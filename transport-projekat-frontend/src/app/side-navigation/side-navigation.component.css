@@ -1,0 +1,84 @@
+.logo-bar {
+  height: 8vh;
+  display: flex;
+  margin-top: 5%;
+  width: 100%;
+  justify-content: center;
+}
+
+.logo-bar-image {
+  margin: auto 15px auto 0;
+  height: 90%;
+}
+
+.center-vertical {
+  margin: auto 0;
+}
+
+.profile-picture {
+  border: 5px solid #FF5722;
+  border-radius: 50%;
+  width: 35%;
+  margin-bottom: 20px;
+}
+
+.sidenav-profile-header {
+  background-color: #303841;
+  box-shadow: none;
+  border-style: none;
+  margin-top: 15%;
+  margin-bottom: 10%;
+  align-items: center;
+}
+
+.icon {
+  color: white;
+  margin-right: 10px !important;
+  transform: scale(1.2);
+}
+
+.list-item {
+  align-items: center;
+  padding-left: 20px !important;
+  border-bottom-right-radius: 30px;
+  border-top-right-radius: 30px;
+  width: 90%;
+}
+
+.list-item:hover {
+  background-color: rgba(0, 173, 181,0.5);
+}
+
+.logout-button {
+  margin: auto auto 5vh;
+}
+
+.button-rounded {
+  display: flex;
+  border-style: none;
+  border-radius: 20px;
+  color: white;
+  padding: 25px 40px;
+  font-weight: 300 !important;
+}
+
+.bright-orange {
+  background: #FF5722;
+}
+
+.sidenav {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  background-color: #303841;
+}
+
+.font-weight-light {
+  font-weight: 300;
+}
+
+
+
+
+
