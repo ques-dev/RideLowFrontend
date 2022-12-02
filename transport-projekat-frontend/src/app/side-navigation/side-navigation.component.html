@@ -1,16 +1,22 @@
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
+</head>
+
 <mat-drawer-container class = "height-100">
   <mat-drawer mode="side" opened class = "width-20 no-border">
     <div class = "sidenav">
 
           <div class = "logo-bar">
               <img src="assets/images/logo.png" class = "logo-bar-image"/>
-              <p class = "center-vertical mat-headline-5 font-weight-light"> CarGoBrrr</p>
+              <p class = "center-vertical mat-headline-5"> CarGoBrrr</p>
           </div>
 
           <mat-card class="sidenav-profile-header">
             <img src="assets/images/account.png" class = "profile-picture">
             <mat-card-content>
-              <p class = "mat-h1 font-weight-light">
+              <p class = "mat-h1">
                 Ime Prezime
               </p>
             </mat-card-content>
@@ -19,22 +25,22 @@
           <mat-nav-list>
             <a mat-list-item class = "list-item" routerLink="/home" routerLinkActive="sky_blue">
               <mat-icon matListItemIcon class = "icon">home</mat-icon>
-              <span class = "font-weight-light mat-h2">Početna</span>
+              <span class = "mat-h2">Početna</span>
             </a>
 
             <a mat-list-item class = "list-item" routerLink="/ride-history" routerLinkActive="sky_blue">
               <mat-icon matListItemIcon class = "icon">history</mat-icon>
-              <span class = "font-weight-light mat-h2">Istorija vožnji</span>
+              <span class = "mat-h2">Istorija vožnji</span>
             </a>
 
             <a mat-list-item class = "list-item" routerLink="/account" routerLinkActive="sky_blue">
               <mat-icon matListItemIcon class = "icon">person_outline</mat-icon>
-              <span class = "font-weight-light mat-h2">Nalog</span>
+              <span class = "mat-h2">Nalog</span>
             </a>
 
             <a mat-list-item class = "list-item" routerLink="/live-support" routerLinkActive="sky_blue">
               <mat-icon matListItemIcon class = "icon">support_agent</mat-icon>
-              <span class = "font-weight-light mat-h2">Podrška</span>
+              <span class = "mat-h2">Podrška</span>
             </a>
           </mat-nav-list>
 
