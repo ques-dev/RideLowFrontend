@@ -2,6 +2,10 @@
   font-weight: 100 !important;
 }
 
+.width-20 {
+  width: 20vw;
+}
+
 .logo-bar {
   height: 8vh;
   display: flex;

@@ -1,8 +1,3 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
 #user-header-container {
   margin-top: 2vw;
   padding: 1vw;
@@ -52,6 +47,7 @@
   border: 0.3vw solid #FF5722;
   border-radius: 50%;
   width: 11.5%;
+  margin-bottom: 1vw;
 }
 ::ng-deep mat-label, input {
   color: black;
@@ -70,17 +66,19 @@
   font-weight: 300!important;
 }
 .inputs-container {
-  margin-top: 1vw;
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
 }
 mat-form-field {
   display: flex;
-  margin-left: 17vw;
 }
 .buttons {
   display: flex;
-}
-.button {
-  margin-left: 9.25vw;
+  justify-content: space-evenly;
+  width: 100%;
 }
 ::ng-deep .mdc-text-field--disabled.mdc-text-field--filled {
   border-radius: 1.25vw;

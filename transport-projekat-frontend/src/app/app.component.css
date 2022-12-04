@@ -9,4 +9,6 @@ body {
   display: flex;
   flex: 1;
   border-radius: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
