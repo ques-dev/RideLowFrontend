@@ -1,0 +1,50 @@
+<div id="user-header-container" class="bright-orange">
+  <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
+  <h1 id="user-header">
+    Podaci o korisniku
+  </h1>
+</div>
+
+<div class="profile-picture-container">
+  <img src="assets/images/account.png" class = "profile-picture" alt="profile picture">
+</div>
+
+<div class="inputs-container">
+  <form>
+    <mat-form-field appearance="fill" [style.width.vw]="50">
+      <mat-label>Ime</mat-label>
+      <input matInput [formControl]="firstNameControl">
+    </mat-form-field><br>
+    <mat-form-field appearance="fill">
+      <mat-label>Prezime</mat-label>
+      <input matInput [formControl]="lastNameControl">
+    </mat-form-field><br>
+    <mat-form-field appearance="fill">
+      <mat-label>Broj telefona</mat-label>
+      <input matInput [formControl]="phoneNumberControl">
+    </mat-form-field><br>
+    <mat-form-field appearance="fill">
+      <mat-label>Adresa</mat-label>
+      <input matInput [formControl]="addressControl">
+    </mat-form-field><br>
+    <mat-form-field appearance="fill">
+      <mat-label>E-mail</mat-label>
+      <input matInput [formControl]="emailControl">
+    </mat-form-field><br>
+  </form>
+</div>
+
+<div class="buttons">
+  <button mat-button class = "bright-orange button-rounded mat-h1 button">
+    <mat-icon class = "icon">mode_edit</mat-icon>
+    Izmeni podatke
+  </button>
+  <button mat-button class = "bright-orange button-rounded mat-h1 button">
+    <mat-icon class = "icon">password</mat-icon>
+    Promeni lozinku
+  </button>
+  <button mat-button class = "bright-orange button-rounded mat-h1 button">
+    <mat-icon class = "icon">payment</mat-icon>
+    Metod plaćanja
+  </button>
+</div>

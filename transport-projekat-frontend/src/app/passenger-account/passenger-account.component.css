@@ -1,0 +1,87 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+#user-header-container {
+  margin-top: 2vw;
+  padding: 1vw;
+  border-bottom-right-radius: 1vw;
+  border-top-right-radius: 1vw;
+  width: 40vw;
+  height: 4vh;
+}
+#user-header {
+  display: inline-block;
+  font-size: 3vw;
+}
+.person-icon {
+  color: white;
+  margin-left: 1vw;
+  margin-right: 1.75vw;
+  margin-bottom: 0.2vw;
+  transform: scale(2);
+}
+.icon {
+  padding-right:0.25vw;
+  transform: scale(1.625);
+}
+#profile-pic {
+  width: 12.5%;
+}
+.button-rounded {
+  display: flex;
+  border-style: none;
+  border-radius: 20vw;
+  color: white;
+  font-weight: 100;
+  padding: 1.5vw 2.75vw;
+}
+.bright-orange {
+  background: #FF5722;
+}
+.profile-picture-container {
+  background-color: inherit;
+  box-shadow: none;
+  border-style: none;
+  margin-top: 1vw;
+  width:80vw;
+  text-align: center;
+}
+.profile-picture {
+  border: 0.3vw solid #FF5722;
+  border-radius: 50%;
+  width: 11.5%;
+}
+::ng-deep mat-label, input {
+  color: black;
+  font-weight: 300!important;
+}
+::ng-deep .mdc-text-field--filled {
+  background-color: #D9D9D9!important;
+}
+::ng-deep .mdc-text-field--disabled .mdc-text-field__input {
+  color:black;
+}
+::ng-deep .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  font-weight: 300!important;
+}
+.inputs-container {
+  margin-top: 1vw;
+}
+mat-form-field {
+  display: flex;
+  margin-left: 17vw;
+}
+.buttons {
+  display: flex;
+}
+.button {
+  margin-left: 9.25vw;
+}
+::ng-deep .mdc-text-field--disabled.mdc-text-field--filled {
+  border-radius: 1.25vw;
+}
