@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {Passenger, PassengerService} from "../service/passenger.service";
 
 @Component({
   selector: 'app-passenger-account',
@@ -7,18 +7,23 @@ import {FormControl} from "@angular/forms";
   styleUrls: ['./passenger-account.component.css']
 })
 export class PassengerAccountComponent implements OnInit {
-  disabled = true;
-  firstNameControl = new FormControl();
-  lastNameControl = new FormControl();
-  phoneNumberControl = new FormControl();
-  addressControl = new FormControl();
-  emailControl = new FormControl();
+  public passenger: Passenger = {
+    "id": -1,
+    "name": "Jovan",
+    "surname": "Jovanović",
+    "profilePicture": "",
+    "telephoneNumber": "063 7924 812",
+    "address": "Resavska 23",
+    "email": "jovan@gmail.com"
+  };
 
+  constructor(private passengerService : PassengerService) { }
   ngOnInit() {
-    this.firstNameControl = new FormControl({value: 'Jovan', disabled: this.disabled});
-    this.lastNameControl = new FormControl({value: 'Jovanović', disabled: this.disabled});
-    this.phoneNumberControl = new FormControl({value: '063 7924 812', disabled: this.disabled});
-    this.addressControl = new FormControl({value: 'Resavska 23', disabled: this.disabled})
-    this.emailControl = new FormControl({value: 'jovan@gmail.com', disabled: this.disabled});
+    this.showPassenger();
+  }
+
+  showPassenger() {
+    this.passengerService.getPassenger()
+      .subscribe(passenger => this.passenger = passenger);
   }
 }
