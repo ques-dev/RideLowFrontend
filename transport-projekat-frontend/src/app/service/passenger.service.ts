@@ -19,8 +19,7 @@ export interface Passenger {
 
 @Injectable()
 export class PassengerService {
-  // TODO: Replace with passenger once the endpoint is complete
-  url = environment.apiURL + "driver/1";
+  url = environment.apiURL + "passenger/1";
 
   constructor(private http: HttpClient) { }
 
