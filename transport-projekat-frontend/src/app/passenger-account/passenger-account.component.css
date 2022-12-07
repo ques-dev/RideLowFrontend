@@ -90,12 +90,17 @@ body {
 ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
   font-weight: 300!important;
 }
+
+.form-container {
+  width: 50%;
+  margin-bottom: auto;
+}
+
 .inputs-container {
   width:100%;
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+
 }
 mat-form-field {
   width: 100%;
