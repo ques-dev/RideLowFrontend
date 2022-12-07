@@ -17,12 +17,14 @@ import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {RegistrationComponent} from "./registration/registration.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     SideNavigationComponent,
-    PassengerAccountComponent
+    PassengerAccountComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

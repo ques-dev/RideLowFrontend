@@ -1,0 +1,28 @@
+import {Component} from "@angular/core";
+import {Passenger, PassengerService} from "../service/passenger.service";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
+@Component({
+  selector: 'app-registration',
+  templateUrl: 'registration.component.html',
+  styleUrls: ['registration.component.css']
+})
+export class RegistrationComponent{
+
+  constructor(private passengerService : PassengerService) { }
+
+  registerPassengerForm = new FormGroup({
+    name: new FormControl( '',[Validators.required]),
+    surname: new FormControl('',[Validators.required]),
+    telephoneNumber: new FormControl('',[Validators.required]),
+    address: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  });
+
+  registerPassenger() {
+    this.passengerService.registerPassenger(this.registerPassengerForm.value)
+      .subscribe((result : any) => console.log(result));
+  }
+}

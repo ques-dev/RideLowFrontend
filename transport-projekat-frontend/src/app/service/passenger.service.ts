@@ -33,4 +33,11 @@ export class PassengerService {
     };
     return this.http.put<Passenger>(this.url,newData,options);
   }
+
+  registerPassenger(newData : any) : Observable<any> {
+    const oprions: any = {
+      responseType: 'text',
+    };
+    return this.http.post<Passenger>(this.url,newData,oprions);
+  }
 }
