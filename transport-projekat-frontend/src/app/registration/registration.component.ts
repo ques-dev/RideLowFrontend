@@ -22,7 +22,9 @@ export class RegistrationComponent{
   });
 
   registerPassenger() {
-    this.passengerService.registerPassenger(this.registerPassengerForm.value)
-      .subscribe((result : any) => console.log(result));
+    if(this.registerPassengerForm.valid){
+      this.passengerService.registerPassenger(this.registerPassengerForm.value)
+        .subscribe((result : any) => console.log(result));
+    }
   }
 }
