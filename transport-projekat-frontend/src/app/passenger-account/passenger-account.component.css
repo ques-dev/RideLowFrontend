@@ -49,6 +49,14 @@ body {
 .bright-orange {
   background: #FF5722;
 }
+.sky-blue {
+  background: #00ADB5;
+}
+
+md-select .md-select-value span:first-child:after {
+  color:#00ADB5 !important;
+}
+
 .profile-picture-container {
   background-color: inherit;
   box-shadow: none;

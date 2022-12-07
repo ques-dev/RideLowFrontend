@@ -74,6 +74,10 @@
   background: #FF5722;
 }
 
+.sky-blue {
+  background: #00ADB5;
+}
+
 .sidenav {
   height: 100vh;
   display: flex;
