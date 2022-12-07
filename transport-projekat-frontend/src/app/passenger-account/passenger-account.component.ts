@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Passenger, PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-passenger-account',
@@ -31,8 +32,10 @@ export class PassengerAccountComponent implements OnInit {
 
   updateMode  = false;
   updateButtonText = "Izmeni podatke"
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  constructor(private passengerService : PassengerService) { }
+  constructor(private passengerService : PassengerService, private successMsg : MatSnackBar) { }
   ngOnInit() {
     this.updatePassengerForm.disable();
     console.log(this.updatePassengerForm.value);
@@ -67,6 +70,7 @@ export class PassengerAccountComponent implements OnInit {
       if(this.updatePassengerForm.valid) {
         this.updatePassenger();
         this.disableForm();
+        this.showSuccessMessage()
       }
     }
     else this.enableForm();
@@ -83,4 +87,12 @@ export class PassengerAccountComponent implements OnInit {
     this.updatePassengerForm.disable();
   }
 
+  showSuccessMessage() {
+    this.successMsg.open('Podaci uspešno izmenjeni!', '', {
+      duration: 200000,
+      horizontalPosition : this.horizontalPosition,
+      verticalPosition : this.verticalPosition,
+      panelClass: ['center']
+    });
+  }
 }

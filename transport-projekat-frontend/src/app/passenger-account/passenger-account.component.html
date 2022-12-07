@@ -14,7 +14,7 @@
 
   <div class="inputs-container">
     <form [formGroup] ="updatePassengerForm" (ngSubmit)="toggleUpdateMode()">
-      <mat-form-field appearance="fill" [style.width.vw]="50">
+      <mat-form-field appearance="fill" [style.width.vw]="40">
         <mat-label>Ime</mat-label>
         <input matInput [value]="this.passenger.name" name = "name" formControlName="name">
       </mat-form-field><br>
@@ -37,13 +37,13 @@
 
 
     <div class="buttons">
-      <button mat-button class = " button-rounded mat-h1 button"
+      <button mat-button class = " bright-orange button-rounded mat-h2 button"
               [ngClass]="{'sky-blue':updateMode,'bright-orange':!updateMode }"
               type = "submit">
         <mat-icon class = "icon">mode_edit</mat-icon>
         {{updateButtonText}}
       </button>
-      <button mat-button class = "bright-orange button-rounded mat-h1 button">
+      <button mat-button class = "bright-orange button-rounded mat-h2 button">
         <mat-icon class = "icon">password</mat-icon>
         Promeni lozinku
       </button>
