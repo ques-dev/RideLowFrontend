@@ -1,0 +1,90 @@
+#my-main{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 60vw;
+  background: #EEEEEE;
+  border-radius: 20px;
+  position: absolute;
+  left: 20vw;
+  top: 20vh;
+}
+
+::ng-deep .mdc-text-field--filled {
+  background-color: #303841 !important;
+}
+
+.bright-orange{
+  background: #FF5722;
+}
+
+.dark-grey{
+  background: #303841;
+}
+
+#left-half{
+  height: 100%;
+  width:50%;
+}
+#right-half{
+  height: 100%;
+  width: 50%;
+}
+
+#registration-header-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vw;
+  padding: 1vw;
+  border-bottom-right-radius: 1vw;
+  border-top-right-radius: 1vw;
+  width: 20vw;
+  height: 4vh;
+}
+
+#registration-header {
+  display: inline-block;
+  font-size: 2.5vw;
+}
+
+#right-form{
+  position: relative;
+  left: 5vw;
+  top: 10vh;
+}
+
+#left-form{
+  position: relative;
+  left: 10vw;
+  top: 22vh;
+}
+
+.icon {
+  padding-right:0.25vw;
+  transform: scale(1.625);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.button-rounded {
+  display: flex;
+  border-style: none;
+  border-radius: 20vw;
+  color: white;
+  font-weight: 100;
+  padding: 1.5vw 2.75vw;
+}
+
+.inputs-container {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
