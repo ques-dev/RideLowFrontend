@@ -35,9 +35,9 @@ export class PassengerService {
   }
 
   registerPassenger(newData : any) : Observable<any> {
-    const oprions: any = {
+    const options: any = {
       responseType: 'text',
     };
-    return this.http.post<Passenger>(this.url,newData,oprions);
+    return this.http.post<Passenger>(this.url,newData,options);
   }
 }
