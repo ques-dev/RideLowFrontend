@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 import {Passenger, PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -10,7 +11,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class RegistrationComponent{
 
-  constructor(private passengerService : PassengerService) { }
+  constructor(private passengerService : PassengerService, private router:Router) { }
 
   registerPassengerForm = new FormGroup({
     name: new FormControl( '',[Validators.required]),
@@ -24,5 +25,12 @@ export class RegistrationComponent{
   registerPassenger() {
     this.passengerService.registerPassenger(this.registerPassengerForm.value)
       .subscribe((result : any) => console.log(result));
+  }
+
+  check(){
+    if(this.registerPassengerForm.valid) {
+      //this.registerPassenger();
+    }
+    this.router.navigate(['account']);
   }
 }
