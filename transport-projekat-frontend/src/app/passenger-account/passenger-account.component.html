@@ -13,7 +13,7 @@
   </div>
 
   <div class="inputs-container">
-    <form [formGroup] ="updatePassengerForm" (ngSubmit)="toggleUpdateMode()" class = "form-container">
+    <form [formGroup] ="updatePassengerForm"  class = "form-container">
       <mat-form-field appearance="fill">
         <mat-label>Ime</mat-label>
         <input matInput [value]="this.passenger.name" name = "name" formControlName="name">

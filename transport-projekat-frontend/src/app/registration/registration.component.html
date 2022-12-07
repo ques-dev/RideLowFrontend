@@ -8,7 +8,7 @@
         </div>
 
         <div class="inputs-container" id="right-form">
-          <form [formGroup] ="registerPassengerForm">
+          <form [formGroup] ="registerPassengerForm" (ngSubmit)="registerPassenger()">
             <mat-form-field  >
               <mat-label>Ime</mat-label>
               <input matInput name="name">
@@ -40,8 +40,8 @@
               <input matInput name="password">
             </mat-form-field><br>
           </form>
-          <button mat-button class = "bright-orange button-rounded mat-h1 button">
-            <mat-icon class = "icon">perm_identity</mat-icon>
+          <button mat-button type="submit" class = "bright-orange button-rounded mat-h1 button">
+            <mat-icon class = "icon" >perm_identity</mat-icon>
             Registracija
           </button>
         </div>
