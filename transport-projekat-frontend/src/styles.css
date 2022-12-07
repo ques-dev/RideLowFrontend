@@ -35,9 +35,5 @@ body {
   text-align: center;
 }
 
-::ng-deep .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: rgba(0,0,0,0.4) !important;
-  --mdc-snackbar-supporting-text-color : white;
-}
 
 

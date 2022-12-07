@@ -89,7 +89,7 @@ export class PassengerAccountComponent implements OnInit {
 
   showSuccessMessage() {
     this.successMsg.open('Podaci uspešno izmenjeni!', '', {
-      duration: 200000,
+      duration: 2000,
       horizontalPosition : this.horizontalPosition,
       verticalPosition : this.verticalPosition,
       panelClass: ['center']

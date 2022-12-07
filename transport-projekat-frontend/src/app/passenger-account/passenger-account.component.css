@@ -111,7 +111,9 @@ mat-form-field {
 .mdc-text-field .mdc-text-field__input {
   caret-color: #00ADB5;
 }
-::ng-deep .mdc-text-field--disabled.mdc-text-field--filled, ::ng-deep .mat-mdc-text-field-wrapper {
+::ng-deep .mdc-text-field--disabled.mdc-text-field--filled,
+::ng-deep .mat-mdc-text-field-wrapper,
+::ng-deep .mdc-snackbar__surface{
   border-radius: 1.25vw !important;
 }
 
@@ -122,9 +124,22 @@ mat-form-field {
 ::ng-deep .ng-star-inserted {
   color: red !important;
 }
-::ng-deep .mat-mdc-snack-bar-container {
 
+::ng-deep .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: rgba(0,0,0,0.7) !important;
+  --mdc-snackbar-supporting-text-color : white;
 }
+
+
+::ng-deep .mat-mdc-simple-snack-bar {
+  padding: 1vh 1vw;
+}
+
+::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
+  font-weight: 100 !important;
+  font-size: 3vh !important;
+}
+
 
 
 
