@@ -1,14 +1,1 @@
-body {
-  display: flex;
-  flex-direction: row;
-  background-color: #303841;
-}
 
-.main-content {
-  background-color: #303841;
-  display: flex;
-  flex: 1;
-  border-radius: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
