@@ -7,6 +7,7 @@ import {Passenger, PassengerService} from "../service/passenger.service";
   styleUrls: ['./passenger-account.component.css']
 })
 export class PassengerAccountComponent implements OnInit {
+
   public passenger: Passenger = {
     "id": -1,
     "name": "Jovan",

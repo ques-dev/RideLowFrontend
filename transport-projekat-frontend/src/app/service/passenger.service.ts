@@ -26,4 +26,8 @@ export class PassengerService {
   getPassenger(): Observable<Passenger> {
     return this.http.get<Passenger>(this.url);
   }
+
+  updatePassenger(newData : Passenger) : Observable<Passenger> {
+    return this.http.put<Passenger>(this.url,newData);
+  }
 }

@@ -28,12 +28,12 @@
               <span class = "mat-h2">Početna</span>
             </a>
 
-            <a mat-list-item class = "list-item" routerLink="/ride-history" routerLinkActive="sky_blue">
+            <a mat-list-item class = "list-item" routerLink="/ride-history" routerLinkActive="sky_blue" >
               <mat-icon matListItemIcon class = "icon">history</mat-icon>
               <span class = "mat-h2">Istorija vožnji</span>
             </a>
 
-            <a mat-list-item class = "list-item" routerLink="/account" routerLinkActive="sky_blue">
+            <a mat-list-item class = "list-item" routerLink="/account" routerLinkActive="sky_blue" [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon matListItemIcon class = "icon">person_outline</mat-icon>
               <span class = "mat-h2">Nalog</span>
             </a>

@@ -1,3 +1,17 @@
+body {
+  display: flex;
+  flex-direction: row;
+  background-color: #303841;
+}
+
+.main-content {
+  background-color: #EEEEEE;
+  flex: 1;
+  border-radius: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 #user-header-container {
   margin-top: 2vw;
   padding: 1vw;
