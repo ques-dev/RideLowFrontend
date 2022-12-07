@@ -9,21 +9,21 @@
 
         <div class="inputs-container" id="right-form">
           <form [formGroup] ="registerPassengerForm" (ngSubmit)="registerPassenger()">
-            <mat-form-field  >
+            <mat-form-field>
               <mat-label>Ime</mat-label>
-              <input matInput name="name">
+              <input matInput name="name" formControlName="name">
             </mat-form-field><br>
             <mat-form-field>
               <mat-label>Prezime</mat-label>
-              <input matInput name="surname">
+              <input matInput name="surname" formControlName="surname">
             </mat-form-field><br>
             <mat-form-field>
               <mat-label>Adresa</mat-label>
-              <input matInput name="address">
+              <input matInput name="address" formControlName="address">
             </mat-form-field><br>
             <mat-form-field>
               <mat-label>Telefon</mat-label>
-              <input matInput name="telephoneNumber">
+              <input matInput name="telephoneNumber" formControlName="telephoneNumber">
             </mat-form-field><br>
           </form>
         </div>
@@ -33,11 +33,11 @@
           <form [formGroup] ="registerPassengerForm">
             <mat-form-field  >
               <mat-label>E-mail</mat-label>
-              <input matInput name="email">
+              <input matInput name="email" formControlName="email">
             </mat-form-field><br>
             <mat-form-field>
               <mat-label>Lozinka</mat-label>
-              <input matInput name="password">
+              <input matInput name="password" formControlName="password">
             </mat-form-field><br>
           </form>
           <button mat-button type="submit" class = "bright-orange button-rounded mat-h1 button" (click)="check()">
