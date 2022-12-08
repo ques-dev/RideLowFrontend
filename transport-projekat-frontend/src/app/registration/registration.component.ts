@@ -23,16 +23,15 @@ export class RegistrationComponent{
   });
 
   registerPassenger() {
-    if(this.registerPassengerForm.valid){
       this.passengerService.registerPassenger(this.registerPassengerForm.value)
         .subscribe((result : any) => console.log(result));
-    }
   }
 
   check(){
     if(this.registerPassengerForm.valid) {
-      //this.registerPassenger();
+      console.log(this.registerPassengerForm.value);
+      this.registerPassenger();
     }
-    this.router.navigate(['account']);
+    //this.router.navigate(['account']);
   }
 }
