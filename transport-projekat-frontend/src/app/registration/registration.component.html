@@ -14,35 +14,40 @@
         <div class = "center">
           <form [formGroup] ="registerPassengerForm" class = "inputs-container">
             <div class = "inputs">
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class = "mat-form-field">
               <mat-label>Ime</mat-label>
               <input matInput name="name" formControlName="name">
             </mat-form-field><br>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class = "mat-form-field">
               <mat-label>Prezime</mat-label>
               <input matInput name="surname" formControlName="surname">
             </mat-form-field><br>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class = "mat-form-field">
               <mat-label>Adresa</mat-label>
               <input matInput name="address" formControlName="address">
             </mat-form-field ><br>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class = "mat-form-field">
               <mat-label>Telefon</mat-label>
               <input matInput name="telephoneNumber" formControlName="telephoneNumber">
             </mat-form-field><br>
 
-            <mat-form-field  appearance="fill">
+            <mat-form-field  appearance="fill" class = "mat-form-field">
               <mat-label>E-mail</mat-label>
               <input matInput name="email" formControlName="email">
             </mat-form-field><br>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class = "mat-form-field">
               <mat-label>Lozinka</mat-label>
               <input matInput name="password" formControlName="password">
             </mat-form-field><br>
+              <div class ="mat-form-field"></div>
+              <mat-form-field appearance="fill" class = "mat-form-field">
+                <mat-label>Ponovi lozinku</mat-label>
+                <input matInput name="password">
+              </mat-form-field><br>
             </div>
           </form>
-            <button mat-button type="submit" class = "button-rounded bright-orange mat-h1 button submit-margin" (click)="check()">
-              <mat-icon class = "icon" >perm_identity</mat-icon>
+            <button mat-button type="submit" class = "button-rounded bright-orange mat-h1 center-horizontal stick-to-bottom" (click)="check()">
+                 <mat-icon class = "icon" >perm_identity</mat-icon>
               Registracija
             </button>
         </div>

@@ -12,8 +12,7 @@
     <img src="assets/images/account.png" class = "profile-picture" alt="profile picture">
   </div>
 
-  <div class="inputs-container">
-    <form [formGroup] ="updatePassengerForm" (ngSubmit)="toggleUpdateMode()"  class = "form-container">
+    <form [formGroup] ="updatePassengerForm" (ngSubmit)="toggleUpdateMode()"  class = "form-container center-horizontal">
       <mat-form-field appearance="fill">
         <mat-label>Ime</mat-label>
         <input matInput [value]="this.passenger.name" name = "name" formControlName="name">
@@ -51,6 +50,5 @@
     </div>
   </form>
   </div>
-</div>
 </body>
 <router-outlet></router-outlet>

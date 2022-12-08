@@ -8,11 +8,12 @@ body {
 #my-main{
   display: flex;
   flex-direction: column;
-  height: 70vh;
   width: 60vw;
+  padding-top: 6vh;
+  padding-bottom: 3vh;
   background: #EEEEEE;
   border-radius: 20px;
-  margin: auto;
+  margin: 7vh auto auto;
 }
 
 
@@ -37,12 +38,12 @@ body {
 #registration-header-container {
   display: flex;
   justify-content: center;
-  margin-top: 2vw;
   padding: 1vw 4vw 1vw 1vw;
   border-bottom-right-radius: 1vw;
   border-top-right-radius: 1vw;
   width: 20vw;
   height: 4vh;
+  margin-bottom: 4vh;
 }
 
 #registration-header {
@@ -80,11 +81,12 @@ body {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 4vh;
 }
 
-mat-form-field {
+.mat-form-field {
   flex:1 1 17vw;
-  margin: auto 2vw;
+  margin: 1vh 2vw;
   color: black;
 }
 

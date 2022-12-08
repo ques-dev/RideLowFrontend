@@ -8,8 +8,10 @@ body {
 .main-content {
   background-color: #EEEEEE;
   flex: 1;
-  border-radius: 20px;
+  border-radius: 1.25vw;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #user-header-container {
@@ -42,13 +44,6 @@ body {
   width: 12.5%;
 }
 
-/*.bright-orange {
-  background: #FF5722;
-}
-.sky-blue {
-  background: #00ADB5;
-}*/
-
 .profile-picture-container {
   background-color: inherit;
   box-shadow: none;
@@ -65,19 +60,14 @@ body {
 }
 
 .form-container {
+  height: -webkit-fill-available;
   width: 50%;
-  margin-bottom: auto;
-}
-
-.inputs-container {
-  width:100%;
   display: flex;
-  justify-content: center;
-
+  flex-direction: column;
 }
+
 mat-form-field {
   width: 100%;
-
 }
 .buttons {
   display: flex;
