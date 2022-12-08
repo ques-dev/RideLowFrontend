@@ -1,23 +1,73 @@
+body {
+  display: flex;
+  flex-direction: column;
+  background: #303841;
+  font-weight: 100 !important;
+}
+
 #my-main{
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   height: 70vh;
   width: 60vw;
   background: #EEEEEE;
   border-radius: 20px;
-  position: absolute;
-  left: 20vw;
-  top: 20vh;
+  margin: auto;
 }
 
-body{
-  background: #303841;
+.font-light {
+  font-weight: 100 !important;
+}
+
+.logo-bar {
+  height: 8vh;
+  display: flex;
+  margin-top: 2vh;
+  width: 100%;
+  justify-content: center;
+}
+
+.logo-bar-image {
+  margin: auto 1vw auto 0;
+  height: 4vw;
+  width: 4vw;
+}
+
+.center-vertical {
+  margin: auto 0;
+}
+::ng-deep .mdc-text-field--disabled.mdc-text-field--filled,
+::ng-deep .mat-mdc-text-field-wrapper,
+::ng-deep .mdc-snackbar__surface{
+  border-radius: 1.25vw !important;
 }
 
 ::ng-deep .mdc-text-field--filled {
-  background-color: #303841 !important;
+
+  background-color: #D9D9D9!important;
+}
+
+::ng-deep .mdc-text-field--filled .mdc-line-ripple::after {
+  border-bottom-color: #00ADB5 !important;
+}
+
+::ng-deep .ng-star-inserted {
+  color: red !important;
+}
+
+::ng-deep mat-label, input {
+  color: black;
+  font-weight: 300!important;
+}
+
+::ng-deep .mdc-text-field--disabled .mdc-text-field__input {
+  color:black;
+}
+::ng-deep .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  font-weight: 300!important;
 }
 
 .bright-orange{
@@ -28,20 +78,11 @@ body{
   background: #303841;
 }
 
-#left-half{
-  height: 100%;
-  width:50%;
-}
-#right-half{
-  height: 100%;
-  width: 50%;
-}
-
 #registration-header-container {
   display: flex;
   justify-content: center;
   margin-top: 2vw;
-  padding: 1vw;
+  padding: 1vw 4vw 1vw 1vw;
   border-bottom-right-radius: 1vw;
   border-top-right-radius: 1vw;
   width: 20vw;
@@ -53,42 +94,47 @@ body{
   font-size: 2.5vw;
 }
 
-#right-form{
-  position: relative;
-  left: 5vw;
-  top: 10vh;
-}
-
-#left-form{
-  position: relative;
-  left: 10vw;
-  top: 22vh;
-}
 
 .icon {
   padding-right:0.25vw;
   transform: scale(1.625);
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-}
 .button-rounded {
   display: flex;
   border-style: none;
   border-radius: 20vw;
   color: white;
   font-weight: 100;
-  padding: 1.5vw 2.75vw;
+  padding: 2vw 2.75vw;
+  margin: auto auto 4vh;
 }
+
 
 .inputs-container {
   display: flex;
-  width: fit-content;
-  height: fit-content;
-  justify-content: space-between;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
+  margin: auto;
+  height: 100%;
 }
+
+.center {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.inputs {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+mat-form-field {
+  flex:1 1 17vw;
+  margin: auto 2vw;
+}
+
+
