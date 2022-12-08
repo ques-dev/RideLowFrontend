@@ -31,8 +31,7 @@ export class RegistrationComponent{
     if(this.registerPassengerForm.valid) {
       console.log(this.registerPassengerForm.value);
       this.registerPassenger();
-
+      this.router.navigate(['account']);
     }
-    this.router.navigate(['account']);
   }
 }
