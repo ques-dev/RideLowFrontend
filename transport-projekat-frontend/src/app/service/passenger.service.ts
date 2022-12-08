@@ -20,6 +20,7 @@ export interface Passenger {
 @Injectable()
 export class PassengerService {
   url = environment.apiURL + "passenger/1";
+  posturl = environment.apiURL + "passenger";
 
   constructor(private http: HttpClient) { }
 
@@ -38,6 +39,7 @@ export class PassengerService {
     const options: any = {
       responseType: 'text',
     };
-    return this.http.post<Passenger>(this.url,newData,options);
+    console.log(newData);
+    return this.http.post<Passenger>(this.posturl,newData,options);
   }
 }
