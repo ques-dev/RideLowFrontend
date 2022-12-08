@@ -10,30 +10,11 @@ body {
 
 * {
   font-family: Roboto, sans-serif;
-  font-weight: 100 ;
+  font-weight: 100;
   color: white;
 }
 
-.rounded-edges {
-  border-radius: 20px;
-}
 
-.sky-blue {
-  background: #00ADB5;
-}
-
-.light-grey {
-  background: #EEEEEE;
-}
-
-.dark-grey {
-  background: #303841;
-}
-
-.center {
-  justify-content: center;
-  text-align: center;
-}
 
 
 

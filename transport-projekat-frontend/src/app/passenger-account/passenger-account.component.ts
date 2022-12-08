@@ -6,7 +6,7 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
 @Component({
   selector: 'app-passenger-account',
   templateUrl: './passenger-account.component.html',
-  styleUrls: ['./passenger-account.component.css']
+  styleUrls: ['./passenger-account.component.css','../app.component.css']
 })
 export class PassengerAccountComponent implements OnInit {
 
