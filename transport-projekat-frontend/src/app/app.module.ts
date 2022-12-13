@@ -18,13 +18,15 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {RegistrationComponent} from "./registration/registration.component";
+import { LoginRegisterComponent } from './login-register/login-register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SideNavigationComponent,
     PassengerAccountComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    LoginRegisterComponent
   ],
   imports: [
     BrowserModule,

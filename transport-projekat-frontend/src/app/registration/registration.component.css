@@ -5,17 +5,17 @@ body {
   font-weight: 100 !important;
 }
 
-#my-main{
+#my-main {
   display: flex;
-  flex-direction: column;
-  width: 60vw;
+  flex-direction: row;
+  width: 70vw;
+  height: 70vh;
   padding-top: 6vh;
   padding-bottom: 3vh;
   background: #EEEEEE;
   border-radius: 20px;
   margin: 7vh auto auto;
 }
-
 
 .logo-bar {
   height: 8vh;
@@ -31,38 +31,30 @@ body {
   width: 4vw;
 }
 
-.center-vertical {
-  margin: auto 0;
-}
-
-#registration-header-container {
-  display: flex;
-  justify-content: center;
-  padding: 1vw 4vw 1vw 1vw;
-  border-bottom-right-radius: 1vw;
-  border-top-right-radius: 1vw;
-  width: 20vw;
-  height: 4vh;
-  margin-bottom: 4vh;
-}
-
 #registration-header {
   display: inline-block;
   font-size: 2.5vw;
 }
 
+.half-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hide {
+  display: none;
+}
+
+.unhide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 .icon {
   padding-right:0.25vw;
   transform: scale(1.625);
-}
-
-.inputs-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin: auto;
-  height: 100%;
 }
 
 .center {
@@ -77,17 +69,24 @@ body {
   margin: auto auto 3vh;
 }
 
-.inputs {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 4vh;
+.mat-form-field {
+  width: 80%;
+  color: black;
 }
 
-.mat-form-field {
-  flex:1 1 17vw;
-  margin: 1vh 2vw;
-  color: black;
+.nav-bottom-bar {
+  display: flex;
+  padding: 0 1vw;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stepper-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: 0 2vw;
 }
 
 

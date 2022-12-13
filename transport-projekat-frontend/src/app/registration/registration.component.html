@@ -1,55 +1,73 @@
-
 <body>
 <div class = "logo-bar">
   <img src="assets/images/logo.png" class = "logo-bar-image"/>
   <p class = "center-vertical mat-headline-4 font-weight-light"> CarGoBrrr</p>
 </div>
   <div id="my-main">
-        <div id="registration-header-container" class="dark-grey">
-          <h1 id="registration-header">
+    <div class = "half-container"></div>
+
+    <div class = "half-container place-end">
+        <div class="label-container sub-margin-medium dark-grey flip-y">
+          <h1 id="registration-header" class = "flip-y">
             Registracija
           </h1>
-          </div>
+        </div>
 
-        <div class = "center">
-          <form [formGroup] ="registerPassengerForm" class = "inputs-container">
-            <div class = "inputs">
-            <mat-form-field appearance="fill" class = "mat-form-field">
-              <mat-label>Ime</mat-label>
-              <input matInput name="name" formControlName="name">
-            </mat-form-field><br>
-            <mat-form-field appearance="fill" class = "mat-form-field">
-              <mat-label>Prezime</mat-label>
-              <input matInput name="surname" formControlName="surname">
-            </mat-form-field><br>
-            <mat-form-field appearance="fill" class = "mat-form-field">
-              <mat-label>Adresa</mat-label>
-              <input matInput name="address" formControlName="address">
-            </mat-form-field ><br>
-            <mat-form-field appearance="fill" class = "mat-form-field">
-              <mat-label>Telefon</mat-label>
-              <input matInput name="telephoneNumber" formControlName="telephoneNumber">
-            </mat-form-field><br>
+          <form [formGroup] ="registerPassengerForm" class = "height-70 width-100">
+            <div class = "stepper-container">
+              <div [ngClass]="{'unhide': firstPartVisible, 'hide':!firstPartVisible}" class = "height-85">
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>Ime</mat-label>
+                <input matInput name="name" formControlName="name">
+              </mat-form-field><br>
 
-            <mat-form-field  appearance="fill" class = "mat-form-field">
-              <mat-label>E-mail</mat-label>
-              <input matInput name="email" formControlName="email">
-            </mat-form-field><br>
-            <mat-form-field appearance="fill" class = "mat-form-field">
-              <mat-label>Lozinka</mat-label>
-              <input matInput  type="password" name="password" formControlName="password">
-            </mat-form-field><br>
-              <div class ="mat-form-field"></div>
-              <mat-form-field appearance="fill" class = "mat-form-field">
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>Prezime</mat-label>
+                <input matInput name="surname" formControlName="surname">
+              </mat-form-field><br>
+
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>Adresa</mat-label>
+                <input matInput name="address" formControlName="address">
+              </mat-form-field ><br>
+
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>Telefon</mat-label>
+                <input matInput name="telephoneNumber" formControlName="telephoneNumber">
+              </mat-form-field><br>
+            </div>
+
+            <div [ngClass]="{'hide': firstPartVisible, 'unhide': !firstPartVisible}" class="height-85">
+              <mat-form-field  appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>E-mail</mat-label>
+                <input matInput name="email" formControlName="email">
+              </mat-form-field><br>
+
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
+                <mat-label>Lozinka</mat-label>
+                <input matInput  type="password" name="password" formControlName="password">
+              </mat-form-field><br>
+
+              <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
                 <mat-label>Ponovi lozinku</mat-label>
                 <input matInput required type="password" name="ppassword">
               </mat-form-field><br>
             </div>
+
+              <div class = "nav-bottom-bar height-15">
+                <button mat-mini-fab class="sky-blue" type = "button" [disabled] = "firstPartVisible" (click)="activateFirstPart()">
+                  <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <button mat-button type="submit" class = "button-rounded sky-blue mat-h1 no-margin" (click)="check()">
+                  <mat-icon class = "icon" >perm_identity</mat-icon>
+                  Registracija
+                </button>
+                <button mat-mini-fab class = "sky-blue" type = "button" [disabled] = "!firstPartVisible" (click)="activateSecondPart()">
+                  <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+              </div>
+            </div>
           </form>
-            <button mat-button type="submit" class = "button-rounded bright-orange mat-h1 center-horizontal stick-to-bottom" (click)="check()">
-                 <mat-icon class = "icon" >perm_identity</mat-icon>
-              Registracija
-            </button>
-        </div>
-      </div>
+    </div>
+  </div>
 </body>

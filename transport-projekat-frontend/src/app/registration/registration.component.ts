@@ -22,6 +22,8 @@ export class RegistrationComponent{
     password: new FormControl('', [Validators.required]),
   });
 
+  firstPartVisible = true;
+
   registerPassenger() {
       this.passengerService.registerPassenger(this.registerPassengerForm.value)
         .subscribe((result : any) => console.log(result));
@@ -32,5 +34,13 @@ export class RegistrationComponent{
       this.registerPassenger();
       this.router.navigate(['account']);
     }
+  }
+
+  activateSecondPart() {
+    this.firstPartVisible = false;
+  }
+
+  activateFirstPart() {
+    this.firstPartVisible = true;
   }
 }
