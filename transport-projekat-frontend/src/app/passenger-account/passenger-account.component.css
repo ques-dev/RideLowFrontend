@@ -8,6 +8,7 @@ body {
 .main-content {
   background-color: #EEEEEE;
   flex: 1;
+  padding-top: 2vh;
   border-radius: 1.25vw;
   overflow: hidden;
   display: flex;

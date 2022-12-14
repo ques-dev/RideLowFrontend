@@ -8,14 +8,15 @@
      <div class = "flex-column height-100 center-vertical">
       <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
         <mat-label>Email</mat-label>
-        <input matInput name="email" formControlName="email">
+        <input matInput name="email" formControlName="email" type = "email">
       </mat-form-field><br>
       <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
         <mat-label>Lozinka</mat-label>
         <input matInput name="password" formControlName="password" type = "password">
       </mat-form-field><br>
 
-      <button mat-button type="submit" class = "button-rounded bright-orange mat-h1 center-horizontal login-button-margin">
+      <button mat-button type="button" class = "button-rounded bright-orange mat-h1 center-horizontal login-button-margin"
+      (click)="routeToAccount()">
          <mat-icon class = "icon" >login</mat-icon>
          Prijava
        </button>
@@ -23,11 +24,13 @@
     </form>
   </div>
 
-  <div class = "stick-to-bottom flex-row width-80 center-horizontal">
-    <p class = "mat-h2">Zaboravljena lozinka?</p>
-    <button mat-button type="button" class = "button-rounded sky-blue mat-h3 center-horizontal">
-      <mat-icon class = "icon" >edit</mat-icon>
-      Promeni lozinku
-    </button>
+  <div class = "stick-to-bottom flex-row">
+    <div class = "flex-row">
+      <p class = "mat-h2 span-margin">Zaboravljena lozinka?</p>
+      <button mat-button type="button" class = "button-rounded sky-blue mat-h3 center-horizontal">
+        <mat-icon class = "icon" >edit</mat-icon>
+        Promeni lozinku
+      </button>
     </div>
+  </div>
 </div>

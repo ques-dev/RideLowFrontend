@@ -11,6 +11,6 @@ export class SideNavigationComponent {
   constructor(private router : Router) { }
 
   logout() {
-    this.router.navigate(['register']);
+    this.router.navigate(['entrance']);
   }
 }
