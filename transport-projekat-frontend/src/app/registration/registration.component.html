@@ -15,7 +15,7 @@
 
           <form [formGroup] ="registerPassengerForm" class = "height-70 width-100">
             <div class = "stepper-container">
-              <div [ngClass]="{'unhide': firstPartVisible, 'hide':!firstPartVisible}" class = "height-85">
+              <div [ngClass]="{'unhide': firstPartVisible, 'hide':!firstPartVisible}" class = "height-85 slide-left">
               <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
                 <mat-label>Ime</mat-label>
                 <input matInput name="name" formControlName="name">
@@ -37,7 +37,7 @@
               </mat-form-field><br>
             </div>
 
-            <div [ngClass]="{'hide': firstPartVisible, 'unhide': !firstPartVisible}" class="height-85">
+            <div [ngClass]="{'hide': firstPartVisible, 'unhide': !firstPartVisible}" class="height-85 slide-right">
               <mat-form-field  appearance="fill" class = "mat-form-field center-horizontal">
                 <mat-label>E-mail</mat-label>
                 <input matInput name="email" formControlName="email">
@@ -58,7 +58,7 @@
                 <button mat-mini-fab class="sky-blue" type = "button" [disabled] = "firstPartVisible" (click)="activateFirstPart()">
                   <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>
-                <button mat-button type="submit" class = "button-rounded sky-blue mat-h1 no-margin" (click)="check()">
+                <button mat-button type="submit" class = "button-rounded sky-blue mat-h1 no-margin" [disabled] = "firstPartVisible"(click)="check()">
                   <mat-icon class = "icon" >perm_identity</mat-icon>
                   Registracija
                 </button>

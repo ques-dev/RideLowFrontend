@@ -83,11 +83,45 @@ body {
 }
 
 .stepper-container {
+  overflow: hidden;
   display: flex;
   height: 100%;
   flex-direction: column;
   padding: 0 2vw;
 }
 
+.slide-left {
+  position: relative;
+  animation: animateleft 0.5s;
+}
+
+.slide-right {
+  position: relative;
+  animation: animateright 0.5s;
+}
+
+@keyframes animateright {
+   0% {
+     right: -300px;
+     opacity: 0;
+   }
+
+   100% {
+     right : 0;
+     opacity: 1;
+   }
+ }
+
+@keyframes animateleft {
+  0% {
+    left: -300px;
+    opacity: 0;
+  }
+
+  100% {
+    left: 0;
+    opacity: 1;
+  }
+}
 
 
