@@ -19,15 +19,17 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {RegistrationComponent} from "./registration/registration.component";
 import { LoginRegisterComponent } from './login-register/login-register.component';
+import {LoginComponent} from "./login/login.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SideNavigationComponent,
-    PassengerAccountComponent,
-    RegistrationComponent,
-    LoginRegisterComponent
-  ],
+    declarations: [
+        AppComponent,
+        SideNavigationComponent,
+        PassengerAccountComponent,
+        RegistrationComponent,
+        LoginRegisterComponent,
+        LoginComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,

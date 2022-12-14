@@ -1,47 +1,3 @@
-body {
-  display: flex;
-  flex-direction: column;
-  background: #303841;
-  font-weight: 100 !important;
-}
-
-#my-main {
-  display: flex;
-  flex-direction: row;
-  width: 70vw;
-  height: 70vh;
-  padding-top: 6vh;
-  padding-bottom: 3vh;
-  background: #EEEEEE;
-  border-radius: 20px;
-  margin: 7vh auto auto;
-}
-
-.logo-bar {
-  height: 8vh;
-  display: flex;
-  margin-top: 2vh;
-  width: 100%;
-  justify-content: center;
-}
-
-.logo-bar-image {
-  margin: auto 1vw auto 0;
-  height: 4vw;
-  width: 4vw;
-}
-
-#registration-header {
-  display: inline-block;
-  font-size: 2.5vw;
-}
-
-.half-container {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-}
-
 .hide {
   display: none;
 }
@@ -55,18 +11,6 @@ body {
 .icon {
   padding-right:0.25vw;
   transform: scale(1.625);
-}
-
-.center {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-}
-
-.submit-margin {
-  margin: auto auto 3vh;
 }
 
 .mat-form-field {
@@ -123,5 +67,7 @@ body {
     opacity: 1;
   }
 }
+
+
 
 
