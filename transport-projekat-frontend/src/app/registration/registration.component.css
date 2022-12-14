@@ -13,25 +13,12 @@
   transform: scale(1.625);
 }
 
-.mat-form-field {
-  width: 80%;
-  color: black;
-}
-
 .nav-bottom-bar {
   display: flex;
   padding: 0 1vw;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-}
-
-.stepper-container {
-  overflow: hidden;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  padding: 0 2vw;
 }
 
 .slide-left {
@@ -68,6 +55,13 @@
   }
 }
 
+.stepper-container {
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: 0 2vw;
+}
 
 
 
