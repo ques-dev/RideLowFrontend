@@ -33,12 +33,6 @@
   align-items: center;
 }
 
-.icon {
-  color: white;
-  margin-right: 10px !important;
-  transform: scale(1.2);
-}
-
 .list-item {
   align-items: center;
   padding-left: 1vw !important;

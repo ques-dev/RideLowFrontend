@@ -20,6 +20,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {RegistrationComponent} from "./registration/registration.component";
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import {LoginComponent} from "./login/login.component";
+import { TopBarComponent } from './top-bar/top-bar.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import {LoginComponent} from "./login/login.component";
         RegistrationComponent,
         LoginRegisterComponent,
         LoginComponent,
+        TopBarComponent,
     ],
   imports: [
     BrowserModule,

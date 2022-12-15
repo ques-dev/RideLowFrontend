@@ -219,6 +219,38 @@
   margin-right: 1vw;
 }
 
+.logo-bar {
+  height: 8vh;
+  display: flex;
+  flex-direction: row;
+  margin-top: 2vh;
+  padding: 0 2vw;
+}
+
+.logo-bar-image {
+  margin: auto 1vw auto 0;
+  height: 4vw;
+  width: 4vw;
+}
+
+.stick-to-left {
+  margin-left: 0;
+}
+
+.stick-to-right {
+  margin-right: 0;
+}
+
+.icon {
+  color: white;
+  margin-right: 10px !important;
+  transform: scale(1.2);
+}
+
+.distance-between-max {
+  justify-content: space-between;
+}
+
 
 
 
