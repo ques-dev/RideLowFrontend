@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
   templateUrl: 'registration.component.html',
   styleUrls: ['registration.component.css','../app.component.css']
 })
-export class RegistrationComponent{
+export class RegistrationComponent {
 
   constructor(private passengerService : PassengerService, private router:Router) { }
 
@@ -25,8 +25,7 @@ export class RegistrationComponent{
   firstPartVisible = true;
 
   registerPassenger() {
-      this.passengerService.registerPassenger(this.registerPassengerForm.value)
-        .subscribe((result : any) => console.log(result));
+      this.passengerService.registerPassenger(this.registerPassengerForm.value).subscribe();
   }
 
   check(){
