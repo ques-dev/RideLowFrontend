@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import {environment} from "../environments/environment";
+import {FormGroup} from "@angular/forms";
 
 export interface Passenger {
   name: string;
@@ -35,11 +36,10 @@ export class PassengerService {
     return this.http.put<Passenger>(this.url,newData,options);
   }
 
-  registerPassenger(newData : any) : Observable<any> {
+  registerPassenger(newData : Passenger) : Observable<any> {
     const options: any = {
       responseType: 'text',
     };
-    console.log(newData);
     return this.http.post<Passenger>(this.posturl,newData,options);
   }
 }
