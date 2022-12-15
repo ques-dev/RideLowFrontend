@@ -1,3 +1,22 @@
+::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
+  font-weight: 100 !important;
+  text-align: center;
+  font-size: 3vh !important;
+}
+
+::ng-deep .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: rgba(0,0,0,0.7) !important;
+  --mdc-snackbar-supporting-text-color : white;
+}
+
+::ng-deep .mat-mdc-simple-snack-bar {
+  padding: 1.5vh 1vw;
+}
+
+::ng-deep .mdc-snackbar__surface {
+  border-radius: 1.25vw !important;
+}
+
 ::ng-deep .mat-mdc-form-field-bottom-align::before {
   display: none !important;
 }
@@ -21,8 +40,7 @@
 }
 
 ::ng-deep .mdc-text-field--disabled.mdc-text-field--filled,
-::ng-deep .mat-mdc-text-field-wrapper,
-::ng-deep .mdc-snackbar__surface{
+::ng-deep .mat-mdc-text-field-wrapper {
   border-radius: 1.25vw !important;
 }
 
@@ -33,21 +51,6 @@
 
 ::ng-deep .mdc-text-field--filled .mdc-line-ripple::after {
   border-bottom-color: #00ADB5 !important;
-}
-
-::ng-deep .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: rgba(0,0,0,0.7) !important;
-  --mdc-snackbar-supporting-text-color : white;
-}
-
-::ng-deep .mat-mdc-simple-snack-bar {
-  padding: 1.5vh 1vw;
-}
-
-::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
-  font-weight: 100 !important;
-  text-align: center;
-  font-size: 3vh !important;
 }
 
 .bright-orange{

@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Passenger, PassengerService} from "../service/passenger.service";
+import {PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
+import {Passenger} from "../model/Passenger";
+import {NotificationService} from "../notification-service/notification.service";
 
 @Component({
   selector: 'app-passenger-account',
@@ -10,48 +11,42 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
 })
 export class PassengerAccountComponent implements OnInit {
 
-  public passenger: Passenger = {
-
-    "name": "Jovan",
-    "surname": "Jovanović",
-    "profilePicture": "",
-    "telephoneNumber": "063 7924 812",
-    "address": "Resavska 23",
-    "email": "jovan@gmail.com",
-    "password":"pass",
-  };
-
-  updatePassengerForm = new FormGroup({
-    name: new FormControl( '',[Validators.required]),
-    surname: new FormControl('',[Validators.required]),
-    telephoneNumber: new FormControl('',[Validators.required]),
-    address: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
+  updatePassengerForm : FormGroup = new FormGroup({
+    name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
+    surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     password: new FormControl('placeholder_pass'),
   });
 
   updateMode  = false;
   updateButtonText = "Izmeni podatke"
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  constructor(private passengerService : PassengerService, private successMsg : MatSnackBar) { }
+  constructor(private passengerService : PassengerService,
+              private notificationService : NotificationService) { }
   ngOnInit() {
     this.updatePassengerForm.disable();
-    console.log(this.updatePassengerForm.value);
     this.showPassenger();
   }
 
   updatePassenger(){
-    this.passengerService.updatePassenger(this.updatePassengerForm.value)
-      .subscribe((result : any) => console.log(result));
+    const passenger : Passenger = {
+      name : this.updatePassengerForm.value.name,
+      surname : this.updatePassengerForm.value.surname,
+      telephoneNumber : this.updatePassengerForm.value.telephoneNumber,
+      profilePicture : '',
+      address : this.updatePassengerForm.value.address,
+      email : this.updatePassengerForm.value.email,
+      password : this.updatePassengerForm.value.password
+    }
+    this.passengerService.updatePassenger(passenger).subscribe();
     this.disableForm();
   }
 
   showPassenger() {
     this.passengerService.getPassenger()
       .subscribe(passenger => {
-        this.passenger = passenger;
       this.updatePassengerForm.patchValue(
         {
           name : passenger.name,
@@ -66,7 +61,6 @@ export class PassengerAccountComponent implements OnInit {
   toggleUpdateMode()
   {
     if(this.updateMode) {
-      console.log(this.updatePassengerForm.value)
       if(this.updatePassengerForm.valid) {
         this.updatePassenger();
         this.disableForm();
@@ -88,11 +82,6 @@ export class PassengerAccountComponent implements OnInit {
   }
 
   showSuccessMessage() {
-    this.successMsg.open('Podaci uspešno izmenjeni!', '', {
-      duration: 2000,
-      horizontalPosition : this.horizontalPosition,
-      verticalPosition : this.verticalPosition,
-      panelClass: ['center']
-    });
+      this.notificationService.createNotification("Podaci uspešno izmenjeni!",2000);
   }
 }

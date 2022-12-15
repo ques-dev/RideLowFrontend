@@ -2,7 +2,7 @@
   display: none;
 }
 
-.unhide {
+.show {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,15 +23,15 @@
 
 .slide-left {
   position: relative;
-  animation: animateleft 0.5s;
+  animation: animate-left 0.5s;
 }
 
 .slide-right {
   position: relative;
-  animation: animateright 0.5s;
+  animation: animate-right 0.5s;
 }
 
-@keyframes animateright {
+@keyframes animate-right {
    0% {
      right: -300px;
      opacity: 0;
@@ -43,7 +43,7 @@
    }
  }
 
-@keyframes animateleft {
+@keyframes animate-left {
   0% {
     left: -300px;
     opacity: 0;

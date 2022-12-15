@@ -20,7 +20,7 @@ export class RegistrationComponent {
     address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     password: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    ppasword : new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    passwordRepeat : new FormControl('',{nonNullable:true, validators: [Validators.required]}),
   });
 
   firstPartVisible = true;

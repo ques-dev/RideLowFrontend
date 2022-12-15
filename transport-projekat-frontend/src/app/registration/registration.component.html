@@ -5,7 +5,7 @@ Registracija
 
 <form [formGroup] ="registerPassengerForm" class = "height-70 width-100">
   <div class = "stepper-container">
-    <div [ngClass]="{'unhide': firstPartVisible, 'hide':!firstPartVisible}" class = "height-85 slide-left">
+    <div [ngClass]="{'show': firstPartVisible, 'hide':!firstPartVisible}" class = "height-85 slide-left">
     <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
       <mat-label>Ime</mat-label>
       <input matInput name="name" formControlName="name">
@@ -27,7 +27,7 @@ Registracija
     </mat-form-field><br>
   </div>
 
-  <div [ngClass]="{'hide': firstPartVisible, 'unhide': !firstPartVisible}" class=" height-85 slide-right">
+  <div [ngClass]="{'hide': firstPartVisible, 'show': !firstPartVisible}" class=" height-85 slide-right">
     <mat-form-field  appearance="fill" class = "mat-form-field center-horizontal">
       <mat-label>E-mail</mat-label>
       <input matInput name="email" formControlName="email" type = "email">
@@ -40,7 +40,7 @@ Registracija
 
     <mat-form-field appearance="fill" class = "mat-form-field center-horizontal">
       <mat-label>Ponovi lozinku</mat-label>
-      <input matInput required type="password" name="ppassword" formControlName="ppasword">
+      <input matInput required type="password" name="passwordRepeat" formControlName="passwordRepeat">
     </mat-form-field><br>
   </div>
 
@@ -48,7 +48,7 @@ Registracija
       <button mat-mini-fab class="sky-blue" type = "button" [disabled] = "firstPartVisible" (click)="activateFirstPart()">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
-      <button mat-button type="submit" class = "button-rounded sky-blue mat-h1 no-margin" [disabled] = "firstPartVisible"(click)="check()">
+      <button mat-button type="submit" class = "button-rounded sky-blue mat-h1 no-margin" [disabled] = "firstPartVisible" (click)="check()">
         <mat-icon class = "icon" >perm_identity</mat-icon>
         Registracija
       </button>
