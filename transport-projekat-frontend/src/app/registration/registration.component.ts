@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
-import {Passenger, PassengerService} from "../service/passenger.service";
+import {PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {Passenger} from "../model/Passenger";
 
 @Component({
   selector: 'app-registration',
@@ -13,19 +13,29 @@ export class RegistrationComponent {
 
   constructor(private passengerService : PassengerService, private router:Router) { }
 
-  registerPassengerForm = new FormGroup({
-    name: new FormControl( '',[Validators.required]),
-    surname: new FormControl('',[Validators.required]),
-    telephoneNumber: new FormControl('',[Validators.required]),
-    address: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+  registerPassengerForm: FormGroup = new FormGroup({
+    name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
+    surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    password: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    ppasword : new FormControl('',{nonNullable:true, validators: [Validators.required]}),
   });
 
   firstPartVisible = true;
 
   registerPassenger() {
-      this.passengerService.registerPassenger(this.registerPassengerForm.value).subscribe();
+      const passenger : Passenger = {
+        name : this.registerPassengerForm.value.name,
+        surname : this.registerPassengerForm.value.surname,
+        telephoneNumber : this.registerPassengerForm.value.telephoneNumber,
+        profilePicture : '',
+        address : this.registerPassengerForm.value.address,
+        email : this.registerPassengerForm.value.email,
+        password : this.registerPassengerForm.value.password
+      }
+      this.passengerService.registerPassenger(passenger).subscribe();
   }
 
   check(){
