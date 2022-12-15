@@ -2,20 +2,6 @@
   font-weight: 100 !important;
 }
 
-.logo-bar {
-  height: 8vh;
-  display: flex;
-  margin-top: 2vh;
-  width: 100%;
-  justify-content: center;
-}
-
-.logo-bar-image {
-  margin: auto 1vw auto 0;
-  height: 4vw;
-  width: 4vw;
-}
-
 .profile-picture {
   border: 0.75vh solid #FF5722;
   border-radius: 50%;
