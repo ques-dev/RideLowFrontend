@@ -1,0 +1,52 @@
+<div class = "flex-column card width-fit-content">
+  <form [formGroup] ="searchForm">
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">location_on</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Od:</mat-label>
+        <input matInput name = "departure" formControlName="departure">
+      </mat-form-field>
+    </div>
+    <br>
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">flag</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Do:</mat-label>
+        <input matInput name = "destination" formControlName="destination">
+      </mat-form-field>
+    </div>
+    <br>
+    <div class = "flex-row space-evenly width-100">
+      <button mat-button class = "bright-orange button-rounded mat-h2" type="submit">
+        <mat-icon class = "icon">search</mat-icon>
+        Pretraga
+      </button>
+
+      <button mat-button class = "sky-blue button-rounded mat-h2" type="button">
+        <mat-icon class = "icon">receipt</mat-icon>
+        Poruči
+      </button>
+    </div>
+  </form>
+</div>
+<br>
+<br>
+<div class = "card flex-column width-fit-content">
+  <form [formGroup]="estimatesForm">
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">access_time</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Vreme:</mat-label>
+        <input matInput name = "time" formControlName="time">
+      </mat-form-field>
+    </div>
+    <br>
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">money</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Cena:</mat-label>
+        <input matInput name = "price" formControlName="price">
+      </mat-form-field>
+    </div>
+  </form>
+</div>

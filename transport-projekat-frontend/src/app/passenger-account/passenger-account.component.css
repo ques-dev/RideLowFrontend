@@ -5,24 +5,12 @@ body {
   height: 100vh;
 }
 
-.main-content {
-  background-color: #EEEEEE;
-  flex: 1;
-  padding-top: 2vh;
-  border-radius: 1.25vw;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
 #user-header-container {
   display: flex;
   margin-top: 2vw;
   padding: 1vw;
   align-items: center;
   flex-direction: row;
-  border-bottom-right-radius: 1vw;
-  border-top-right-radius: 1vw;
   width: 40vw;
 }
 

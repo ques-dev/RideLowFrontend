@@ -21,6 +21,8 @@ import {RegistrationComponent} from "./registration/registration.component";
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import {LoginComponent} from "./login/login.component";
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { PassengerHomeComponent } from './passenger-home/passenger-home.component';
+import { RideEstimatesComponent } from './ride-estimates/ride-estimates.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
         LoginRegisterComponent,
         LoginComponent,
         TopBarComponent,
+        PassengerHomeComponent,
+        RideEstimatesComponent,
     ],
   imports: [
     BrowserModule,

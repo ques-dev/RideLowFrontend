@@ -16,6 +16,6 @@ export class LoginComponent {
   });
 
   routeToAccount() {
-  this.router.navigate(['account']);
+  this.router.navigate(['home']);
 }
 }

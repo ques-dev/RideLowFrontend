@@ -1,7 +1,7 @@
-<mat-drawer-container class = "height-100-vh">
+<mat-drawer-container class = "height-100">
   <mat-drawer mode="side" opened class = "width-20-vw no-border">
     <div class = "sidenav">
-
+      <div class = "padding-bottom sidenav">
           <div class = "logo-bar center-horizontal">
               <img src="assets/images/logo.png" class = "logo-bar-image"/>
               <p class = "center-vertical mat-headline-5"> CarGoBrrr</p>
@@ -38,11 +38,12 @@
             </a>
           </mat-nav-list>
 
-          <button mat-button class = "bright-orange button-rounded mat-h1 logout-button stick-to-bottom center-horizontal"
+          <button mat-button class = "bright-orange button-rounded mat-h1 stick-to-bottom logout-button center-horizontal"
           (click)="logout()">
             <mat-icon class = "icon">logout</mat-icon>
             Odjava
           </button>
      </div>
+    </div>
   </mat-drawer>
 </mat-drawer-container>

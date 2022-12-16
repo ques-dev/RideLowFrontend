@@ -31,16 +31,16 @@
   background-color: rgba(0, 173, 181,0.5);
 }
 
-
-
 .sidenav {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #303841;
 }
 
-
+.padding-bottom {
+  padding-bottom: 2vh;
+}
 
 
 
