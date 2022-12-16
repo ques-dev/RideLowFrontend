@@ -22,7 +22,8 @@
         Pretraga
       </button>
 
-      <button mat-button class = "sky-blue button-rounded mat-h2" type="button">
+      <button mat-button class = "sky-blue button-rounded mat-h2" type="button"
+      [ngClass]="{'hide':!isRegisteredUser,'show':isRegisteredUser}">
         <mat-icon class = "icon">receipt</mat-icon>
         Poruči
       </button>

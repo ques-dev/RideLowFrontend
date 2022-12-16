@@ -8,6 +8,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class RideEstimatesComponent {
 
+  isRegisteredUser = true;
+  
   searchForm : FormGroup = new FormGroup({
     departure: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
     destination: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
