@@ -57,6 +57,21 @@
   margin-bottom: 0 !important;
 }
 
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text{
+  color: black;
+  font-weight: 300 !important;
+  padding: 0.8vh 0;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item:hover{
+  background: rgba(0,0,0,0.1);
+}
+
+::ng-deep .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) .mdc-menu-surface.mat-mdc-autocomplete-panel {
+  border-radius: 1.25vw;
+  background: #EEEEEE;
+}
+
 .bright-orange{
   background: #FF5722 !important;
 }
