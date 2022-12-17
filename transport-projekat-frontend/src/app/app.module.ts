@@ -23,6 +23,7 @@ import {LoginComponent} from "./login/login.component";
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { PassengerHomeComponent } from './passenger-home/passenger-home.component';
 import { RideEstimatesComponent } from './ride-estimates/ride-estimates.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
     declarations: [
@@ -36,22 +37,23 @@ import { RideEstimatesComponent } from './ride-estimates/ride-estimates.componen
         PassengerHomeComponent,
         RideEstimatesComponent,
     ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatCardModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatSnackBarModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatCardModule,
+        MatListModule,
+        MatIconModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        MatAutocompleteModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

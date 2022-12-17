@@ -1,10 +1,17 @@
 <div class = "flex-column card width-fit-content">
-  <form [formGroup] ="searchForm">
+  <form [formGroup]="searchForm">
     <div class = "flex-row">
       <mat-icon class = "icon black-icon">location_on</mat-icon>
       <mat-form-field appearance="fill">
         <mat-label>Od:</mat-label>
-        <input matInput name = "departure" formControlName="departure">
+        <input matInput name = "departure" formControlName = "departure"
+               (keyup)="getDepartureSuggestions()"
+               [matAutocomplete]="dep">
+        <mat-autocomplete #dep="matAutocomplete">
+          <mat-option *ngFor="let option of departureSuggestions" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
     </div>
     <br>
@@ -12,7 +19,14 @@
       <mat-icon class = "icon black-icon">flag</mat-icon>
       <mat-form-field appearance="fill">
         <mat-label>Do:</mat-label>
-        <input matInput name = "destination" formControlName="destination">
+        <input matInput name = "destination" formControlName = "destination"
+               (keyup)="getDestinationSuggestions()"
+               [matAutocomplete]="dest">
+        <mat-autocomplete #dest="matAutocomplete">
+          <mat-option *ngFor="let option of destinationSuggestions" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
     </div>
     <br>
