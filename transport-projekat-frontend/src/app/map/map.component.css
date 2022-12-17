@@ -1,9 +1,6 @@
 .map-container {
-  position: absolute;
-  top: 12vh;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  margin-top: 2vh;
+  height: 88%;
 }
 
 .map-frame {
