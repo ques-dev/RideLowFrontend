@@ -21,6 +21,8 @@ import {RegistrationComponent} from "./registration/registration.component";
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import {LoginComponent} from "./login/login.component";
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { UnregisteredUserMainComponent } from './unregistered-user-main/unregistered-user-main.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
         LoginRegisterComponent,
         LoginComponent,
         TopBarComponent,
+        UnregisteredUserMainComponent,
+        MapComponent,
     ],
   imports: [
     BrowserModule,
