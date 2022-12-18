@@ -31,18 +31,9 @@
   background-color: rgba(0, 173, 181,0.5);
 }
 
-
-
 .sidenav {
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: #303841;
 }
-
-
-
-
-
-
-

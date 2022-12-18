@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SideNavigationComponent } from './side-navigation/side-navigation.component';
+import { PassengerSideNavigationComponent } from './passenger-side-navigation/passenger-side-navigation.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
@@ -14,7 +14,7 @@ import { PassengerAccountComponent } from './passenger-account/passenger-account
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {RegistrationComponent} from "./registration/registration.component";
@@ -23,11 +23,14 @@ import {LoginComponent} from "./login/login.component";
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { UnregisteredUserMainComponent } from './unregistered-user-main/unregistered-user-main.component';
 import { MapComponent } from './map/map.component';
+import { DriverSideNavigationComponent } from './driver-side-navigation/driver-side-navigation.component';
+import { DriverAccountComponent } from './driver-account/driver-account.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
         AppComponent,
-        SideNavigationComponent,
+        PassengerSideNavigationComponent,
         PassengerAccountComponent,
         RegistrationComponent,
         LoginRegisterComponent,
@@ -35,6 +38,8 @@ import { MapComponent } from './map/map.component';
         TopBarComponent,
         UnregisteredUserMainComponent,
         MapComponent,
+        DriverSideNavigationComponent,
+        DriverAccountComponent,
     ],
   imports: [
     BrowserModule,
@@ -50,7 +55,9 @@ import { MapComponent } from './map/map.component';
     MatInputModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

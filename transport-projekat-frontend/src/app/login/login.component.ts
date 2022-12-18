@@ -16,6 +16,10 @@ export class LoginComponent {
   });
 
   routeToAccount() {
-  this.router.navigate(['account']);
-}
+    if (this.loginForm.controls.email.value == "driver") {
+      this.router.navigate(['driver-account']);
+    } else {
+      this.router.navigate(['passenger-account']);
+    }
+  }
 }

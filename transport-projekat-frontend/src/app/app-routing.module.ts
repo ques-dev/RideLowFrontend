@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import {PassengerAccountComponent} from "./passenger-account/passenger-account.component";
 import {LoginRegisterComponent} from "./login-register/login-register.component";
 import {UnregisteredUserMainComponent} from "./unregistered-user-main/unregistered-user-main.component";
+import {DriverAccountComponent} from "./driver-account/driver-account.component";
 
 const routes: Routes = [
-  {path: "account", component: PassengerAccountComponent },
+  {path: "passenger-account", component: PassengerAccountComponent },
+  {path: "driver-account", component: DriverAccountComponent },
   {path: "entrance", component: LoginRegisterComponent },
-  {path: "unregistered_main", component: UnregisteredUserMainComponent },
-  {path: '', redirectTo:'/unregistered_main', pathMatch: 'full'},
+  {path: "unregistered-main", component: UnregisteredUserMainComponent },
+  {path: '', redirectTo:'/unregistered-main', pathMatch: 'full'},
 ];
 
 @NgModule({

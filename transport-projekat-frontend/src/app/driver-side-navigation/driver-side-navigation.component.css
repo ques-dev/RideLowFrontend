@@ -1,0 +1,104 @@
+* {
+  font-weight: 100 !important;
+}
+
+.profile-picture {
+  border: 0.75vh solid #FF5722;
+  border-radius: 50%;
+  width: 7vw;
+  height: 7vw;
+  margin-bottom: 2vh;
+}
+
+.sidenav-profile-header {
+  background-color: #303841;
+  box-shadow: none;
+  border-style: none;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
+  align-items: center;
+}
+
+.list-item {
+  align-items: center;
+  padding-left: 1vw !important;
+  border-bottom-right-radius: 1.5vw;
+  border-top-right-radius: 1.5vw;
+  width: 17vw;
+}
+
+.list-item:hover, .list-item-active {
+  background-color: rgba(0, 173, 181,0.5);
+}
+
+.sidenav {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #303841;
+}
+
+#sidenav-footer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 1vh;
+  left: 5vw;
+}
+
+::ng-deep #sidenav-footer .mdc-form-field {
+  flex-direction: column-reverse;
+}
+
+mat-slide-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5vh;
+  scale: 1.75;
+}
+
+::ng-deep #sidenav-footer .mdc-form-field>label {
+  z-index: 500;
+  position: absolute;
+  top: -0.3vh;
+  left: 34%;
+  user-select: none;
+}
+
+::ng-deep .mat-mdc-slide-toggle .mdc-switch .mdc-switch__track {
+  scale: 2.75 2.15;
+}
+
+::ng-deep .mdc-switch .mdc-switch__handle-track {
+  scale: 1.35;
+}
+
+::ng-deep #sidenav-footer .mdc-switch--checked .mdc-switch__handle {
+  left: 100%;
+}
+
+::ng-deep #sidenav-footer .mdc-switch--unselected .mdc-switch__handle {
+  left: -130%;
+}
+
+::ng-deep .mdc-switch__ripple {
+  display: none;
+}
+
+.logout-button {
+  scale: 1.2 1.1;
+}
+
+::ng-deep .mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-track-color: #00adb58a;
+  --mdc-switch-selected-hover-track-color: #00adb58a;
+  --mdc-switch-selected-pressed-track-color: #00adb58a;
+  --mdc-switch-selected-focus-state-layer-color: #00adb58a;
+  --mdc-switch-selected-handle-color: white;
+  --mdc-switch-selected-hover-state-layer-color: #00adb58a;
+  --mdc-switch-selected-pressed-state-layer-color: #00adb58a;
+  --mdc-switch-selected-focus-handle-color: white;
+  --mdc-switch-selected-hover-handle-color: white;
+  --mdc-switch-selected-pressed-handle-color: white;
+  --mdc-switch-selected-focus-track-color: #00adb58a;
+}
