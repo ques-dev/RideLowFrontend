@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import {Location} from "../model/Location";
 
 @Component({
   selector: 'app-ride-estimates',
@@ -22,17 +23,33 @@ export class RideEstimatesComponent {
   });
 
   provider = new OpenStreetMapProvider();
-  destinationSuggestions : object[] = [];
-  departureSuggestions : object[] = [];
+  destinationSuggestions : Location[] = [];
+  departureSuggestions : Location[] = [];
+
+  @Output() chosenDeparture = new EventEmitter<Location>();
+  @Output() chosenDestination = new EventEmitter<Location>();
+  @Output() bothLocationsSelected = new EventEmitter<boolean>;
 
   ngOnInit() {
     this.estimatesForm.disable();
   }
 
-  private filterToTop5Suggestions(suggestions : object[]) : object[] {
+  private mapGeoSearchObjectToLocation(geoSearchObj : any) : Location {
+    const location = new Location(
+      geoSearchObj.label,
+      geoSearchObj.x,
+      geoSearchObj.y)
+
+    return location;
+}
+
+  private filterToTop5Suggestions(suggestions : object[]) : Location[] {
     suggestions = suggestions.slice(0,5);
-    suggestions = suggestions.map((suggestion : any) => suggestion.label);
-    return suggestions;
+    const top5 : Location[] = [];
+    for(const suggestion of suggestions) {
+      top5.push(this.mapGeoSearchObjectToLocation(suggestion));
+    }
+    return top5;
   }
 
 
@@ -46,5 +63,21 @@ export class RideEstimatesComponent {
     const top5results = await this.provider.search({query: this.searchForm.value.destination})
       .then((results: object[]) => this.filterToTop5Suggestions(results));
     this.destinationSuggestions = top5results;
+  }
+
+  public displayLabel(location : Location) : string
+  {
+    return location.address;
+  }
+
+  public sendLocationInputToParent(value : Location,which : string) {
+    if(which == 'departure') this.chosenDeparture.emit(value);
+    else this.chosenDestination.emit(value);
+  }
+
+  public drawRoute(){
+      if(this.searchForm.valid) {
+          this.bothLocationsSelected.emit(true);
+      }
   }
 }

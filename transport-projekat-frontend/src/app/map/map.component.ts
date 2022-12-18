@@ -1,22 +1,26 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, Input} from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
-import {LatLngTuple} from "leaflet";
+import {LatLngTuple, marker} from "leaflet";
+import {Location} from "../model/Location";
+import {BehaviorSubject, Subject} from "rxjs";
 
-const CIRCLE_FILL_OPACITY = 0.9;
-const CIRCLE_RADIUS = 20;
-const FREE_CIRCLE_COLOR = '#50B214';
-const TAKEN_CIRCLE_COLOR = '#FD1C1C';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css','../app.component.css']
 })
+
 export class MapComponent implements AfterViewInit {
+
   private map!: L.Map;
   private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
+
+  @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
+  @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
+  @Input() toDrawRoute : Subject<boolean> = new Subject<boolean>();
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -25,7 +29,7 @@ export class MapComponent implements AfterViewInit {
 
     iconSize:     [40, 40], // size of the icon
     shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [20, 35], // point of the icon which will correspond to marker's location
+    iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
     shadowAnchor: [0, 0],  // the same for the shadow
     popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
   });
@@ -49,18 +53,9 @@ export class MapComponent implements AfterViewInit {
 
     iconSize:     [25, 25], // size of the icon
     shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [15, 20], // point of the icon which will correspond to marker's location
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
     shadowAnchor: [0, 0],  // the same for the shadow
     popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
-  });
-
-  private startMarker: L.Marker = L.marker([45.245932, 19.850961], {
-    draggable: true,
-    title: 'Start',
-  });
-  private endMarker: L.Marker = L.marker([45.238844, 19.838659], {
-    draggable: true,
-    title: 'End',
   });
 
   private initMap(): void {
@@ -72,35 +67,37 @@ export class MapComponent implements AfterViewInit {
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
+      maxZoom: 19,
       minZoom: 3,
     });
 
     tiles.addTo(this.map);
   }
 
-  private initRouting(): void {
+  private makeMarker(location : Location) : L.Marker {
+    const locationMarker = L.marker([location.latitude, location.longitude], {
+        draggable: true,
+      });
+  return locationMarker;
+  }
+
+  private drawRoute(departure : Location, destination : Location) : void {
     L.Routing.control({
       router: L.Routing.osrmv1({
         serviceUrl: `http://router.project-osrm.org/route/v1/`
       }),
-      showAlternatives: true,
+      showAlternatives: false,
       lineOptions: {
         styles: [{color: '#CF0A0A', weight: 7}],
         extendToWaypoints: true,
         missingRouteTolerance: 100
       },
       fitSelectedRoutes: false,
-      altLineOptions: {
-        styles: [{color: '#ed6852', weight: 7}],
-        extendToWaypoints: true,
-        missingRouteTolerance: 100
-      },
-      show: false,
+      show: true,
       routeWhileDragging: true,
       waypoints: [
-        this.startMarker.getLatLng(),
-        this.endMarker.getLatLng()
+        this.makeMarker(departure).getLatLng(),
+        this.makeMarker(destination).getLatLng()
       ]
     }).addTo(this.map);
   }
@@ -131,7 +128,25 @@ export class MapComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     L.Marker.prototype.options.icon = this.locationIcon;
     this.initMap();
-    this.initRouting();
     this.initCars();
+    this.destination.subscribe(location => {
+      this.drawMarker(location);
+    });
+    this.departure.subscribe(location => {
+      this.drawMarker(location);
+    });
+    this.toDrawRoute.subscribe(yes => {
+      this.drawRouteBetweenSelectedLocations();
+    });
+  }
+
+  public drawMarker(location : Location)
+  {
+    this.makeMarker(location).addTo(this.map);
+  }
+
+  public drawRouteBetweenSelectedLocations()
+  {
+    this.drawRoute(this.departure.getValue(), this.destination.getValue());
   }
 }

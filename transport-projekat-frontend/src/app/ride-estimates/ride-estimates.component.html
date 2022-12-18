@@ -1,5 +1,5 @@
-<div class = "flex-column card width-fit-content">
-  <form [formGroup]="searchForm">
+<div class = "flex-column card width-fit-content white-text">
+  <form [formGroup]="searchForm" (ngSubmit)="drawRoute()">
     <div class = "flex-row">
       <mat-icon class = "icon black-icon">location_on</mat-icon>
       <mat-form-field appearance="fill">
@@ -7,9 +7,9 @@
         <input matInput name = "departure" formControlName = "departure"
                (keyup)="getDepartureSuggestions()"
                [matAutocomplete]="dep">
-        <mat-autocomplete #dep="matAutocomplete">
+        <mat-autocomplete #dep="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToParent($event.option.value,'departure')">
           <mat-option *ngFor="let option of departureSuggestions" [value]="option">
-            {{option}}
+            {{option.address}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -22,9 +22,9 @@
         <input matInput name = "destination" formControlName = "destination"
                (keyup)="getDestinationSuggestions()"
                [matAutocomplete]="dest">
-        <mat-autocomplete #dest="matAutocomplete">
-          <mat-option *ngFor="let option of destinationSuggestions" [value]="option">
-            {{option}}
+        <mat-autocomplete #dest="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToParent($event.option.value,'destination')">
+          <mat-option *ngFor="let option of destinationSuggestions" [value]="option" >
+            {{option.address}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

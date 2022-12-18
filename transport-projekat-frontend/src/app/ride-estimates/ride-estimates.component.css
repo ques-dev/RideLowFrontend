@@ -13,6 +13,3 @@ mat-form-field {
   width: 20vw;
 }
 
-mat-autocomplete {
-  z-index: 9999;
-}
