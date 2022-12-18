@@ -1,0 +1,22 @@
+.map-container {
+  margin-top: 2vh;
+  height: 88%;
+}
+
+.map-frame {
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+}
+
+#legend {
+  color: black;
+  font-size: 2.5vw;
+  z-index: 1001;
+  position: absolute;
+  right: 1vw;
+  bottom: 2vh;
+  box-shadow: rgb(0 0 0 / 50%) 0 0.65vh 0.35vh;
+}

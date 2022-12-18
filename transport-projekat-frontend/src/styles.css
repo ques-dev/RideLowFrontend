@@ -6,6 +6,7 @@ html, body {
 
 body {
   margin: 0;
+  background: #303841;
 }
 
 * {
@@ -14,7 +15,6 @@ body {
   color: white;
 }
 
-
-
-
-
+.standard-border-radius {
+  border-radius: 1.25vw;
+}

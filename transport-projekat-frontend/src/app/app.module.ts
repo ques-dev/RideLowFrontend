@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,6 +23,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { PassengerHomeComponent } from './passenger-home/passenger-home.component';
 import { RideEstimatesComponent } from './ride-estimates/ride-estimates.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { UnregisteredUserMainComponent } from './unregistered-user-main/unregistered-user-main.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         TopBarComponent,
         PassengerHomeComponent,
         RideEstimatesComponent,
+        UnregisteredUserMainComponent,
+        MapComponent,
     ],
     imports: [
         BrowserModule,
@@ -52,7 +55,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         ReactiveFormsModule,
         HttpClientModule,
         MatSnackBarModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
     ],
   providers: [],
   bootstrap: [AppComponent]
