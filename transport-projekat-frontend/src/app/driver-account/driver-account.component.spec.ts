@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SideNavigationComponent } from './side-navigation.component';
+import { DriverAccountComponent } from './driver-account.component';
 
-describe('SideNavigationComponent', () => {
-  let component: SideNavigationComponent;
-  let fixture: ComponentFixture<SideNavigationComponent>;
+describe('DriverAccountComponent', () => {
+  let component: DriverAccountComponent;
+  let fixture: ComponentFixture<DriverAccountComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SideNavigationComponent ]
+      declarations: [ DriverAccountComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SideNavigationComponent);
+    fixture = TestBed.createComponent(DriverAccountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,5 +21,3 @@ describe('SideNavigationComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-
-

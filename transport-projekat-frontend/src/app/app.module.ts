@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SideNavigationComponent } from './side-navigation/side-navigation.component';
+import { PassengerSideNavigationComponent } from './passenger-side-navigation/passenger-side-navigation.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
@@ -13,7 +13,7 @@ import { PassengerAccountComponent } from './passenger-account/passenger-account
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {RegistrationComponent} from "./registration/registration.component";
@@ -25,11 +25,14 @@ import { RideEstimatesComponent } from './ride-estimates/ride-estimates.componen
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { UnregisteredUserMainComponent } from './unregistered-user-main/unregistered-user-main.component';
 import { MapComponent } from './map/map.component';
+import { DriverSideNavigationComponent } from './driver-side-navigation/driver-side-navigation.component';
+import { DriverAccountComponent } from './driver-account/driver-account.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
         AppComponent,
-        SideNavigationComponent,
+        PassengerSideNavigationComponent,
         PassengerAccountComponent,
         RegistrationComponent,
         LoginRegisterComponent,
@@ -39,6 +42,8 @@ import { MapComponent } from './map/map.component';
         RideEstimatesComponent,
         UnregisteredUserMainComponent,
         MapComponent,
+        DriverSideNavigationComponent,
+        DriverAccountComponent,
     ],
     imports: [
         BrowserModule,
@@ -56,7 +61,10 @@ import { MapComponent } from './map/map.component';
         HttpClientModule,
         MatSnackBarModule,
         MatAutocompleteModule,
+        MatSlideToggleModule,
+        FormsModule
     ],
+
   providers: [],
   bootstrap: [AppComponent]
 })
