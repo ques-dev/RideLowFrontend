@@ -1,4 +1,4 @@
-export interface PassengerRetrieved {
+export interface UserRetrieved {
   id : number,
   name : string,
   surname : string,

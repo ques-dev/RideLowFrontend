@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {Passenger} from "../model/Passenger";
+import {User} from "../model/User";
 
 @Component({
   selector: 'app-registration',
@@ -26,7 +26,7 @@ export class RegistrationComponent {
   firstPartVisible = true;
 
   registerPassenger() {
-      const passenger : Passenger = {
+      const passenger : User = {
         name : this.registerPassengerForm.value.name,
         surname : this.registerPassengerForm.value.surname,
         telephoneNumber : this.registerPassengerForm.value.telephoneNumber,
