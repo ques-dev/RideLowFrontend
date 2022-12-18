@@ -5,9 +5,3 @@ body {
   flex-direction: row;
 }
 
-#ride-estimates{
-  position: absolute;
-  padding-top: 1vh;
-  padding-left: 1vw;
-  z-index: 999;
-}

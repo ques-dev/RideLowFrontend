@@ -15,11 +15,11 @@ export class LoginComponent {
     password: new FormControl('',[Validators.required]),
   });
 
-  routeToAccount() {
+  routeToHome() {
     if (this.loginForm.controls.email.value == "driver") {
       this.router.navigate(['driver-account']);
     } else {
-      this.router.navigate(['passenger-account']);
+      this.router.navigate(['passenger-home']);
     }
   }
 }

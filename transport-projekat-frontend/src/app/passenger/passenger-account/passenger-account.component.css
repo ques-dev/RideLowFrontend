@@ -3,6 +3,7 @@
   flex-direction: row;
   background-color: #303841;
   height: 100vh;
+  color: white;
 }
 
 #user-header-container {

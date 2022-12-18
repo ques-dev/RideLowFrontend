@@ -11,10 +11,12 @@ body {
 
 * {
   font-family: Roboto, sans-serif;
-  font-weight: 100;
-  color: white;
 }
 
-.standard-border-radius {
-  border-radius: 1.25vw;
+.leaflet-routing-alternatives-container {
+  color: black;
+  font-weight: 300;
 }
+
+
+

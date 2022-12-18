@@ -1,8 +1,9 @@
-body {
+.container {
   display: flex;
   flex-direction: column;
   background: #303841;
   font-weight: 100 !important;
+  color: white;
 }
 
 #my-main {
@@ -14,7 +15,7 @@ body {
   padding-bottom: 3vh;
   background: #EEEEEE;
   border-radius: 20px;
-  margin: auto;
+  margin: 3vh auto auto;
 }
 
 .half-container {

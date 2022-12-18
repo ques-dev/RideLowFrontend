@@ -11,6 +11,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
+import {PassengerModule} from "../passenger/passenger.module";
 
 
 
@@ -22,15 +23,16 @@ import {MatInputModule} from "@angular/material/input";
     LoginRegisterComponent,
     LoginComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatInputModule
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MatIconModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        PassengerModule
+    ],
   exports: [
     UnregisteredUserMainComponent,
     TopBarComponent,

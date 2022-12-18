@@ -70,8 +70,8 @@
 ::ng-deep .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) .mdc-menu-surface.mat-mdc-autocomplete-panel {
   border-radius: 1.25vw;
   background: #EEEEEE;
-  z-index: 9999 !important;
 }
+
 
 .bright-orange{
   background: #FF5722 !important;
@@ -296,6 +296,21 @@
 
 .height-max {
   flex: 1;
+}
+
+.padding-top-2vh {
+  padding-top: 2vh;
+}
+
+.white-text {
+  color: white !important;
+}
+
+#ride-estimates{
+  position: absolute;
+  padding-top: 1vh;
+  padding-left: 1vw;
+  z-index: 999;
 }
 
 
