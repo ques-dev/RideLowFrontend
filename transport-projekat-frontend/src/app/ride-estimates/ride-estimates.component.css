@@ -2,6 +2,7 @@
   box-shadow: 5px 8px 15px rgba(0,0,0,0.3);
   padding: 1vw;
   border-radius: 1.25vw;
+  background: #EEEEEE;
 }
 
 .temporary-border {
@@ -10,4 +11,8 @@
 
 mat-form-field {
   width: 20vw;
+}
+
+mat-autocomplete {
+  z-index: 9999;
 }
