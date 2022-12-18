@@ -1,4 +1,4 @@
-export interface Passenger {
+export interface User {
   name: string;
   surname: string;
   profilePicture: string;

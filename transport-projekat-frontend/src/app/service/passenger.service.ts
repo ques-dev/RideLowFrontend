@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import {environment} from "../environments/environment";
-import {Passenger} from "../model/Passenger";
-import {PassengerRetrieved} from "../model/PassengerRetrieved";
+import {User} from "../model/User";
+import {UserRetrieved} from "../model/UserRetrieved";
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +16,21 @@ export class PassengerService {
 
   constructor(private http: HttpClient) { }
 
-  getPassenger(): Observable<PassengerRetrieved> {
-    return this.http.get<PassengerRetrieved>(this.url);
+  getPassenger(): Observable<UserRetrieved> {
+    return this.http.get<UserRetrieved>(this.url);
   }
 
-  updatePassenger(newData : Passenger) : Observable<HttpEvent<PassengerRetrieved>> {
+  updatePassenger(newData : User) : Observable<HttpEvent<UserRetrieved>> {
     const options: any = {
       responseType: 'text',
     };
-    return this.http.put<PassengerRetrieved>(this.url,newData,options);
+    return this.http.put<UserRetrieved>(this.url,newData,options);
   }
 
-  registerPassenger(newData : Passenger) : Observable<HttpEvent<PassengerRetrieved>> {
+  registerPassenger(newData : User) : Observable<HttpEvent<UserRetrieved>> {
     const options : any = {
       responseType: 'text',
     };
-    return this.http.post<PassengerRetrieved>(this.postUrl,newData,options);
+    return this.http.post<UserRetrieved>(this.postUrl,newData,options);
   }
 }

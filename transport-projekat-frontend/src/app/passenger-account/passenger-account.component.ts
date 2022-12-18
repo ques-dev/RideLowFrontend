@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PassengerService} from "../service/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Passenger} from "../model/Passenger";
+import {User} from "../model/User";
 import {NotificationService} from "../notification-service/notification.service";
 
 @Component({
@@ -31,7 +31,7 @@ export class PassengerAccountComponent implements OnInit {
   }
 
   updatePassenger(){
-    const passenger : Passenger = {
+    const passenger : User = {
       name : this.updatePassengerForm.value.name,
       surname : this.updatePassengerForm.value.surname,
       telephoneNumber : this.updatePassengerForm.value.telephoneNumber,
