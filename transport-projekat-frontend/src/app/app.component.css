@@ -296,6 +296,10 @@
   display: flex;
 }
 
+.height-max {
+  flex: 1;
+}
+
 
 
 
