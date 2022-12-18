@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-driver-side-navigation',
   templateUrl: './driver-side-navigation.component.html',
-  styleUrls: ['./driver-side-navigation.component.css', '../app.component.css']
+  styleUrls: ['../passenger-side-navigation/passenger-side-navigation.component.css', './driver-side-navigation.component.css', '../app.component.css']
 })
 export class DriverSideNavigationComponent {
   isChecked = true;
