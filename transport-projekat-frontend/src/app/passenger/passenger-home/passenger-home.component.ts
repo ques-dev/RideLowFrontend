@@ -12,6 +12,7 @@ export class PassengerHomeComponent {
   public departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   public destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   public toDrawRoute : Subject<boolean> = new Subject<boolean>();
+  public rideOrderClicked = false;
 
   public sendLocationToMap(location : Location, which : string) : void {
     if(which == 'destination') this.destination.next(location);
@@ -20,6 +21,10 @@ export class PassengerHomeComponent {
 
   public drawRoute() : void {
     this.toDrawRoute.next(true);
+  }
+
+  public openRideOrderForm(){
+    this.rideOrderClicked = true;
   }
 }
 

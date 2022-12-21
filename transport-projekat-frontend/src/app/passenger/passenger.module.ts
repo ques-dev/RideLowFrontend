@@ -16,13 +16,16 @@ import {MatListModule} from "@angular/material/list";
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {SharedModule} from "../shared/shared.module";
 import {PassengerService} from "./passenger.service";
+import { RideReservationFormComponent } from './ride-reservation-form/ride-reservation-form.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
     PassengerAccountComponent,
     PassengerHomeComponent,
     PassengerSideNavigationComponent,
-    RideEstimatesComponent
+    RideEstimatesComponent,
+    RideReservationFormComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,8 @@ import {PassengerService} from "./passenger.service";
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
-    SharedModule
+    SharedModule,
+    MatSelectModule
   ],
   exports: [
     PassengerAccountComponent,

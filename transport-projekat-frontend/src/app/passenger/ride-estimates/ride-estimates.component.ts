@@ -29,6 +29,7 @@ export class RideEstimatesComponent {
   @Output() chosenDeparture = new EventEmitter<Location>();
   @Output() chosenDestination = new EventEmitter<Location>();
   @Output() bothLocationsSelected = new EventEmitter<boolean>;
+  @Output() orderIsClicked = new EventEmitter<boolean>;
 
   ngOnInit() {
     this.estimatesForm.disable();
@@ -79,5 +80,9 @@ export class RideEstimatesComponent {
       if(this.searchForm.valid) {
           this.bothLocationsSelected.emit(true);
       }
+  }
+
+  public showOrderForm() {
+    this.orderIsClicked.emit(true);
   }
 }
