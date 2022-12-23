@@ -24,6 +24,7 @@ export class MapComponent implements AfterViewInit {
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() toDrawRoute : Subject<boolean> = new Subject<boolean>();
+  @Input() parentName = "passenger";
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -60,6 +61,18 @@ export class MapComponent implements AfterViewInit {
     shadowAnchor: [0, 0],  // the same for the shadow
     popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
   });
+
+  private driverIcon = L.icon({
+    iconUrl: 'assets/images/car.png',
+    shadowUrl: 'assets/images/car.png',
+    iconRetinaUrl : 'assets/images/car.png',
+
+    iconSize:     [35, 35], // size of the icon
+    shadowSize:   [0,0], // size of the shadow
+    iconAnchor:   [35, 35], // point of the icon which will correspond to marker's location
+    shadowAnchor: [0, 0],  // the same for the shadow
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+  })
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -139,11 +152,21 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
+  private initDriverCar(): void {
+    L.marker(this.map.getCenter(), {
+      draggable: false,
+      icon: this.driverIcon
+    }).addTo(this.map);
+  }
+
   ngAfterViewInit(): void {
     L.Marker.prototype.options.icon = this.locationIcon;
     this.initMap();
     this.initCars();
     this.initReverseGeocoding();
+    if (this.parentName.startsWith("driver")) {
+      this.initDriverCar();
+    }
     this.destination.subscribe(location => {
       this.drawMarker(location);
     });

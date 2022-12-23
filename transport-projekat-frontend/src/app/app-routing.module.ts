@@ -5,12 +5,14 @@ import {LoginRegisterComponent} from "./unregistered-user/login-register/login-r
 import {PassengerHomeComponent} from "./passenger/passenger-home/passenger-home.component";
 import {UnregisteredUserMainComponent} from "./unregistered-user/unregistered-user-main/unregistered-user-main.component";
 import {DriverAccountComponent} from "./driver/driver-account/driver-account.component";
+import {DriverHomeComponent} from "./driver/driver-home/driver-home.component";
 
 const routes: Routes = [
   {path: "passenger-account", component: PassengerAccountComponent },
   {path: "driver-account", component: DriverAccountComponent },
   {path: "entrance", component: LoginRegisterComponent },
   {path: "passenger-home", component: PassengerHomeComponent},
+  {path: "driver-home", component: DriverHomeComponent},
   {path: "unregistered-main", component: UnregisteredUserMainComponent },
   {path: '', redirectTo:'/unregistered-main', pathMatch: 'full'},
 ];
