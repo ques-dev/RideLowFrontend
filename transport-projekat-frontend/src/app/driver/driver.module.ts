@@ -15,30 +15,34 @@ import {MatInputModule} from "@angular/material/input";
 import {DriverService} from "./driver.service";
 import { DriverHomeComponent } from './driver-home/driver-home.component';
 import {SharedModule} from "../shared/shared.module";
+import { RideReceivedComponent } from './ride-received/ride-received.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
     DriverAccountComponent,
     DriverSideNavigationComponent,
-    DriverHomeComponent
+    DriverHomeComponent,
+    RideReceivedComponent
   ],
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatCardModule,
-        MatListModule,
-        RouterLink,
-        RouterLinkActive,
-        MatSlideToggleModule,
-        FormsModule,
-        RouterOutlet,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        SharedModule
-    ],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    RouterLink,
+    RouterLinkActive,
+    MatSlideToggleModule,
+    FormsModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    SharedModule,
+    MatAutocompleteModule
+  ],
   exports: [
     DriverAccountComponent,
     DriverSideNavigationComponent

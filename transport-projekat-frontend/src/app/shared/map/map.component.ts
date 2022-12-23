@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
 import * as L from 'leaflet';
+import {LatLngTuple} from 'leaflet';
 import 'leaflet-routing-machine';
-import {LatLng, LatLngTuple} from "leaflet";
 import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
@@ -20,11 +20,12 @@ export class MapComponent implements AfterViewInit {
   private map!: L.Map;
   private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
+  private carMarker!: L.Marker;
 
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
-  @Input() toDrawRoute : Subject<boolean> = new Subject<boolean>();
-  @Input() parentName = "passenger";
+  @Input() passenger : Subject<boolean> = new Subject<boolean>();
+  @Input() displayCar = false;
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -91,13 +92,13 @@ export class MapComponent implements AfterViewInit {
   }
 
   private makeMarker(location : Location) : L.Marker {
-    const locationMarker = L.marker([location.latitude, location.longitude], {
-        draggable: true,
-      });
-  return locationMarker;
+    return L.marker([location.latitude, location.longitude], {
+    draggable: true,
+  });
   }
 
-  private drawRoute(departure : Location, destination : Location) : void {
+  private drawRoute(departure : Location, destination : Location, passenger : boolean) : void {
+    console.log(passenger);
     L.Routing.control({
       router: L.Routing.osrmv1({
         serviceUrl: `http://router.project-osrm.org/route/v1/`
@@ -111,10 +112,35 @@ export class MapComponent implements AfterViewInit {
       fitSelectedRoutes: false,
       show: true,
       routeWhileDragging: true,
-      waypoints: [
-        this.makeMarker(departure).getLatLng(),
-        this.makeMarker(destination).getLatLng()
-      ]
+      // waypoints: [
+      //   this.makeMarker(departure).getLatLng(),
+      //   this.makeMarker(destination).getLatLng()
+      // ],
+      plan: L.Routing.plan([
+          this.makeMarker(departure).getLatLng(),
+          this.makeMarker(destination).getLatLng()
+      ], {
+        draggableWaypoints: passenger,
+        createMarker: function(i: number, waypoint: any, n: number) {
+          console.log(i, waypoint, n);
+          if (i == 0 && !passenger) {
+            return L.marker(waypoint.latLng, {
+              icon: L.icon({
+                iconUrl: 'assets/images/car.png',
+                shadowUrl: 'assets/images/car.png',
+                iconRetinaUrl: 'assets/images/car.png',
+
+                iconSize: [35, 35], // size of the icon
+                shadowSize: [0, 0], // size of the shadow
+                iconAnchor: [35, 35], // point of the icon which will correspond to marker's location
+                shadowAnchor: [0, 0],  // the same for the shadow
+                popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
+              }),
+            });
+          }
+          return L.marker(waypoint.latLng);
+        }
+      })
     }).addTo(this.map);
   }
 
@@ -153,7 +179,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private initDriverCar(): void {
-    L.marker(this.map.getCenter(), {
+    this.carMarker = L.marker(this.map.getCenter(), {
       draggable: false,
       icon: this.driverIcon
     }).addTo(this.map);
@@ -164,27 +190,30 @@ export class MapComponent implements AfterViewInit {
     this.initMap();
     this.initCars();
     this.initReverseGeocoding();
-    if (this.parentName.startsWith("driver")) {
+    if (this.displayCar) {
       this.initDriverCar();
     }
-    this.destination.subscribe(location => {
-      this.drawMarker(location);
-    });
-    this.departure.subscribe(location => {
-      this.drawMarker(location);
-    });
-    this.toDrawRoute.subscribe(yes => {
-      this.drawRouteBetweenSelectedLocations();
+    // this.destination.subscribe(location => {
+    //   this.drawMarker(location);
+    // });
+    // this.departure.subscribe(location => {
+    //   this.drawMarker(location);
+    // });
+    this.passenger.subscribe(yes => {
+      this.drawRouteBetweenSelectedLocations(yes);
     });
   }
 
-  public drawMarker(location : Location)
-  {
-    this.makeMarker(location).addTo(this.map);
-  }
+  // public drawMarker(location : Location)
+  // {
+  //   this.makeMarker(location, true).addTo(this.map);
+  // }
 
-  public drawRouteBetweenSelectedLocations()
+  public drawRouteBetweenSelectedLocations(passenger : boolean)
   {
-    this.drawRoute(this.departure.getValue(), this.destination.getValue());
+    if (this.carMarker != null) {
+      this.carMarker.remove();
+    }
+    this.drawRoute(this.departure.getValue(), this.destination.getValue(), passenger);
   }
 }

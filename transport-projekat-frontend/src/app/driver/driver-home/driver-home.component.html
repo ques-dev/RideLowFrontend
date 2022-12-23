@@ -1,7 +1,12 @@
 <div class = "main-page dark-grey">
 <app-driver-side-navigation></app-driver-side-navigation>
   <div class = "main-content">
-    <app-map [parentName]="'driver'"></app-map>
+    <div id ="ride-estimates">
+      <app-ride-received *ngIf="rideReceived" (chosenDeparture) = "sendLocationToMap($event,'departure')"
+                          (chosenDestination)= "sendLocationToMap($event, 'destination')"
+                          (bothLocationsSelected)="drawRoute()"></app-ride-received>
+    </div>
+    <app-map [displayCar]="displayCar" [departure]="departure" [destination]="destination" [passenger]="passenger"></app-map>
   </div>
 </div>
 <router-outlet></router-outlet>

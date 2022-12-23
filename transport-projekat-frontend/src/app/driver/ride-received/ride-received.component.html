@@ -1,0 +1,35 @@
+<div class = "flex-column card width-fit-content white-text">
+  <form [formGroup]="searchForm" (ngSubmit)="drawRoute()">
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">location_on</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Od:</mat-label>
+        <input matInput name = "departure" formControlName = "departure">
+      </mat-form-field>
+    </div>
+
+    <br>
+
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">flag</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Do:</mat-label>
+        <input matInput name = "destination" formControlName = "destination" [readonly]>
+      </mat-form-field>
+    </div>
+
+    <br>
+
+    <div class = "flex-row space-evenly width-100">
+      <button mat-button class = "red button-rounded mat-h2" type="submit">
+        <mat-icon class = "icon">do_not_disturb</mat-icon>
+        Odbij
+      </button>
+
+      <button mat-button class = "green button-rounded mat-h2" type="button">
+        <mat-icon class = "icon">not_started</mat-icon>
+        Započni
+      </button>
+    </div>
+  </form>
+</div>
