@@ -1,9 +1,12 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
-import {LatLngTuple, marker} from "leaflet";
+import {LatLng, LatLngTuple} from "leaflet";
 import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
+import { HttpClient } from '@angular/common/http';
+
+const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
 @Component({
   selector: 'app-map',
@@ -13,6 +16,7 @@ import {BehaviorSubject, Subject} from "rxjs";
 
 export class MapComponent implements AfterViewInit {
 
+  constructor(private http: HttpClient) {}
   private map!: L.Map;
   private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
@@ -124,10 +128,22 @@ export class MapComponent implements AfterViewInit {
     this.initFreeCars();
   }
 
+  private initReverseGeocoding(): void {
+    this.map.on('click', (ev) => {
+      const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
+      console.log(latlng.lat + ', ' + latlng.lng);
+      const locationUrl = reverseGeocodeUrl + latlng.lng + "," + latlng.lat + "&f=pjson";
+      this.http.get(locationUrl).subscribe((response: any) => {
+        console.log(response.address);
+      });
+    });
+  }
+
   ngAfterViewInit(): void {
     L.Marker.prototype.options.icon = this.locationIcon;
     this.initMap();
     this.initCars();
+    this.initReverseGeocoding();
     this.destination.subscribe(location => {
       this.drawMarker(location);
     });
