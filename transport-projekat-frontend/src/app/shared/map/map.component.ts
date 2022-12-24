@@ -106,48 +106,65 @@ export class MapComponent implements AfterViewInit {
     if (this.route != null) {
       this.route.remove();
     }
-    this.route = L.Routing.control({
-      router: L.Routing.osrmv1({
-        serviceUrl: `http://router.project-osrm.org/route/v1/`
-      }),
-      showAlternatives: false,
-      lineOptions: {
-        styles: [{color: '#CF0A0A', weight: 7}],
-        extendToWaypoints: true,
-        missingRouteTolerance: 100
-      },
-      fitSelectedRoutes: false,
-      show: true,
-      routeWhileDragging: true,
-      // waypoints: [
-      //   this.makeMarker(departure).getLatLng(),
-      //   this.makeMarker(destination).getLatLng()
-      // ],
-      plan: L.Routing.plan([
+    if (passenger) {
+      this.route = L.Routing.control({
+        router: L.Routing.osrmv1({
+          serviceUrl: `http://router.project-osrm.org/route/v1/`
+        }),
+        showAlternatives: false,
+        lineOptions: {
+          styles: [{color: '#CF0A0A', weight: 7}],
+          extendToWaypoints: true,
+          missingRouteTolerance: 100
+        },
+        fitSelectedRoutes: false,
+        show: true,
+        routeWhileDragging: true,
+        waypoints: [
           this.makeMarker(departure).getLatLng(),
           this.makeMarker(destination).getLatLng()
-      ], {
-        draggableWaypoints: passenger,
-        createMarker: function(i: number, waypoint: any, n: number) {
-          if (i == 0 && !passenger) {
-            return L.marker(waypoint.latLng, {
-              icon: L.icon({
-                iconUrl: 'assets/images/car.png',
-                shadowUrl: 'assets/images/car.png',
-                iconRetinaUrl: 'assets/images/car.png',
+        ]
+      }).addTo(this.map);
+    } else {
+      this.route = L.Routing.control({
+        router: L.Routing.osrmv1({
+          serviceUrl: `http://router.project-osrm.org/route/v1/`
+        }),
+        showAlternatives: false,
+        lineOptions: {
+          styles: [{color: '#CF0A0A', weight: 7}],
+          extendToWaypoints: true,
+          missingRouteTolerance: 100
+        },
+        fitSelectedRoutes: false,
+        show: true,
+        routeWhileDragging: true,
+        plan: L.Routing.plan([
+          this.makeMarker(departure).getLatLng(),
+          this.makeMarker(destination).getLatLng()
+        ], {
+          draggableWaypoints: false,
+          createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
+            if (i == 0 && !passenger) {
+              return L.marker(waypoint.latLng, {
+                icon: L.icon({
+                  iconUrl: 'assets/images/car.png',
+                  shadowUrl: 'assets/images/car.png',
+                  iconRetinaUrl: 'assets/images/car.png',
 
-                iconSize: [35, 35], // size of the icon
-                shadowSize: [0, 0], // size of the shadow
-                iconAnchor: [35, 35], // point of the icon which will correspond to marker's location
-                shadowAnchor: [0, 0],  // the same for the shadow
-                popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
-              }),
-            });
+                  iconSize: [35, 35], // size of the icon
+                  shadowSize: [0, 0], // size of the shadow
+                  iconAnchor: [35, 35], // point of the icon which will correspond to marker's location
+                  shadowAnchor: [0, 0],  // the same for the shadow
+                  popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
+                }),
+              });
+            }
+            return L.marker(waypoint.latLng);
           }
-          return L.marker(waypoint.latLng);
-        }
-      })
-    }).addTo(this.map);
+        })
+      }).addTo(this.map);
+    }
   }
 
   private initTakenCars(): void {

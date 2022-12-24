@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Location} from "../../shared/model/Location";
 import {MapService} from "../../shared/map/map.service";
@@ -8,7 +8,7 @@ import {MapService} from "../../shared/map/map.service";
   templateUrl: './driver-ride.component.html',
   styleUrls: ['../../passenger/ride-estimates/ride-estimates.component.css', './driver-ride.component.css', '../../app.component.css']
 })
-export class DriverRideComponent {
+export class DriverRideComponent implements OnInit {
   constructor(public mapService : MapService) {}
 
   searchForm : FormGroup = new FormGroup({

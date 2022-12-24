@@ -15,7 +15,6 @@ export class DriverHomeComponent implements OnInit{
   public passenger : Subject<boolean> = new Subject<boolean>();
   public rideReceived = false;
   public displayCar = true;
-  public denyOpened = false;
 
   constructor(private notificationService : NotificationService,
               public mapService : MapService) {}
