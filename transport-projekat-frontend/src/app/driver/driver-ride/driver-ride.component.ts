@@ -47,6 +47,10 @@ export class DriverRideComponent {
     this.bothLocationsSelected.emit(true);
   }
 
+  public deny() : void {
+    this.mapService.setRideDenied(true);
+  }
+
   public finish(): void {
     this.mapService.setRideInProgress(false);
     setTimeout(() => {

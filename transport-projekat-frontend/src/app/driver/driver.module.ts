@@ -17,13 +17,16 @@ import { DriverHomeComponent } from './driver-home/driver-home.component';
 import {SharedModule} from "../shared/shared.module";
 import { DriverRideComponent } from './driver-ride/driver-ride.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { DriverDenyRideComponent } from './driver-deny-ride/driver-deny-ride.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
     DriverAccountComponent,
     DriverSideNavigationComponent,
     DriverHomeComponent,
-    DriverRideComponent
+    DriverRideComponent,
+    DriverDenyRideComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +44,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     MatFormFieldModule,
     MatInputModule,
     SharedModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   exports: [
     DriverAccountComponent,

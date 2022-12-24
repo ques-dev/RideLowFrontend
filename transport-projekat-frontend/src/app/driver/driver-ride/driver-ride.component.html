@@ -21,7 +21,8 @@
     <br>
 
     <div class = "flex-row space-evenly width-100">
-      <button *ngIf="!rideInProgress" mat-button class = "red button-rounded mat-h2" type="button">
+      <button *ngIf="!rideInProgress" mat-button class = "red button-rounded mat-h2" type="button"
+      (click)="deny()">
         <mat-icon class = "icon">do_not_disturb</mat-icon>
         Odbij
       </button>
