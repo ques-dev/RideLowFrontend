@@ -1,14 +1,13 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {OpenStreetMapProvider} from "leaflet-geosearch";
 import {Location} from "../../shared/model/Location";
 
 @Component({
-  selector: 'app-ride-received',
-  templateUrl: './ride-received.component.html',
-  styleUrls: ['../../passenger/ride-estimates/ride-estimates.component.css', './ride-received.component.css', '../../app.component.css']
+  selector: 'app-driver-ride',
+  templateUrl: './driver-ride.component.html',
+  styleUrls: ['../../passenger/ride-estimates/ride-estimates.component.css', './driver-ride.component.css', '../../app.component.css']
 })
-export class RideReceivedComponent {
+export class DriverRideComponent {
   searchForm : FormGroup = new FormGroup({
     departure: new FormControl( '',{ validators: [Validators.required]}),
     destination: new FormControl('',{validators: [Validators.required]}),
@@ -17,6 +16,7 @@ export class RideReceivedComponent {
   @Output() chosenDeparture = new EventEmitter<Location>();
   @Output() chosenDestination = new EventEmitter<Location>();
   @Output() bothLocationsSelected = new EventEmitter<boolean>;
+  inProgress = false;
 
   ngOnInit() {
     this.searchForm.disable();
@@ -27,9 +27,17 @@ export class RideReceivedComponent {
     this.bothLocationsSelected.emit(true);
   }
 
-  public drawRoute(){
+  public drawRoute() : void{
     if(this.searchForm.valid) {
       this.bothLocationsSelected.emit(true);
     }
+  }
+
+  public accept() : void {
+    this.inProgress = true;
+  }
+
+  public finish(): void {
+    window.location.reload();
   }
 }

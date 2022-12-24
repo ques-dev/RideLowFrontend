@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RideReceivedComponent } from './ride-received.component';
+import { DriverRideComponent } from './driver-ride.component';
 
 describe('RideReceivedComponent', () => {
-  let component: RideReceivedComponent;
-  let fixture: ComponentFixture<RideReceivedComponent>;
+  let component: DriverRideComponent;
+  let fixture: ComponentFixture<DriverRideComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RideReceivedComponent ]
+      declarations: [ DriverRideComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RideReceivedComponent);
+    fixture = TestBed.createComponent(DriverRideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

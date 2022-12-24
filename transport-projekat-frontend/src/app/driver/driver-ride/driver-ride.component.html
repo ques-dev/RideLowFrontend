@@ -21,14 +21,21 @@
     <br>
 
     <div class = "flex-row space-evenly width-100">
-      <button mat-button class = "red button-rounded mat-h2" type="submit">
+      <button *ngIf="!inProgress" mat-button class = "red button-rounded mat-h2" type="submit">
         <mat-icon class = "icon">do_not_disturb</mat-icon>
         Odbij
       </button>
 
-      <button mat-button class = "green button-rounded mat-h2" type="button">
+      <button *ngIf="!inProgress" mat-button class = "green button-rounded mat-h2" type="button"
+      (click)="accept()">
         <mat-icon class = "icon">not_started</mat-icon>
         Započni
+      </button>
+
+      <button *ngIf="inProgress" mat-button class = "green button-rounded mat-h2" type="button"
+      (click)="finish()">
+        <mat-icon class = "icon">check</mat-icon>
+        Završi vožnju
       </button>
     </div>
   </form>

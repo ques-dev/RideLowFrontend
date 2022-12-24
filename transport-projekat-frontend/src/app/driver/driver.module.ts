@@ -15,7 +15,7 @@ import {MatInputModule} from "@angular/material/input";
 import {DriverService} from "./driver.service";
 import { DriverHomeComponent } from './driver-home/driver-home.component';
 import {SharedModule} from "../shared/shared.module";
-import { RideReceivedComponent } from './ride-received/ride-received.component';
+import { DriverRideComponent } from './driver-ride/driver-ride.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
@@ -23,7 +23,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     DriverAccountComponent,
     DriverSideNavigationComponent,
     DriverHomeComponent,
-    RideReceivedComponent
+    DriverRideComponent
   ],
   imports: [
     CommonModule,

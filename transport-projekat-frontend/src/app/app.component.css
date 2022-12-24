@@ -31,7 +31,7 @@
 }
 
 ::ng-deep .ng-star-inserted {
-  color: red !important;
+  color: red;
 }
 
 ::ng-deep mat-label, input {
