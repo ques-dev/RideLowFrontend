@@ -12,17 +12,20 @@ const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css','../../app.component.css'],
-  providers: [MapService]
+  styleUrls: ['./map.component.css','../../app.component.css']
 })
 
 export class MapComponent implements AfterViewInit {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              public mapService: MapService) {}
   private map!: L.Map;
   private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
   private carMarker!: L.Marker;
+  private takenCarMarkers: L.Marker[] = [];
+  private freeCarMarkers: L.Marker[] = [];
+  private route!: L.Routing.Control;
 
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
@@ -100,7 +103,10 @@ export class MapComponent implements AfterViewInit {
   }
 
   private drawRoute(departure : Location, destination : Location, passenger : boolean) : void {
-    L.Routing.control({
+    if (this.route != null) {
+      this.route.remove();
+    }
+    this.route = L.Routing.control({
       router: L.Routing.osrmv1({
         serviceUrl: `http://router.project-osrm.org/route/v1/`
       }),
@@ -146,25 +152,36 @@ export class MapComponent implements AfterViewInit {
 
   private initTakenCars(): void {
     for (const car of this.takenCars) {
-      L.marker(car, {
+      this.takenCarMarkers.push(
+        L.marker(car, {
         draggable: false,
         icon: this.vehicleReservedIcon
-      }).addTo(this.map);
+      }).addTo(this.map));
     }
   }
 
   private initFreeCars(): void {
     for (const car of this.freeCars) {
+      this.freeCarMarkers.push(
       L.marker(car, {
         draggable: false,
         icon: this.vehicleFreeIcon
-      }).addTo(this.map);
+      }).addTo(this.map));
     }
   }
 
   private initCars(): void {
     this.initTakenCars();
     this.initFreeCars();
+  }
+
+  private clearCars(): void {
+    for (const car of this.takenCarMarkers) {
+      car.remove();
+    }
+    for (const car of this.freeCarMarkers) {
+      car.remove();
+    }
   }
 
   private initReverseGeocoding(): void {
@@ -201,6 +218,13 @@ export class MapComponent implements AfterViewInit {
     // });
     this.passenger.subscribe(yes => {
       this.drawRouteBetweenSelectedLocations(yes);
+    });
+    this.mapService.rideInProgress$.subscribe(rideInProgress => {
+      if (rideInProgress) {
+        this.clearCars();
+      } else {
+        this.initCars();
+      }
     });
   }
   // public drawMarker(location : Location)

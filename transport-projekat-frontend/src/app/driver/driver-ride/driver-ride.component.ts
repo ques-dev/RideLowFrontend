@@ -42,9 +42,15 @@ export class DriverRideComponent {
 
   public accept() : void {
     this.mapService.setRideInProgress(true);
+    this.chosenDeparture.emit(new Location("Ulica Gogoljeva 16-28, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.833455085754398, 45.24670303487374));
+    this.chosenDestination.emit(new Location("Ulica Sime Matavulja, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.826073646545414, 45.234887824257456));
+    this.bothLocationsSelected.emit(true);
   }
 
   public finish(): void {
-    window.location.reload();
+    this.mapService.setRideInProgress(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 50);
   }
 }
