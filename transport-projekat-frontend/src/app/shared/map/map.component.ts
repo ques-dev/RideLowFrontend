@@ -5,13 +5,15 @@ import 'leaflet-routing-machine';
 import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
 import {HttpClient} from '@angular/common/http';
+import {MapService} from "./map.service";
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css','../../app.component.css']
+  styleUrls: ['./map.component.css','../../app.component.css'],
+  providers: [MapService]
 })
 
 export class MapComponent implements AfterViewInit {
@@ -98,7 +100,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   private drawRoute(departure : Location, destination : Location, passenger : boolean) : void {
-    console.log(passenger);
     L.Routing.control({
       router: L.Routing.osrmv1({
         serviceUrl: `http://router.project-osrm.org/route/v1/`
@@ -122,7 +123,6 @@ export class MapComponent implements AfterViewInit {
       ], {
         draggableWaypoints: passenger,
         createMarker: function(i: number, waypoint: any, n: number) {
-          console.log(i, waypoint, n);
           if (i == 0 && !passenger) {
             return L.marker(waypoint.latLng, {
               icon: L.icon({
@@ -203,7 +203,6 @@ export class MapComponent implements AfterViewInit {
       this.drawRouteBetweenSelectedLocations(yes);
     });
   }
-
   // public drawMarker(location : Location)
   // {
   //   this.makeMarker(location, true).addTo(this.map);
