@@ -5,8 +5,15 @@
     <div id  ="ride-estimates">
       <app-ride-estimates (chosenDeparture) = "sendLocationToMap($event,'departure')"
                           (chosenDestination)= "sendLocationToMap($event, 'destination')"
-                          (bothLocationsSelected)="drawRoute()"></app-ride-estimates>
+                          (bothLocationsSelected)="drawRoute()"
+                          (mapSelectionOnly)="removeMarkers()"
+                          (clearMap)="clearMapMarkersAndRoute()"
+      ></app-ride-estimates>
     </div>
-    <app-map [departure]= "departure" [destination]="destination" [passenger]="passenger"> </app-map>
+    <app-map [departure]= "departure"
+             [destination]="destination"
+             [passenger]="passenger"
+             [mapRoutingOnly]="mapRoutingOnly"
+             [clearMap]="clearMap"> </app-map>
   </div>
 </div>

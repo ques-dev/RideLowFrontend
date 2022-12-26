@@ -6,6 +6,7 @@ import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
 import {HttpClient} from '@angular/common/http';
 import {MapService} from "./map.service";
+import {LocationIQProvider} from "leaflet-geosearch";
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
@@ -20,6 +21,7 @@ export class MapComponent implements AfterViewInit {
   constructor(private http: HttpClient,
               public mapService: MapService) {}
   private map!: L.Map;
+  private routeLayer! : L.LayerGroup;
   private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
   private carMarker!: L.Marker;
@@ -30,6 +32,8 @@ export class MapComponent implements AfterViewInit {
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() passenger : Subject<boolean> = new Subject<boolean>();
+  @Input() mapRoutingOnly : Subject<boolean> = new Subject<boolean>();
+  @Input() clearMap : Subject<boolean> = new Subject<boolean>();
   @Input() displayCar = false;
 
   private locationIcon = L.icon({
@@ -94,12 +98,14 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
+    this.routeLayer = new L.LayerGroup();
+    this.routeLayer.addTo(this.map);
   }
 
   private makeMarker(location : Location) : L.Marker {
     return L.marker([location.latitude, location.longitude], {
-    draggable: true,
-  });
+    draggable: false,
+  }).bindPopup(location.address).openPopup();
   }
 
   private drawRoute(departure : Location, destination : Location, passenger : boolean) : void {
@@ -107,6 +113,8 @@ export class MapComponent implements AfterViewInit {
       this.route.remove();
     }
     if (passenger) {
+      console.log(departure);
+      console.log(destination);
       this.route = L.Routing.control({
         router: L.Routing.osrmv1({
           serviceUrl: `http://router.project-osrm.org/route/v1/`
@@ -117,9 +125,23 @@ export class MapComponent implements AfterViewInit {
           extendToWaypoints: true,
           missingRouteTolerance: 100
         },
-        fitSelectedRoutes: false,
+        fitSelectedRoutes: true,
         show: true,
         routeWhileDragging: true,
+        plan: L.Routing.plan([
+          this.makeMarker(departure).getLatLng(),
+          this.makeMarker(destination).getLatLng()
+        ], {
+          createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
+            let text = '';
+            if(i == 0) text = departure.address;
+            else text = destination.address;
+            return L.marker(waypoint.latLng, {
+              draggable: false,
+            }).bindPopup(text).openPopup();
+          },
+          draggableWaypoints : false
+        }),
         waypoints: [
           this.makeMarker(departure).getLatLng(),
           this.makeMarker(destination).getLatLng()
@@ -204,12 +226,19 @@ export class MapComponent implements AfterViewInit {
   private initReverseGeocoding(): void {
     this.map.on('click', (ev) => {
       const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
-      console.log(latlng.lat + ', ' + latlng.lng);
       const locationUrl = reverseGeocodeUrl + latlng.lng + "," + latlng.lat + "&f=pjson";
       this.http.get(locationUrl).subscribe((response: any) => {
-        console.log(response.address);
+        const clicked = new Location(response.address.LongLabel, latlng.lng, latlng.lat);
+        this.makeMarker(clicked).addTo(this.routeLayer);
+        if (this.departure.getValue().address == '') this.departure.next(clicked);
+        else {
+          this.destination.next(clicked);
+          this.routeLayer.clearLayers();
+          this.drawRoute(this.departure.getValue(), this.destination.getValue(),true);
+        }
       });
     });
+
   }
 
   private initDriverCar(): void {
@@ -223,16 +252,18 @@ export class MapComponent implements AfterViewInit {
     L.Marker.prototype.options.icon = this.locationIcon;
     this.initMap();
     this.initCars();
-    this.initReverseGeocoding();
     if (this.displayCar) {
       this.initDriverCar();
     }
-    // this.destination.subscribe(location => {
-    //   this.drawMarker(location);
-    // });
-    // this.departure.subscribe(location => {
-    //   this.drawMarker(location);
-    // });
+    this.mapRoutingOnly.subscribe(yes => {
+      this.clear();
+      this.initReverseGeocoding();
+    });
+
+    this.clearMap.subscribe(yes => {
+      this.clear();
+    });
+
     this.passenger.subscribe(yes => {
       this.drawRouteBetweenSelectedLocations(yes);
     });
@@ -244,10 +275,15 @@ export class MapComponent implements AfterViewInit {
       }
     });
   }
-  // public drawMarker(location : Location)
-  // {
-  //   this.makeMarker(location, true).addTo(this.map);
-  // }
+
+  private clear() {
+    if(this.route != null) {
+      this.route.remove();
+    }
+    this.routeLayer.clearLayers();
+    this.departure.next(Location.getEmptyLocation());
+    this.destination.next(Location.getEmptyLocation());
+  }
 
   public drawRouteBetweenSelectedLocations(passenger : boolean)
   {

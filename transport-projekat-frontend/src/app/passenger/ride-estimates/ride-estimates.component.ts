@@ -11,6 +11,10 @@ import {Location} from "../../shared/model/Location";
 export class RideEstimatesComponent {
 
   isRegisteredUser = true;
+  mapRoutingOnly = false;
+
+  modeButtonText = 'Označi na mapi'
+
 
   searchForm : FormGroup = new FormGroup({
     departure: new FormControl( '',{ validators: [Validators.required]}),
@@ -29,6 +33,8 @@ export class RideEstimatesComponent {
   @Output() chosenDeparture = new EventEmitter<Location>();
   @Output() chosenDestination = new EventEmitter<Location>();
   @Output() bothLocationsSelected = new EventEmitter<boolean>;
+  @Output() mapSelectionOnly = new EventEmitter<boolean>;
+  @Output() clearMap = new EventEmitter<boolean>;
 
   ngOnInit() {
     this.estimatesForm.disable();
@@ -80,4 +86,29 @@ export class RideEstimatesComponent {
           this.bothLocationsSelected.emit(true);
       }
   }
+
+  public clearMapMarkersAndRoute() {
+    this.clearMap.emit(true);
+  }
+  toggleMode()
+  {
+    if(!this.mapRoutingOnly) {
+        this.disableSearch();
+    }
+    else this.enableSearch();
+  }
+  enableSearch() {
+    this.modeButtonText = 'Označi na mapi';
+    this.searchForm.enable();
+    this.mapSelectionOnly.emit(false);
+    this.mapRoutingOnly = false;
+  }
+
+  disableSearch() {
+    this.modeButtonText = 'Unesi u polja';
+    this.searchForm.disable();
+    this.mapSelectionOnly.emit(true);
+    this.mapRoutingOnly = true;
+  }
+
 }
