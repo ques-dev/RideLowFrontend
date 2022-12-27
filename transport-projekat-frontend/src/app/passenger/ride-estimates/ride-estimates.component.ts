@@ -1,7 +1,10 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import {Location} from "../../shared/model/Location";
+import {BehaviorSubject, Subject} from "rxjs";
+import {RouteEstimates} from "../../shared/model/RouteEstimates";
+import {MapService} from "../../shared/map/map.service";
 
 @Component({
   selector: 'app-ride-estimates',
@@ -12,8 +15,8 @@ export class RideEstimatesComponent {
 
   isRegisteredUser = true;
   mapRoutingOnly = false;
-
-  modeButtonText = 'Označi na mapi'
+  modeButtonText = 'Označi na mapi';
+  returnedEstimates = RouteEstimates.getEmptyRouteEstimates();
 
 
   searchForm : FormGroup = new FormGroup({
@@ -30,14 +33,15 @@ export class RideEstimatesComponent {
   destinationSuggestions : Location[] = [];
   departureSuggestions : Location[] = [];
 
-  @Output() chosenDeparture = new EventEmitter<Location>();
-  @Output() chosenDestination = new EventEmitter<Location>();
-  @Output() bothLocationsSelected = new EventEmitter<boolean>;
-  @Output() mapSelectionOnly = new EventEmitter<boolean>;
-  @Output() clearMap = new EventEmitter<boolean>;
-
+  constructor(private mapService : MapService) { }
   ngOnInit() {
     this.estimatesForm.disable();
+    this.mapService.estimates$.subscribe(estimates => this.returnedEstimates = estimates);
+    this.mapService.returnEstimates$.subscribe(yes => this.fillEstimatesForm());
+    this.mapService.clearMap$.subscribe(yes => {
+      this.clearEstimatesForm();
+      this.clearSearchForm();
+    });
   }
 
   private mapGeoSearchObjectToLocation(geoSearchObj : any) : Location {
@@ -45,7 +49,6 @@ export class RideEstimatesComponent {
       geoSearchObj.label,
       geoSearchObj.x,
       geoSearchObj.y)
-
     return location;
 }
 
@@ -58,37 +61,41 @@ export class RideEstimatesComponent {
     return top5;
   }
 
+  public getDepartureSuggestions() {
+    setTimeout(() => this.filterDepartureSuggestions(),1000);
+  }
 
-  async getDepartureSuggestions(){
+  public getDestionationSuggestions() {
+    setTimeout(() => this.filterDestinationSuggestions(),1000);
+  }
+
+  private async filterDepartureSuggestions(){
     const top5results = await this.provider.search({query: this.searchForm.value.departure})
-     .then((results: object[]) => this.filterToTop5Suggestions(results));
+      .then((results: object[]) => this.filterToTop5Suggestions(results));
     this.departureSuggestions = top5results;
   }
 
-  async getDestinationSuggestions()  {
+  private async filterDestinationSuggestions()  {
     const top5results = await this.provider.search({query: this.searchForm.value.destination})
       .then((results: object[]) => this.filterToTop5Suggestions(results));
     this.destinationSuggestions = top5results;
   }
 
-  public displayLabel(location : Location) : string
-  {
-    return location.address;
-  }
+  public displayLabel(location : Location) : string { return location.address; }
 
   public sendLocationInputToParent(value : Location,which : string) {
-    if(which == 'departure') this.chosenDeparture.emit(value);
-    else this.chosenDestination.emit(value);
+    if(which == 'departure') this.mapService.setDeparture(value);
+    else this.mapService.setDestination(value);
   }
 
   public drawRoute(){
       if(this.searchForm.valid) {
-          this.bothLocationsSelected.emit(true);
+          this.mapService.setDrawRouteRequest();
       }
   }
 
   public clearMapMarkersAndRoute() {
-    this.clearMap.emit(true);
+    this.mapService.setClearMap();
   }
   toggleMode()
   {
@@ -100,15 +107,33 @@ export class RideEstimatesComponent {
   enableSearch() {
     this.modeButtonText = 'Označi na mapi';
     this.searchForm.enable();
-    this.mapSelectionOnly.emit(false);
     this.mapRoutingOnly = false;
   }
 
   disableSearch() {
     this.modeButtonText = 'Unesi u polja';
     this.searchForm.disable();
-    this.mapSelectionOnly.emit(true);
+    this.mapService.setMapRoutingOnly();
     this.mapRoutingOnly = true;
+  }
+
+  public fillEstimatesForm() {
+    this.estimatesForm.enable();
+    this.estimatesForm.controls['time'].setValue(this.returnedEstimates.estimatedTimeInMinutes + " min");
+    this.estimatesForm.controls['price'].setValue(this.returnedEstimates.estimatedCost + " din");
+    this.estimatesForm.disable();
+  }
+
+  public clearEstimatesForm() {
+    this.estimatesForm.enable();
+    this.estimatesForm.controls['time'].setValue('');
+    this.estimatesForm.controls['price'].setValue('');
+    this.estimatesForm.disable();
+  }
+
+  public clearSearchForm() {
+    this.searchForm.controls['destination'].setValue('');
+    this.searchForm.controls['departure'].setValue('');
   }
 
 }

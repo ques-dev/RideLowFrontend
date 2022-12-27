@@ -21,7 +21,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Do:</mat-label>
         <input matInput name = "destination" formControlName = "destination"
-               (keyup)="getDestinationSuggestions()"
+               (keyup)="getDestionationSuggestions()"
                [matAutocomplete]="dest">
         <mat-autocomplete #dest="matAutocomplete"
                           [displayWith]="displayLabel"

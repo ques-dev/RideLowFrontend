@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import * as L from 'leaflet';
 import {LatLngTuple} from 'leaflet';
 import 'leaflet-routing-machine';
@@ -6,8 +6,7 @@ import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
 import {HttpClient} from '@angular/common/http';
 import {MapService} from "./map.service";
-import {LocationIQProvider} from "leaflet-geosearch";
-
+import {RouteEstimates} from "../model/RouteEstimates";
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
 @Component({
@@ -16,7 +15,7 @@ const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World
   styleUrls: ['./map.component.css','../../app.component.css']
 })
 
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
 
   constructor(private http: HttpClient,
               public mapService: MapService) {}
@@ -28,13 +27,12 @@ export class MapComponent implements AfterViewInit {
   private takenCarMarkers: L.Marker[] = [];
   private freeCarMarkers: L.Marker[] = [];
   private route!: L.Routing.Control;
-
+  private departurePlain = Location.getEmptyLocation();
+  private destinationPlain = Location.getEmptyLocation();
+  @Input() displayCar = false;
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() passenger : Subject<boolean> = new Subject<boolean>();
-  @Input() mapRoutingOnly : Subject<boolean> = new Subject<boolean>();
-  @Input() clearMap : Subject<boolean> = new Subject<boolean>();
-  @Input() displayCar = false;
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -113,8 +111,6 @@ export class MapComponent implements AfterViewInit {
       this.route.remove();
     }
     if (passenger) {
-      console.log(departure);
-      console.log(destination);
       this.route = L.Routing.control({
         router: L.Routing.osrmv1({
           serviceUrl: `http://router.project-osrm.org/route/v1/`
@@ -230,17 +226,21 @@ export class MapComponent implements AfterViewInit {
       this.http.get(locationUrl).subscribe((response: any) => {
         const clicked = new Location(response.address.LongLabel, latlng.lng, latlng.lat);
         this.makeMarker(clicked).addTo(this.routeLayer);
-        if (this.departure.getValue().address == '') this.departure.next(clicked);
+        if (this.departurePlain.address == '') this.departurePlain = clicked;
         else {
-          this.destination.next(clicked);
+          this.destinationPlain = clicked;
           this.routeLayer.clearLayers();
-          this.drawRoute(this.departure.getValue(), this.destination.getValue(),true);
+          this.drawRoute(this.departurePlain, this.destinationPlain, true);
+          this.mapService.setRideEstimates();
         }
       });
     });
-
   }
 
+  drawMarker(location : Location) : void {
+    this.makeMarker(location).addTo(this.routeLayer);
+    this.map.setView([location.latitude,location.longitude],16);
+  }
   private initDriverCar(): void {
     this.carMarker = L.marker(this.map.getCenter(), {
       draggable: false,
@@ -255,24 +255,34 @@ export class MapComponent implements AfterViewInit {
     if (this.displayCar) {
       this.initDriverCar();
     }
-    this.mapRoutingOnly.subscribe(yes => {
-      this.clear();
-      this.initReverseGeocoding();
-    });
 
-    this.clearMap.subscribe(yes => {
-      this.clear();
-    });
-
-    this.passenger.subscribe(yes => {
-      this.drawRouteBetweenSelectedLocations(yes);
-    });
     this.mapService.rideInProgress$.subscribe(rideInProgress => {
       if (rideInProgress) {
         this.clearCars();
       } else {
         this.initCars();
       }
+    });
+    this.mapService.departure$.subscribe(departure => {
+      this.departurePlain = departure;
+      if(departure.address != '') this.drawMarker(departure)
+    });
+
+    this.mapService.destination$.subscribe(destination => {
+      this.destinationPlain = destination;
+      if(destination.address != '') this.drawMarker(destination);
+    });
+
+    this.mapService.clearMap$.subscribe(yes => this.clear());
+
+    this.mapService.mapRoutingOnly$.subscribe(yes => {
+      this.clear();
+      this.initReverseGeocoding();
+    });
+
+    this.mapService.drawRouteRequest$.subscribe(yes => {
+      this.drawRouteBetweenSelectedLocations(yes);
+      this.mapService.setRideEstimates();
     });
   }
 
@@ -281,7 +291,11 @@ export class MapComponent implements AfterViewInit {
       this.route.remove();
     }
     this.routeLayer.clearLayers();
+    this.departurePlain = Location.getEmptyLocation();
+    this.destinationPlain = Location.getEmptyLocation();
     this.departure.next(Location.getEmptyLocation());
+    this.mapService.setDeparture(Location.getEmptyLocation());
+    this.mapService.setDestination(Location.getEmptyLocation());
     this.destination.next(Location.getEmptyLocation());
   }
 
@@ -290,6 +304,10 @@ export class MapComponent implements AfterViewInit {
     if (this.carMarker != null) {
       this.carMarker.remove();
     }
-    this.drawRoute(this.departure.getValue(), this.destination.getValue(), passenger);
+    this.drawRoute(this.departurePlain, this.destinationPlain, passenger);
+  }
+
+  ngOnDestroy() {
+    this.clear();
   }
 }

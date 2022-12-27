@@ -3,17 +3,8 @@
   <div class = "height-2-vh"></div>
   <div class = "height-max">
     <div id  ="ride-estimates">
-      <app-ride-estimates (chosenDeparture) = "sendLocationToMap($event,'departure')"
-                          (chosenDestination)= "sendLocationToMap($event, 'destination')"
-                          (bothLocationsSelected)="drawRoute()"
-                          (mapSelectionOnly)="removeMarkers()"
-                          (clearMap)="clearMapMarkersAndRoute()"
-      ></app-ride-estimates>
+      <app-ride-estimates></app-ride-estimates>
     </div>
-    <app-map [departure]= "departure"
-             [destination]="destination"
-             [passenger]="passenger"
-             [mapRoutingOnly]="mapRoutingOnly"
-             [clearMap]="clearMap"> </app-map>
+    <app-map [displayCar]="false"> </app-map>
   </div>
 </div>

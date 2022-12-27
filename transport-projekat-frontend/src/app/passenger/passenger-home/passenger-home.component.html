@@ -2,18 +2,9 @@
   <app-passenger-side-navigation></app-passenger-side-navigation>
   <div class = "main-content">
     <div id ="ride-estimates">
-      <app-ride-estimates (chosenDeparture) = "sendLocationToMap($event,'departure')"
-                          (chosenDestination)= "sendLocationToMap($event, 'destination')"
-                          (bothLocationsSelected)="drawRoute()"
-                          (mapSelectionOnly)="removeMarkers()"
-                          (clearMap)="clearMapMarkersAndRoute()"></app-ride-estimates>
+      <app-ride-estimates></app-ride-estimates>
     </div>
-    <app-map [departure]= "departure"
-             [destination]="destination"
-             [passenger]="passenger"
-             [mapRoutingOnly]="mapRoutingOnly"
-             [clearMap]="clearMap"> </app-map>
-
+    <app-map [displayCar]="false"> </app-map>
   </div>
 </body>
 <router-outlet></router-outlet>

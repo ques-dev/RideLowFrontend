@@ -20,12 +20,12 @@ export class DriverHomeComponent implements OnInit{
               public mapService : MapService) {}
 
   public sendLocationToMap(location : Location, which : string) : void {
-    if(which == 'destination') this.destination.next(location);
-    else this.departure.next(location);
+    if(which == 'destination') this.mapService.setDestination(location);
+    else this.mapService.setDeparture(location);
   }
 
   public drawRoute() : void {
-    this.passenger.next(false);
+    this.mapService.setDrawRouteRequest();
   }
 
   public receiveRide() : void {
