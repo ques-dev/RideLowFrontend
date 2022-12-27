@@ -21,7 +21,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Do:</mat-label>
         <input matInput name = "destination" formControlName = "destination"
-               (keyup)="getDestionationSuggestions()"
+               (keyup)="getDestinationSuggestions()"
                [matAutocomplete]="dest">
         <mat-autocomplete #dest="matAutocomplete"
                           [displayWith]="displayLabel"
@@ -39,8 +39,8 @@
         Pretraga
       </button>
 
-      <button mat-button class = "sky-blue button-rounded mat-h2" type="button" [disabled]="mapRoutingOnly"
-      [ngClass]="{'hide':!isRegisteredUser,'show':isRegisteredUser}" (click)="showOrderForm()">
+      <button mat-button class = "sky-blue button-rounded mat-h2" type="button" [disabled]="!enableReservation || !valid"
+       (click)="showOrderForm()">
         <mat-icon class = "icon">receipt</mat-icon>
         Poruči
       </button>

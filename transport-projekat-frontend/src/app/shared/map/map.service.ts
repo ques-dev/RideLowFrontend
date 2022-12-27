@@ -64,8 +64,8 @@ export class MapService {
     this.clearMap.next(true);
   }
 
-  public setMapRoutingOnly() {
-    this.mapRoutingOnly.next(true);
+  public setMapRoutingOnly(status : boolean) {
+    this.mapRoutingOnly.next(status);
   }
 
   public setDrawRouteRequest() {

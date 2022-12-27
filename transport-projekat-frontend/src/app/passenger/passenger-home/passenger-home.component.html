@@ -2,9 +2,11 @@
   <app-passenger-side-navigation></app-passenger-side-navigation>
   <div class = "main-content">
     <div id ="ride-estimates">
-      <app-ride-estimates></app-ride-estimates>
+      <app-ride-estimates [enableReservation]="true"
+                          (orderIsClicked)="openRideOrderForm()"></app-ride-estimates>
     </div>
       <app-map [displayCar]="false"> </app-map>
+    <app-ride-reservation-form *ngIf="rideOrderClicked"></app-ride-reservation-form>
   </div>
 </body>
 <router-outlet></router-outlet>

@@ -29,6 +29,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private route!: L.Routing.Control;
   private departurePlain = Location.getEmptyLocation();
   private destinationPlain = Location.getEmptyLocation();
+  private enableClicking = true;
   @Input() displayCar = false;
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
@@ -220,7 +221,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private initReverseGeocoding(): void {
+
     this.map.on('click', (ev) => {
+      if(this.enableClicking) {
       const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
       const locationUrl = reverseGeocodeUrl + latlng.lng + "," + latlng.lat + "&f=pjson";
       this.http.get(locationUrl).subscribe((response: any) => {
@@ -234,8 +237,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           this.mapService.setRideEstimates();
         }
       });
-    });
-  }
+    }});
+}
 
   drawMarker(location : Location) : void {
     this.makeMarker(location).addTo(this.routeLayer);
@@ -275,7 +278,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.mapService.clearMap$.subscribe(yes => this.clear());
 
-    this.mapService.mapRoutingOnly$.subscribe(yes => {
+    this.mapService.mapRoutingOnly$.subscribe(status => {
+      this.enableClicking = status;
+      console.log(status);
       this.clear();
       this.initReverseGeocoding();
     });
@@ -304,6 +309,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (this.carMarker != null) {
       this.carMarker.remove();
     }
+    console.log("routing");
+    console.log(this.departurePlain);
+    console.log(this.destinationPlain);
     this.drawRoute(this.departurePlain, this.destinationPlain, passenger);
   }
 

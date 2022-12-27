@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {OpenStreetMapProvider} from 'leaflet-geosearch';
 import {Location} from "../../shared/model/Location";
@@ -12,11 +12,12 @@ import {MapService} from "../../shared/map/map.service";
 })
 export class RideEstimatesComponent implements OnInit{
 
-  isRegisteredUser = true;
   mapRoutingOnly = false;
   modeButtonText = 'Označi na mapi';
   returnedEstimates = RouteEstimates.getEmptyRouteEstimates();
   @Output() orderIsClicked = new EventEmitter<boolean>();
+  @Input() enableReservation = false;
+  valid = false;
 
   searchForm : FormGroup = new FormGroup({
     departure: new FormControl( '',{ validators: [Validators.required]}),
@@ -36,11 +37,18 @@ export class RideEstimatesComponent implements OnInit{
   ngOnInit() {
     this.estimatesForm.disable();
     this.mapService.estimates$.subscribe(estimates => this.returnedEstimates = estimates);
-    this.mapService.returnEstimates$.subscribe(() => this.fillEstimatesForm());
+    this.mapService.returnEstimates$.subscribe(() => {
+      this.mapService.destination$.subscribe(val => console.log(val));
+      this.mapService.departure$.subscribe(val => console.log(val));
+      this.fillEstimatesForm();
+      this.valid = true;
+    });
     this.mapService.clearMap$.subscribe(() => {
       this.clearEstimatesForm();
       this.clearSearchForm();
+      this.valid = false;
     });
+    this.mapService.mapRoutingOnly$.subscribe(status => this.mapRoutingOnly = status);
   }
 
   private mapGeoSearchObjectToLocation(geoSearchObj : any) : Location {
@@ -63,7 +71,7 @@ export class RideEstimatesComponent implements OnInit{
     setTimeout(() => this.filterDepartureSuggestions(),1000);
   }
 
-  public getDestionationSuggestions() {
+  public getDestinationSuggestions() {
     setTimeout(() => this.filterDestinationSuggestions(),1000);
   }
 
@@ -83,7 +91,12 @@ export class RideEstimatesComponent implements OnInit{
     if(which == 'departure') this.mapService.setDeparture(value);
     else this.mapService.setDestination(value);
   }
-  public drawRoute() {if(this.searchForm.valid) this.mapService.setDrawRouteRequest();}
+  public drawRoute() {
+    if(this.searchForm.valid) {
+      this.mapService.setDrawRouteRequest();
+      this.valid = true;
+    }
+  }
 
   public clearMapMarkersAndRoute() {this.mapService.setClearMap();}
   toggleMode() {
@@ -91,19 +104,23 @@ export class RideEstimatesComponent implements OnInit{
     else this.enableSearch();
   }
   enableSearch() {
+    console.log("enable");
     this.modeButtonText = 'Označi na mapi';
     this.searchForm.enable();
-    this.mapRoutingOnly = false;
+    this.mapService.setMapRoutingOnly(false);
+    this.clearMapMarkersAndRoute();
   }
 
   disableSearch() {
+    console.log("disable");
     this.modeButtonText = 'Unesi u polja';
+    this.clearSearchForm();
     this.searchForm.disable();
-    this.mapService.setMapRoutingOnly();
-    this.mapRoutingOnly = true;
+    this.mapService.setMapRoutingOnly(true);
+    this.clearMapMarkersAndRoute();
   }
 
-  public showOrderForm() { this.orderIsClicked.emit(true); }
+  public showOrderForm() {this.orderIsClicked.emit(true); }
 
   public fillEstimatesForm() {
     this.estimatesForm.enable();

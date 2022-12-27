@@ -16,6 +16,3 @@
   margin: auto;
 }
 
-::ng-deep .mat-mdc-select-value-text {
-  color: black !important;
-}
