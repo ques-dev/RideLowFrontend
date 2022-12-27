@@ -17,9 +17,9 @@ export class LoginComponent {
 
   routeToHome() {
     if (this.loginForm.controls.email.value == "driver") {
-      this.router.navigate(['driver-home']);
+      this.router.navigate(['driver-home']).then();
     } else {
-      this.router.navigate(['passenger-home']);
+      this.router.navigate(['passenger-home']).then();
     }
   }
 }

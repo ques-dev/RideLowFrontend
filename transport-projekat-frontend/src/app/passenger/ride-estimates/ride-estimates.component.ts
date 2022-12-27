@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import {OpenStreetMapProvider} from 'leaflet-geosearch';
 import {Location} from "../../shared/model/Location";
-import {BehaviorSubject, Subject} from "rxjs";
 import {RouteEstimates} from "../../shared/model/RouteEstimates";
 import {MapService} from "../../shared/map/map.service";
 
@@ -11,7 +10,7 @@ import {MapService} from "../../shared/map/map.service";
   templateUrl: './ride-estimates.component.html',
   styleUrls: ['./ride-estimates.component.css','../../app.component.css']
 })
-export class RideEstimatesComponent {
+export class RideEstimatesComponent implements OnInit{
 
   isRegisteredUser = true;
   mapRoutingOnly = false;
@@ -37,19 +36,18 @@ export class RideEstimatesComponent {
   ngOnInit() {
     this.estimatesForm.disable();
     this.mapService.estimates$.subscribe(estimates => this.returnedEstimates = estimates);
-    this.mapService.returnEstimates$.subscribe(yes => this.fillEstimatesForm());
-    this.mapService.clearMap$.subscribe(yes => {
+    this.mapService.returnEstimates$.subscribe(() => this.fillEstimatesForm());
+    this.mapService.clearMap$.subscribe(() => {
       this.clearEstimatesForm();
       this.clearSearchForm();
     });
   }
 
   private mapGeoSearchObjectToLocation(geoSearchObj : any) : Location {
-    const location = new Location(
+    return new Location(
       geoSearchObj.label,
       geoSearchObj.x,
       geoSearchObj.y)
-    return location;
 }
 
   private filterToTop5Suggestions(suggestions : object[]) : Location[] {
@@ -70,38 +68,26 @@ export class RideEstimatesComponent {
   }
 
   private async filterDepartureSuggestions(){
-    const top5results = await this.provider.search({query: this.searchForm.value.departure})
+    this.departureSuggestions = await this.provider.search({query: this.searchForm.value.departure})
       .then((results: object[]) => this.filterToTop5Suggestions(results));
-    this.departureSuggestions = top5results;
   }
 
   private async filterDestinationSuggestions()  {
-    const top5results = await this.provider.search({query: this.searchForm.value.destination})
+    this.destinationSuggestions = await this.provider.search({query: this.searchForm.value.destination})
       .then((results: object[]) => this.filterToTop5Suggestions(results));
-    this.destinationSuggestions = top5results;
   }
 
   public displayLabel(location : Location) : string { return location.address; }
 
-  public sendLocationInputToParent(value : Location,which : string) {
+  public sendLocationInputToDraw(value : Location, which : string) {
     if(which == 'departure') this.mapService.setDeparture(value);
     else this.mapService.setDestination(value);
   }
+  public drawRoute() {if(this.searchForm.valid) this.mapService.setDrawRouteRequest();}
 
-  public drawRoute(){
-      if(this.searchForm.valid) {
-          this.mapService.setDrawRouteRequest();
-      }
-  }
-
-  public clearMapMarkersAndRoute() {
-    this.mapService.setClearMap();
-  }
-  toggleMode()
-  {
-    if(!this.mapRoutingOnly) {
-        this.disableSearch();
-    }
+  public clearMapMarkersAndRoute() {this.mapService.setClearMap();}
+  toggleMode() {
+    if(!this.mapRoutingOnly) this.disableSearch();
     else this.enableSearch();
   }
   enableSearch() {

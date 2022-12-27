@@ -3,7 +3,6 @@ import {PassengerService} from "../passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../shared/model/User";
 import {NotificationService} from "../../shared/notification-service/notification.service";
-import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-passenger-account',

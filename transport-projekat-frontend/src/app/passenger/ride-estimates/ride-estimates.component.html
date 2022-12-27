@@ -8,7 +8,7 @@
                (keyup)="getDepartureSuggestions()"
                [matAutocomplete]="dep">
         <mat-autocomplete
-          #dep="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToParent($event.option.value,'departure')">
+          #dep="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToDraw($event.option.value,'departure')">
           <mat-option *ngFor="let option of departureSuggestions" [value]="option">
             {{option.address}}
           </mat-option>
@@ -25,7 +25,7 @@
                [matAutocomplete]="dest">
         <mat-autocomplete #dest="matAutocomplete"
                           [displayWith]="displayLabel"
-                          (optionSelected)="sendLocationInputToParent($event.option.value,'destination')">
+                          (optionSelected)="sendLocationInputToDraw($event.option.value,'destination')">
           <mat-option *ngFor="let option of destinationSuggestions" [value]="option" >
             {{option.address}}
           </mat-option>

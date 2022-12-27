@@ -8,9 +8,7 @@ import {Router} from "@angular/router";
 })
 export class PassengerSideNavigationComponent {
 
-  constructor(private router : Router) { }
+  constructor(private router : Router) {}
 
-  logout() {
-    this.router.navigate(['entrance']);
-  }
+  logout() {this.router.navigate(['entrance']).then();}
 }
