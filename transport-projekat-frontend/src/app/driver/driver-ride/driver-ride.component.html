@@ -1,0 +1,43 @@
+<div class = "flex-column card width-fit-content white-text">
+  <form [formGroup]="searchForm" (ngSubmit)="drawRoute()">
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">location_on</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Od:</mat-label>
+        <input matInput name = "departure" formControlName = "departure">
+      </mat-form-field>
+    </div>
+
+    <br>
+
+    <div class = "flex-row">
+      <mat-icon class = "icon black-icon">flag</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>Do:</mat-label>
+        <input matInput name = "destination" formControlName = "destination">
+      </mat-form-field>
+    </div>
+
+    <br>
+
+    <div class = "flex-row space-evenly width-100">
+      <button *ngIf="!rideInProgress" mat-button class = "red button-rounded mat-h2" type="button"
+      (click)="deny()">
+        <mat-icon class = "icon">do_not_disturb</mat-icon>
+        Odbij
+      </button>
+
+      <button *ngIf="!rideInProgress" mat-button class = "green button-rounded mat-h2" type="button"
+      (click)="accept()">
+        <mat-icon class = "icon">not_started</mat-icon>
+        Započni
+      </button>
+
+      <button *ngIf="rideInProgress" mat-button class = "green button-rounded mat-h2" type="button"
+      (click)="finish()">
+        <mat-icon class = "icon">check</mat-icon>
+        Završi vožnju
+      </button>
+    </div>
+  </form>
+</div>

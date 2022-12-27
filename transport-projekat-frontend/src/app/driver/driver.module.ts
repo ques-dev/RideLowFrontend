@@ -13,11 +13,20 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {DriverService} from "./driver.service";
+import { DriverHomeComponent } from './driver-home/driver-home.component';
+import {SharedModule} from "../shared/shared.module";
+import { DriverRideComponent } from './driver-ride/driver-ride.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { DriverDenyRideComponent } from './driver-deny-ride/driver-deny-ride.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
     DriverAccountComponent,
-    DriverSideNavigationComponent
+    DriverSideNavigationComponent,
+    DriverHomeComponent,
+    DriverRideComponent,
+    DriverDenyRideComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +42,10 @@ import {DriverService} from "./driver.service";
     RouterOutlet,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    SharedModule,
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   exports: [
     DriverAccountComponent,

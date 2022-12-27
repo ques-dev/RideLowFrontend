@@ -84,4 +84,5 @@ export class PassengerAccountComponent implements OnInit {
   showSuccessMessage() {
       this.notificationService.createNotification("Podaci uspešno izmenjeni!",2000);
   }
+
 }

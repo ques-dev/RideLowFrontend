@@ -7,7 +7,8 @@
         <input matInput name = "departure" formControlName = "departure"
                (keyup)="getDepartureSuggestions()"
                [matAutocomplete]="dep">
-        <mat-autocomplete #dep="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToParent($event.option.value,'departure')">
+        <mat-autocomplete
+          #dep="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToDraw($event.option.value,'departure')">
           <mat-option *ngFor="let option of departureSuggestions" [value]="option">
             {{option.address}}
           </mat-option>
@@ -20,9 +21,11 @@
       <mat-form-field appearance="fill">
         <mat-label>Do:</mat-label>
         <input matInput name = "destination" formControlName = "destination"
-               (keyup)="getDestinationSuggestions()"
+               (keyup)="getDestionationSuggestions()"
                [matAutocomplete]="dest">
-        <mat-autocomplete #dest="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="sendLocationInputToParent($event.option.value,'destination')">
+        <mat-autocomplete #dest="matAutocomplete"
+                          [displayWith]="displayLabel"
+                          (optionSelected)="sendLocationInputToDraw($event.option.value,'destination')">
           <mat-option *ngFor="let option of destinationSuggestions" [value]="option" >
             {{option.address}}
           </mat-option>
@@ -31,15 +34,30 @@
     </div>
     <br>
     <div class = "flex-row space-evenly width-100">
-      <button mat-button class = "bright-orange button-rounded mat-h2" type="submit">
+      <button mat-button class = "bright-orange button-rounded mat-h2" type="submit" [disabled]="mapRoutingOnly">
         <mat-icon class = "icon">search</mat-icon>
         Pretraga
       </button>
 
-      <button mat-button class = "sky-blue button-rounded mat-h2" type="button"
+      <button mat-button class = "sky-blue button-rounded mat-h2" type="button" [disabled]="mapRoutingOnly"
       [ngClass]="{'hide':!isRegisteredUser,'show':isRegisteredUser}" (click)="showOrderForm()">
         <mat-icon class = "icon">receipt</mat-icon>
         Poruči
+      </button>
+    </div>
+    <br>
+    <div class = "black-icon center-horizontal width-fit-content">ili</div>
+    <br>
+    <div class = "flex-row space-evenly width-100">
+      <button mat-button class = "sky-blue button-rounded mat-h2 center-horizontal" type="button"
+              (click) = "toggleMode()">
+        <mat-icon class = "icon">location_on</mat-icon>
+        {{modeButtonText}}
+      </button>
+      <button mat-button class = "wine-red button-rounded mat-h2 center-horizontal" type="button"
+              (click) = "clearMapMarkersAndRoute()">
+        <mat-icon class = "icon">close</mat-icon>
+        Očisti
       </button>
     </div>
   </form>

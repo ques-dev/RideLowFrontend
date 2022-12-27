@@ -1,16 +1,22 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import {OpenStreetMapProvider} from 'leaflet-geosearch';
 import {Location} from "../../shared/model/Location";
+import {RouteEstimates} from "../../shared/model/RouteEstimates";
+import {MapService} from "../../shared/map/map.service";
 
 @Component({
   selector: 'app-ride-estimates',
   templateUrl: './ride-estimates.component.html',
   styleUrls: ['./ride-estimates.component.css','../../app.component.css']
 })
-export class RideEstimatesComponent {
+export class RideEstimatesComponent implements OnInit{
 
   isRegisteredUser = true;
+  mapRoutingOnly = false;
+  modeButtonText = 'Označi na mapi';
+  returnedEstimates = RouteEstimates.getEmptyRouteEstimates();
+  @Output() orderIsClicked = new EventEmitter<boolean>();
 
   searchForm : FormGroup = new FormGroup({
     departure: new FormControl( '',{ validators: [Validators.required]}),
@@ -26,22 +32,22 @@ export class RideEstimatesComponent {
   destinationSuggestions : Location[] = [];
   departureSuggestions : Location[] = [];
 
-  @Output() chosenDeparture = new EventEmitter<Location>();
-  @Output() chosenDestination = new EventEmitter<Location>();
-  @Output() bothLocationsSelected = new EventEmitter<boolean>;
-  @Output() orderIsClicked = new EventEmitter<boolean>;
-
+  constructor(private mapService : MapService) { }
   ngOnInit() {
     this.estimatesForm.disable();
+    this.mapService.estimates$.subscribe(estimates => this.returnedEstimates = estimates);
+    this.mapService.returnEstimates$.subscribe(() => this.fillEstimatesForm());
+    this.mapService.clearMap$.subscribe(() => {
+      this.clearEstimatesForm();
+      this.clearSearchForm();
+    });
   }
 
   private mapGeoSearchObjectToLocation(geoSearchObj : any) : Location {
-    const location = new Location(
+    return new Location(
       geoSearchObj.label,
       geoSearchObj.x,
       geoSearchObj.y)
-
-    return location;
 }
 
   private filterToTop5Suggestions(suggestions : object[]) : Location[] {
@@ -53,36 +59,69 @@ export class RideEstimatesComponent {
     return top5;
   }
 
-
-  async getDepartureSuggestions(){
-    const top5results = await this.provider.search({query: this.searchForm.value.departure})
-     .then((results: object[]) => this.filterToTop5Suggestions(results));
-    this.departureSuggestions = top5results;
+  public getDepartureSuggestions() {
+    setTimeout(() => this.filterDepartureSuggestions(),1000);
   }
 
-  async getDestinationSuggestions()  {
-    const top5results = await this.provider.search({query: this.searchForm.value.destination})
+  public getDestionationSuggestions() {
+    setTimeout(() => this.filterDestinationSuggestions(),1000);
+  }
+
+  private async filterDepartureSuggestions(){
+    this.departureSuggestions = await this.provider.search({query: this.searchForm.value.departure})
       .then((results: object[]) => this.filterToTop5Suggestions(results));
-    this.destinationSuggestions = top5results;
   }
 
-  public displayLabel(location : Location) : string
-  {
-    return location.address;
+  private async filterDestinationSuggestions()  {
+    this.destinationSuggestions = await this.provider.search({query: this.searchForm.value.destination})
+      .then((results: object[]) => this.filterToTop5Suggestions(results));
   }
 
-  public sendLocationInputToParent(value : Location,which : string) {
-    if(which == 'departure') this.chosenDeparture.emit(value);
-    else this.chosenDestination.emit(value);
+  public displayLabel(location : Location) : string { return location.address; }
+
+  public sendLocationInputToDraw(value : Location, which : string) {
+    if(which == 'departure') this.mapService.setDeparture(value);
+    else this.mapService.setDestination(value);
+  }
+  public drawRoute() {if(this.searchForm.valid) this.mapService.setDrawRouteRequest();}
+
+  public clearMapMarkersAndRoute() {this.mapService.setClearMap();}
+  toggleMode() {
+    if(!this.mapRoutingOnly) this.disableSearch();
+    else this.enableSearch();
+  }
+  enableSearch() {
+    this.modeButtonText = 'Označi na mapi';
+    this.searchForm.enable();
+    this.mapRoutingOnly = false;
   }
 
-  public drawRoute(){
-      if(this.searchForm.valid) {
-          this.bothLocationsSelected.emit(true);
-      }
+  disableSearch() {
+    this.modeButtonText = 'Unesi u polja';
+    this.searchForm.disable();
+    this.mapService.setMapRoutingOnly();
+    this.mapRoutingOnly = true;
   }
 
-  public showOrderForm() {
-    this.orderIsClicked.emit(true);
+  public showOrderForm() { this.orderIsClicked.emit(true); }
+
+  public fillEstimatesForm() {
+    this.estimatesForm.enable();
+    this.estimatesForm.controls['time'].setValue(this.returnedEstimates.estimatedTimeInMinutes + " min");
+    this.estimatesForm.controls['price'].setValue(this.returnedEstimates.estimatedCost + " din");
+    this.estimatesForm.disable();
   }
+
+  public clearEstimatesForm() {
+    this.estimatesForm.enable();
+    this.estimatesForm.controls['time'].setValue('');
+    this.estimatesForm.controls['price'].setValue('');
+    this.estimatesForm.disable();
+  }
+
+  public clearSearchForm() {
+    this.searchForm.controls['destination'].setValue('');
+    this.searchForm.controls['departure'].setValue('');
+  }
+
 }

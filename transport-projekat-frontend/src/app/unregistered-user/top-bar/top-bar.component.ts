@@ -11,7 +11,7 @@ export class TopBarComponent {
   constructor(private router : Router) { }
 
   redirectToLoginRegister() {
-    this.router.navigate(['/entrance']);
+    this.router.navigate(['/entrance']).then();
   }
 
 }
