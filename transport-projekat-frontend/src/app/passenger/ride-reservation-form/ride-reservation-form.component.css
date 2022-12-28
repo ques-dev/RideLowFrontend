@@ -16,3 +16,6 @@
   margin: auto;
 }
 
+.fourth-times-bigger {
+  transform: scale(1.25);
+}

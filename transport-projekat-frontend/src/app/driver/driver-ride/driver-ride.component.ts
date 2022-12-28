@@ -26,8 +26,9 @@ export class DriverRideComponent implements OnInit {
     this.searchForm.disable();
     this.searchForm.controls['departure'].setValue('Ulica Gogoljeva 16-28, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina');
     this.searchForm.controls['destination'].setValue('Ulica Sime Matavulja, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina');
-    this.chosenDeparture.emit(new Location("Ulica Vladimira Perića Valtera 1-3, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.850956499576572,45.245972209988224));
-    this.chosenDestination.emit(new Location("Ulica Gogoljeva 16-28, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.833455085754398, 45.24670303487374));
+    this.mapService.setIsDriver(true);
+    this.mapService.setDeparture(new Location("Ulica Vladimira Perića Valtera 1-3, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.850956499576572,45.245972209988224));
+    this.mapService.setDestination(new Location("Ulica Gogoljeva 16-28, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.833455085754398, 45.24670303487374));
     this.bothLocationsSelected.emit(true);
     this.mapService.rideInProgress$.subscribe(rideInProgress => {
       this.rideInProgress = rideInProgress;

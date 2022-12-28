@@ -1,29 +1,83 @@
-<div class = "modal-overlay-layer standard-border-radius white-text flex-column standard-border-radius">
-  <div class = "width-50 order-form-container light-grey">
-      <div class = "label-container-small sky-blue stick-to-left flex-row">
-        <mat-icon matListItemIcon class = "icon">group_add</mat-icon>
-        Dodaj putnike:
-      </div>
-      <br>
-       <div class = "flex-row justify-items-start padding-left-2vw">
-            <img src="../../../assets/images/account.png" class = "circle-picture">
-       </div>
-      <br>
-    <div class = "label-container-small sky-blue stick-to-left flex-row">
-      <mat-icon matListItemIcon class = "icon">settings</mat-icon>
-      Odaberi opcije:
-    </div>
-    <br>
-    <div class = "flex-row black-text justify-items-start padding-left-2vw width-100 mat-h2 font-weight-medium">
-      Tip vozila:&nbsp;&nbsp;
+<div class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="!closed">
+  <div class = "width-50 height-70 light-grey standard-border-radius">
+    <mat-stepper #stepper class = "light-grey standard-border-radius">
+      <mat-step [errorMessage]="errorText">
+        <form class = "black-icon">
+          <ng-template matStepLabel>Unesi osnovne podatke</ng-template>
+          <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
+            <mat-icon matListItemIcon class = "icon">settings</mat-icon>
+            Odaberi opcije:
+          </div>
+          <br>
+          <div class = "flex-row black-text justify-items-start padding-left-2vw width-100 mat-h2 font-weight-medium">
+            Tip vozila:&nbsp;&nbsp;
 
-        <mat-select class = "width-40 select-bar black-text font-weight-medium">
-          <mat-option value="STANDARDNO">Standardno</mat-option>
-          <mat-option value="LUKSUZNO">Luksuzno</mat-option>
-          <mat-option value="KOMBI">Kombi</mat-option>
-        </mat-select>
-      <br>
-
-    </div>
+            <mat-select class = "width-40 select-bar black-text font-weight-medium">
+              <mat-option value="STANDARDNO">Standardno</mat-option>
+              <mat-option value="LUKSUZNO">Luksuzno</mat-option>
+              <mat-option value="KOMBI">Kombi</mat-option>
+            </mat-select>
+            <br>
+          </div>
+          <br>
+          <div class ="width-100 flex-row padding-left-2vw justify-items-start">
+            <mat-checkbox class="black-text fourth-times-bigger margin-right-20">Prevoz dece</mat-checkbox>
+            <mat-checkbox class="black-text fourth-times-bigger">Prevoz ljubimaca</mat-checkbox>
+          </div>
+          <br>
+          <br>
+          <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
+            <mat-icon matListItemIcon class = "icon">access_time_filled</mat-icon>
+            Odaberi termin:
+          </div>
+          <br>
+          <div class ="width-100 flex-row padding-left-2vw justify-items-start">
+            <mat-checkbox class="black-text fourth-times-bigger margin-right-20">Za najskorije </mat-checkbox>
+            <mat-form-field appearance="fill">
+              <mat-label>Za kasnije</mat-label>
+              <input matInput [matDatepicker]="datepicker">
+              <mat-datepicker-toggle matIconSuffix [for]="datepicker" class="black-text"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker>
+                <mat-datepicker-actions>
+                  <button mat-button class = "standard-border-radius" matDatepickerCancel>Cancel</button>
+                  <button mat-button class="sky-blue standard-border-radius" matDatepickerApply>Apply</button>
+                </mat-datepicker-actions>
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <br>
+          <br>
+          <div class="width-100 flex-row margin-top-1vh">
+            <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="close()">
+              <mat-icon class = "icon">close</mat-icon>
+              Zatvori
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step  errorMessage="Address is required.">
+        <form>
+          <ng-template matStepLabel>Fill out your address</ng-template>
+          <mat-form-field appearance="fill">
+            <mat-label>Address</mat-label>
+            <input matInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl"
+                   required>
+          </mat-form-field>
+          <div>
+            <p>Go to a different step to see the error state</p>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
   </div>
 </div>

@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./ride-reservation-form.component.css','../../app.component.css']
 })
 export class RideReservationFormComponent {
-
+  errorText = '';
+  closed = false;
+  public close() {
+    this.closed = true;
+  }
 }

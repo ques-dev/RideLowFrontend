@@ -38,8 +38,6 @@ export class RideEstimatesComponent implements OnInit{
     this.estimatesForm.disable();
     this.mapService.estimates$.subscribe(estimates => this.returnedEstimates = estimates);
     this.mapService.returnEstimates$.subscribe(() => {
-      this.mapService.destination$.subscribe(val => console.log(val));
-      this.mapService.departure$.subscribe(val => console.log(val));
       this.fillEstimatesForm();
       this.valid = true;
     });
@@ -104,7 +102,6 @@ export class RideEstimatesComponent implements OnInit{
     else this.enableSearch();
   }
   enableSearch() {
-    console.log("enable");
     this.modeButtonText = 'Označi na mapi';
     this.searchForm.enable();
     this.mapService.setMapRoutingOnly(false);
@@ -112,7 +109,6 @@ export class RideEstimatesComponent implements OnInit{
   }
 
   disableSearch() {
-    console.log("disable");
     this.modeButtonText = 'Unesi u polja';
     this.clearSearchForm();
     this.searchForm.disable();

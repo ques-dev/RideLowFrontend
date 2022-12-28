@@ -18,6 +18,9 @@ import {SharedModule} from "../shared/shared.module";
 import {PassengerService} from "./passenger.service";
 import { RideReservationFormComponent } from './ride-reservation-form/ride-reservation-form.component';
 import {MatSelectModule} from "@angular/material/select";
+import {MatStepperModule} from "@angular/material/stepper";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import {MatSelectModule} from "@angular/material/select";
     RouterLinkActive,
     RouterOutlet,
     SharedModule,
-    MatSelectModule
+    MatSelectModule,
+    MatStepperModule,
+    MatCheckboxModule,
+    MatDatepickerModule
   ],
   exports: [
     PassengerAccountComponent,

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {LatLngTuple} from 'leaflet';
 import 'leaflet-routing-machine';
@@ -6,7 +6,6 @@ import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
 import {HttpClient} from '@angular/common/http';
 import {MapService} from "./map.service";
-import {RouteEstimates} from "../model/RouteEstimates";
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
 @Component({
@@ -30,6 +29,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private departurePlain = Location.getEmptyLocation();
   private destinationPlain = Location.getEmptyLocation();
   private enableClicking = true;
+  private isDriver = false;
   @Input() displayCar = false;
   @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
@@ -107,11 +107,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }).bindPopup(location.address).openPopup();
   }
 
-  private drawRoute(departure : Location, destination : Location, passenger : boolean) : void {
+  private drawRoute(departure : Location, destination : Location, driver = this.isDriver) : void {
     if (this.route != null) {
       this.route.remove();
     }
-    if (passenger) {
+    if (!this.isDriver) {
       this.route = L.Routing.control({
         router: L.Routing.osrmv1({
           serviceUrl: `http://router.project-osrm.org/route/v1/`
@@ -130,7 +130,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           this.makeMarker(destination).getLatLng()
         ], {
           createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
-            let text = '';
+            let text;
             if(i == 0) text = departure.address;
             else text = destination.address;
             return L.marker(waypoint.latLng, {
@@ -155,7 +155,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           extendToWaypoints: true,
           missingRouteTolerance: 100
         },
-        fitSelectedRoutes: false,
+        fitSelectedRoutes: true,
         show: true,
         routeWhileDragging: true,
         plan: L.Routing.plan([
@@ -164,7 +164,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         ], {
           draggableWaypoints: false,
           createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
-            if (i == 0 && !passenger) {
+            if (i == 0 && driver) {
               return L.marker(waypoint.latLng, {
                 icon: L.icon({
                   iconUrl: 'assets/images/car.png',
@@ -233,14 +233,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         else {
           this.destinationPlain = clicked;
           this.routeLayer.clearLayers();
-          this.drawRoute(this.departurePlain, this.destinationPlain, true);
-          this.mapService.setRideEstimates();
+          this.drawRoute(this.departurePlain, this.destinationPlain);
+          this.mapService.setRideEstimates().then();
         }
       });
     }});
 }
 
   drawMarker(location : Location) : void {
+    if(this.isDriver) return;
     this.makeMarker(location).addTo(this.routeLayer);
     this.map.setView([location.latitude,location.longitude],16);
   }
@@ -271,12 +272,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       if(departure.address != '') this.drawMarker(departure)
     });
 
+    this.mapService.isDriver$.subscribe(status => this.isDriver = status);
+
     this.mapService.destination$.subscribe(destination => {
       this.destinationPlain = destination;
       if(destination.address != '') this.drawMarker(destination);
     });
 
-    this.mapService.clearMap$.subscribe(yes => this.clear());
+    this.mapService.clearMap$.subscribe(() => this.clear());
 
     this.mapService.mapRoutingOnly$.subscribe(status => {
       this.enableClicking = status;
@@ -285,9 +288,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.initReverseGeocoding();
     });
 
-    this.mapService.drawRouteRequest$.subscribe(yes => {
-      this.drawRouteBetweenSelectedLocations(yes);
-      this.mapService.setRideEstimates();
+    this.mapService.drawRouteRequest$.subscribe(() => {
+      this.drawRouteBetweenSelectedLocations();
+      this.mapService.setRideEstimates().then();
     });
   }
 
@@ -295,6 +298,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if(this.route != null) {
       this.route.remove();
     }
+    this.isDriver = false;
     this.routeLayer.clearLayers();
     this.departurePlain = Location.getEmptyLocation();
     this.destinationPlain = Location.getEmptyLocation();
@@ -304,15 +308,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.destination.next(Location.getEmptyLocation());
   }
 
-  public drawRouteBetweenSelectedLocations(passenger : boolean)
+  public drawRouteBetweenSelectedLocations()
   {
     if (this.carMarker != null) {
       this.carMarker.remove();
     }
-    console.log("routing");
-    console.log(this.departurePlain);
-    console.log(this.destinationPlain);
-    this.drawRoute(this.departurePlain, this.destinationPlain, passenger);
+    this.drawRoute(this.departurePlain, this.destinationPlain);
   }
 
   ngOnDestroy() {

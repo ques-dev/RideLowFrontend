@@ -34,6 +34,9 @@ export class MapService {
   private returnEstimates : Subject<boolean>= new Subject<boolean>();
   returnEstimates$ = this.returnEstimates.asObservable();
 
+  private isDriver : Subject<boolean>= new Subject<boolean>();
+  isDriver$ = this.isDriver.asObservable();
+
   public setRideInProgress(inProgress: boolean) {
     this.rideInProgress.next(inProgress);
   }
@@ -77,5 +80,7 @@ export class MapService {
     this.returnEstimates.next(true);
   }
 
-
+  public setIsDriver(status : boolean) {
+    this.isDriver.next(status);
+  }
 }
