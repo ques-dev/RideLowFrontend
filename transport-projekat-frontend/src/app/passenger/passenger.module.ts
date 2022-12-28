@@ -21,6 +21,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     MatSelectModule,
     MatStepperModule,
     MatCheckboxModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatChipsModule
   ],
   exports: [
     PassengerAccountComponent,

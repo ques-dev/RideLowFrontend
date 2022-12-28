@@ -2,7 +2,7 @@
   <div class = "width-50 height-70 light-grey standard-border-radius">
     <mat-stepper #stepper class = "light-grey standard-border-radius">
       <mat-step [errorMessage]="errorText">
-        <form class = "black-icon">
+        <form>
           <ng-template matStepLabel>Unesi osnovne podatke</ng-template>
           <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
             <mat-icon matListItemIcon class = "icon">settings</mat-icon>
@@ -55,18 +55,49 @@
           </div>
         </form>
       </mat-step>
-      <mat-step  errorMessage="Address is required.">
+      <mat-step  [errorMessage]="errorText">
         <form>
-          <ng-template matStepLabel>Fill out your address</ng-template>
-          <mat-form-field appearance="fill">
-            <mat-label>Address</mat-label>
-            <input matInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl"
-                   required>
-          </mat-form-field>
-          <div>
-            <p>Go to a different step to see the error state</p>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+          <ng-template matStepLabel>Dodaj putnike</ng-template>
+          <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
+            <mat-icon matListItemIcon class = "icon">mail</mat-icon>
+            Unesi email:
+          </div>
+          <br>
+          <div class ="width-100 flex-row padding-left-2vw justify-items-start">
+            <mat-form-field appearance="fill" class = "width-50 margin-right-5">
+              <mat-label>Email</mat-label>
+              <input matInput name = "email" [matChipInputFor]="chipGrid">
+            </mat-form-field>
+            <button mat-mini-fab class="bright-orange white-text box-shadow-none" type = "button" (click)="add('mail3@mail.com')">
+              <mat-icon>done</mat-icon>
+            </button>
+          </div>
+          <br>
+          <br>
+          <div class = "padding-left-2vw">
+            <div class = "font-weight-heavy mat-headline-5">
+              Dodati putnici:
+            </div>
+          </div>
+          <hr>
+          <div class="flex-row width-100 height-20 justify-items-start padding-left-2vw">
+              <mat-chip-grid #chipGrid aria-label="Mail-ovi:" class="overflow-y-scroll height-20-vh width-100">
+                <mat-chip *ngFor="let email of passengersEmails"
+                              (removed)="remove(email)"
+                              class="mat-h2 font-weight-medium">
+                  {{email}}
+                  <button matChipRemove [attr.aria-label]="'Izbaci'">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+              </mat-chip-grid>
+          </div>
+          <br>
+          <div class="width-100 flex-row margin-top-1vh">
+            <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="close()">
+              <mat-icon class = "icon">close</mat-icon>
+              Zatvori
+            </button>
           </div>
         </form>
       </mat-step>
