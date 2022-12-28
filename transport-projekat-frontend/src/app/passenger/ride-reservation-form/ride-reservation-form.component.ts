@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatChipInputEvent} from "@angular/material/chips";
 
 @Component({
@@ -10,8 +10,12 @@ export class RideReservationFormComponent {
   errorText = '';
   closed = false;
   passengersEmails = ["prvi@mail.com","drugi@mail.com"];
+  totalPrice = 840.00;
+  pricePerPerson = this.totalPrice / this.passengersEmails.length;
+  @Input() orderClicked = false;
+  @Output() orderClosed = new EventEmitter<boolean>();
   public close() {
-    this.closed = true;
+    this.orderClosed.emit(true);
   }
 
   public remove(email : string) {

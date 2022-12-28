@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MapService} from "../../shared/map/map.service";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-passenger-home',
@@ -9,13 +10,17 @@ import {MapService} from "../../shared/map/map.service";
 export class PassengerHomeComponent implements OnInit{
 
   constructor(private mapService: MapService) {}
+  orderClicked = false;
 
   ngOnInit() {
     this.mapService.setIsDriver(false);
   }
-  rideOrderClicked = false;
   public openRideOrderForm(){
-    this.rideOrderClicked = true;
+    this.orderClicked = true;
+  }
+
+  public closeRideOrderForm(){
+    this.orderClicked = false;
   }
 
 }

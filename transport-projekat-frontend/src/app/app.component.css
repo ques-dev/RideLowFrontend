@@ -518,3 +518,11 @@
 .height-20-vh{
   height: 20vh;
 }
+
+.padding-right-2vw{
+  padding-right: 2vw;
+}
+
+.justify-items-end {
+  justify-content: end;
+}
