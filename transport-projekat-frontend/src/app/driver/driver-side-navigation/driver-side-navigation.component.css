@@ -21,24 +21,24 @@ mat-slide-toggle {
   z-index: 500;
   position: absolute;
   top: -0.3vh;
-  left: 34%;
+  left: 33%;
   user-select: none;
 }
 
 ::ng-deep .mat-mdc-slide-toggle .mdc-switch .mdc-switch__track {
-  scale: 2.75 2.15;
+  scale: 2.75 2.2;
 }
 
 ::ng-deep .mdc-switch .mdc-switch__handle-track {
-  scale: 1.35;
+  scale: 1.2;
 }
 
 ::ng-deep #sidenav-footer .mdc-switch--checked .mdc-switch__handle {
-  left: 100%;
+  left: 120%;
 }
 
 ::ng-deep #sidenav-footer .mdc-switch--unselected .mdc-switch__handle {
-  left: -130%;
+  left: -140%;
 }
 
 ::ng-deep .mdc-switch__ripple {

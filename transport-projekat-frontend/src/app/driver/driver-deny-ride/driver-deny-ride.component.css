@@ -1,11 +1,11 @@
 .modal-overlay-layer {
   z-index: 1002;
   height: 100%;
-  width: 80%;
+  width: 100%;
   background: rgba(0,0,0,0.6);
   position: absolute;
   top: 0;
-  left: 20vw;
+  left: 0;
 }
 
 #deny {
