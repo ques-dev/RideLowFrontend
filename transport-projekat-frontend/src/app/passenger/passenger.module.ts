@@ -24,6 +24,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatChipsModule} from "@angular/material/chips";
 import {RideReservedPopupComponent} from "./ride-reserved-popup/ride-reserved-popup.component";
 import { RideNotReservedPopupComponent } from './ride-not-reserved-popup/ride-not-reserved-popup.component';
+import { RideRatingComponent } from './ride-rating/ride-rating.component';
+import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { RideNotReservedPopupComponent } from './ride-not-reserved-popup/ride-no
     RideEstimatesComponent,
     RideReservationFormComponent,
     RideReservedPopupComponent,
-    RideNotReservedPopupComponent
+    RideNotReservedPopupComponent,
+    RideRatingComponent,
+    RatingStarBarComponent
   ],
     imports: [
         CommonModule,

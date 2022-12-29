@@ -1,0 +1,39 @@
+<div class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="windowVisible">
+  <div class = "width-50 height-70 light-grey standard-border-radius padding-bottom-2vh padding-top-3vh">
+    <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
+      <mat-icon matListItemIcon class = "icon">star_border</mat-icon>
+      Oceni {{who}}:
+    </div>
+    <br>
+    <div class="padding-left-2vw padding-right-2vw">
+      <div class="flex-row font-weight-medium mat-h1 width-100 justify-items-start">
+        <p class="margin-right-2">Ocena:</p>
+        <app-rating-star-bar (ratingUpdated)="onRatingChanged($event)" [rating]="rating"></app-rating-star-bar>
+      </div>
+      <br>
+      <p class="mat-h1 font-weight-medium">Komentar:</p>
+      <br>
+      <mat-form-field appearance="fill" class="width-100">
+        <mat-label>Komentar:</mat-label>
+        <textarea matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="13"
+                  cdkAutosizeMaxRows="13"
+                  name = "comment"></textarea>
+      </mat-form-field>
+      <br>
+      <br>
+      <div class="flex-row width-100">
+        <button type="button" mat-button class = "bright-orange button-rounded mat-h2 margin-right-5" (click)="close()">
+          Oceni kasnije
+        </button>
+        <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="close()">
+          <mat-icon class = "icon">star_outline</mat-icon>
+          Oceni
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

@@ -11,16 +11,22 @@ export class PassengerHomeComponent implements OnInit{
 
   constructor(private mapService: MapService) {}
   orderClicked = false;
+  ratingWindowVisible = false;
 
   ngOnInit() {
     this.mapService.setIsDriver(false);
   }
   public openRideOrderForm(){
+    this.ratingWindowVisible = true;
     this.orderClicked = true;
   }
 
   public closeRideOrderForm(){
     this.orderClicked = false;
+  }
+
+  public closeRatingForm(){
+    this.ratingWindowVisible = false;
   }
 
 }

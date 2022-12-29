@@ -75,7 +75,7 @@
   border-bottom-color: #00ADB5 !important;
 }
 
-::ng-deep .mat-h2, .mat-h3, .mat-h4, .mat-h1,.mat-headline-5,h1 {
+::ng-deep .mat-h2, .mat-h3, .mat-h4, .mat-h1,.mat-headline-5,h1,p {
   margin-bottom: 0 !important;
 }
 
@@ -568,3 +568,20 @@
 .red-text{
   color:#FD1C1C;
 }
+
+.padding-top-3vh {
+  padding-top: 3vh;
+}
+
+.sun-yellow-text {
+  color : #ffb703;
+}
+
+.two-times-bigger {
+  transform: scale(1.75);
+}
+
+.margin-right-2{
+  margin-right: 2%;
+}
+
