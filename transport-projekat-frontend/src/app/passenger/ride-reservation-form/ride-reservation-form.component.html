@@ -1,4 +1,4 @@
-<div class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="orderClicked">
+<div class = "modal-overlay-layer flex-column standard-border-radius" *ngIf="orderOpened">
   <div class = "width-50 height-70 light-grey standard-border-radius">
     <mat-stepper #stepper class = "light-grey standard-border-radius">
       <mat-step [errorMessage]="errorText">
@@ -151,7 +151,7 @@
             </button>
           </div>
           <div class="padding-right-2vw">
-            <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="close()">
+            <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="reserve()">
               <mat-icon class = "icon">payments</mat-icon>
               Plati
             </button>
@@ -161,3 +161,5 @@
     </mat-stepper>
   </div>
 </div>
+<app-ride-reserved-popup [popupOpened]="openSuccessPopup"
+                          (popupClosed)="closePopup()"></app-ride-reserved-popup>

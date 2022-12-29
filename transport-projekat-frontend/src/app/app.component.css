@@ -75,7 +75,7 @@
   border-bottom-color: #00ADB5 !important;
 }
 
-::ng-deep .mat-h2, .mat-h3, .mat-h4, .mat-h1,.mat-headline-5 {
+::ng-deep .mat-h2, .mat-h3, .mat-h4, .mat-h1,.mat-headline-5,h1 {
   margin-bottom: 0 !important;
 }
 
@@ -526,3 +526,34 @@
 .justify-items-end {
   justify-content: end;
 }
+
+.padding-3 {
+  padding: 3vh 3vw;
+}
+
+.green-text {
+  color: green;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.width-60{
+  width: 60%;
+}
+
+.modal-overlay-layer {
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.width-30 {
+  width: 30%;
+}
+

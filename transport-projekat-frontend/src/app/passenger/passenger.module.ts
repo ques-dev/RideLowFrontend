@@ -22,6 +22,7 @@ import {MatStepperModule} from "@angular/material/stepper";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatChipsModule} from "@angular/material/chips";
+import {RideReservedPopupComponent} from "./ride-reserved-popup/ride-reserved-popup.component";
 
 @NgModule({
   declarations: [
@@ -29,34 +30,36 @@ import {MatChipsModule} from "@angular/material/chips";
     PassengerHomeComponent,
     PassengerSideNavigationComponent,
     RideEstimatesComponent,
-    RideReservationFormComponent
+    RideReservationFormComponent,
+    RideReservedPopupComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatInputModule,
-    MatCardModule,
-    MatSidenavModule,
-    MatListModule,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-    SharedModule,
-    MatSelectModule,
-    MatStepperModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatChipsModule
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatInputModule,
+        MatCardModule,
+        MatSidenavModule,
+        MatListModule,
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        SharedModule,
+        MatSelectModule,
+        MatStepperModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatChipsModule,
+    ],
   exports: [
     PassengerAccountComponent,
     PassengerHomeComponent,
     PassengerSideNavigationComponent,
-    RideEstimatesComponent
+    RideEstimatesComponent,
+    RideReservationFormComponent
   ],
   providers: [
     PassengerService

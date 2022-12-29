@@ -12,9 +12,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -25,7 +25,9 @@ import {MatNativeDateModule} from '@angular/material/core';
     PassengerModule,
     UnregisteredUserModule,
     SharedModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+  ],
+  exports: [
   ],
   bootstrap: [AppComponent]
 })

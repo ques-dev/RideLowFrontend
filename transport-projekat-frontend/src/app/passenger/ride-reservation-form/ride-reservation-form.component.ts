@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MatChipInputEvent} from "@angular/material/chips";
 
 @Component({
   selector: 'app-ride-reservation-form',
@@ -8,14 +7,15 @@ import {MatChipInputEvent} from "@angular/material/chips";
 })
 export class RideReservationFormComponent {
   errorText = '';
-  closed = false;
   passengersEmails = ["prvi@mail.com","drugi@mail.com"];
   totalPrice = 840.00;
   pricePerPerson = this.totalPrice / this.passengersEmails.length;
-  @Input() orderClicked = false;
+  @Input() orderOpened = false;
   @Output() orderClosed = new EventEmitter<boolean>();
+  openSuccessPopup = false;
   public close() {
     this.orderClosed.emit(true);
+    this.openSuccessPopup = true;
   }
 
   public remove(email : string) {
@@ -26,5 +26,13 @@ export class RideReservationFormComponent {
   }
   add(email: string): void {
     this.passengersEmails.push(email);
+  }
+
+  reserve() {
+    this.close();
+  }
+
+  closePopup(){
+    this.openSuccessPopup = false;
   }
 }

@@ -1,0 +1,20 @@
+<div class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="popupOpened">
+  <div class = "width-30 light-grey standard-border-radius flex-column card-padding">
+    <div class = "flex-row width-100">
+        <mat-icon matListItemIcon
+          class=" green-text square-icon">check_circle_outline</mat-icon>
+      <h1 class="font-weight-medium text-align-center padding-left-2vw">
+        Vožnja je uspešno poručena. Dodati rutu u listu omiljenih?
+      </h1>
+    </div>
+    <br>
+    <div class="flex-row width-100">
+      <button type="button" mat-button class = "bright-orange button-rounded mat-h2 margin-right-5" (click)="close()">
+        Da
+      </button>
+      <button type="button" mat-button class = "bright-orange button-rounded mat-h2" (click)="close()">
+        Ne
+      </button>
+    </div>
+  </div>
+</div>
