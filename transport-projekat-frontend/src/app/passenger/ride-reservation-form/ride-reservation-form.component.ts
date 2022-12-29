@@ -13,9 +13,11 @@ export class RideReservationFormComponent {
   @Input() orderOpened = false;
   @Output() orderClosed = new EventEmitter<boolean>();
   openSuccessPopup = false;
+  openFailPopup = false;
   public close() {
     this.orderClosed.emit(true);
-    this.openSuccessPopup = true;
+    //this.openSuccessPopup = true;
+    this.openFailPopup = true;
   }
 
   public remove(email : string) {
@@ -33,6 +35,7 @@ export class RideReservationFormComponent {
   }
 
   closePopup(){
-    this.openSuccessPopup = false;
+   //this.openSuccessPopup = false;
+    this.openFailPopup = false;
   }
 }

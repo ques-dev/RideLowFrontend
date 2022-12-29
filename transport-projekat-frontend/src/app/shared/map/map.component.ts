@@ -283,7 +283,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.mapService.mapRoutingOnly$.subscribe(status => {
       this.enableClicking = status;
-      console.log(status);
       this.clear();
       this.initReverseGeocoding();
     });
