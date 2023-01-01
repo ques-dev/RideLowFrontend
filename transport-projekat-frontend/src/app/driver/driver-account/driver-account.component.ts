@@ -79,4 +79,16 @@ export class DriverAccountComponent implements OnInit {
   showSuccessMessage() {
     this.notificationService.createNotification("Izmene uspešno poslate administratoru na pregled i odobravanje.",5000);
   }
+
+  onFileSelected(event: Event) {
+    if (event.target != null) {
+      const inputElement: HTMLInputElement = event.target as HTMLInputElement;
+      if (inputElement.files != null) {
+        const file: File = inputElement.files[0];
+        if (file) {
+          console.log(file.name);
+        }
+      }
+    }
+  }
 }

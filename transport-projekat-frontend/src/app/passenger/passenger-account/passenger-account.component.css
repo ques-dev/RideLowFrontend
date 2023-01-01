@@ -38,7 +38,7 @@
   background-color: inherit;
   box-shadow: none;
   border-style: none;
-  margin-top: 1vw;
+  margin-top: 1vh;
   width:80vw;
   text-align: center;
 }
@@ -46,7 +46,7 @@
   border: 0.3vw solid #FF5722;
   border-radius: 50%;
   width: 10%;
-  margin-bottom: 1vw;
+  margin-bottom: 0.5vh;
   height: 16vh;
 }
 
@@ -64,4 +64,13 @@ mat-form-field {
   justify-content: space-evenly;
   width: 100%;
   margin: 1vh auto;
+}
+
+#file-upload {
+  color: black;
+}
+
+#file-upload p:hover {
+  cursor: pointer;
+  color: gray;
 }

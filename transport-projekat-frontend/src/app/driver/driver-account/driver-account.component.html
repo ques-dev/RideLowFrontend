@@ -11,6 +11,13 @@
       <img [src]="image" class = "profile-picture" alt="profile picture">
     </div>
 
+    <div *ngIf="this.updateMode" id="file-upload" class="flex-row mat-h3 padding-bottom-2vh">
+      <input type="file" class="file-input"
+             (change)="onFileSelected($event)" #fileUpload>
+      <mat-icon>edit</mat-icon>
+      <p (click)="fileUpload.click()">Izmeni profilnu sliku</p>
+    </div>
+
     <form [formGroup] ="updateDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">
       <mat-form-field appearance="fill">
         <mat-label>Ime</mat-label>
