@@ -21,4 +21,8 @@ export class UserService {
   public changePassword(id : number, request : ChangePassword) : Observable<ChangePasswordResponse> {
     return this.http.put<ChangePasswordResponse>(environment.apiURL + `user/${id}/changePassword`, request);
   }
+
+  public cutBase64ImageFormat(base64Image: string) : string {
+    return base64Image.split(',')[1];
+  }
 }
