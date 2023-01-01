@@ -21,11 +21,15 @@ export class DriverAccountComponent implements OnInit {
   updateMode  = false;
   updateButtonText = "Izmeni podatke"
 
-  constructor(private driverService : DriverService,
+  constructor(public driverService : DriverService,
               private notificationService : NotificationService) { }
   ngOnInit() {
     this.updateDriverForm.disable();
     this.showDriver();
+  }
+
+  openChangePassword() : void {
+    this.driverService.setChangingPassword(true);
   }
 
   showDriver() {

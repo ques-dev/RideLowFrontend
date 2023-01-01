@@ -1,6 +1,7 @@
 <div class="main-page">
   <app-driver-side-navigation></app-driver-side-navigation>
   <div class="main-content padding-top-2vh">
+    <app-change-password *ngIf="driverService.changingPassword$ | async"></app-change-password>
     <div class="bright-orange label-container width-50">
       <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
       Podaci o korisniku
@@ -34,13 +35,14 @@
 
 
       <div class="buttons">
-        <button mat-button class = " bright-orange button-rounded mat-h1"
+        <button mat-button class = "bright-orange button-rounded mat-h1"
                 [ngClass]="{'sky-blue':updateMode, 'bright-orange':!updateMode }"
                 type = "submit">
           <mat-icon class = "icon">mode_edit</mat-icon>
           {{updateButtonText}}
         </button>
-        <button mat-button class = "bright-orange button-rounded mat-h1" type="button">
+        <button mat-button class = "bright-orange button-rounded mat-h1" type="button"
+        (click)="openChangePassword()">
           <mat-icon class = "icon">password</mat-icon>
           Promeni lozinku
         </button>
