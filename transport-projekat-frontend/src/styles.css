@@ -18,6 +18,6 @@ body {
   font-weight: 300;
 }
 
-
-
-
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  line-height: 3.25vh!important;
+}
