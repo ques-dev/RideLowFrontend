@@ -8,7 +8,7 @@
     </div>
 
     <div class="profile-picture-container">
-      <img src="../../../assets/images/account.png" class = "profile-picture" alt="profile picture">
+      <img [src]="image" class = "profile-picture" alt="profile picture">
     </div>
 
     <form [formGroup] ="updateDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">

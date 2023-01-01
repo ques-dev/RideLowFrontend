@@ -19,7 +19,8 @@ export class DriverAccountComponent implements OnInit {
   });
 
   updateMode  = false;
-  updateButtonText = "Izmeni podatke"
+  updateButtonText = "Izmeni podatke";
+  image = "../../../assets/images/account.png";
 
   constructor(public driverService : DriverService,
               private notificationService : NotificationService) { }
@@ -43,7 +44,13 @@ export class DriverAccountComponent implements OnInit {
             address: driver.address,
             email: driver.email,
           }
-        )});
+        )
+        if (driver.profilePicture != null) {
+          this.image = 'data:image/png;base64,' + driver.profilePicture;
+        } else {
+          this.image = "../../../assets/images/account.png";
+        }
+      });
   }
 
   toggleUpdateMode()
