@@ -39,7 +39,7 @@
       </mat-nav-list>
 
       <div id="sidenav-footer">
-        <mat-slide-toggle [(ngModel)]="isChecked">{{isChecked ? "Online" : "Offline"}}</mat-slide-toggle>
+        <mat-slide-toggle [disabled]="driverService.cantStartShift" [checked]="driverService.shiftId !== -1" (click)="changeState()">{{driverService.shiftId !== -1 ? "Online" : "Offline"}}</mat-slide-toggle>
 
         <button mat-button class = "bright-orange button-rounded mat-h1 logout-button stick-to-bottom center-horizontal"
                 (click)="logout()">

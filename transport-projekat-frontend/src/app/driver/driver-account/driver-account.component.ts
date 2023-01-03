@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import {DriverService} from "../driver.service";
-import {DriverUpdateRequest} from "../DriverUpdateRequest";
+import {DriverUpdateRequest} from "../../shared/model/DriverUpdateRequest";
 import {UserService} from "../../shared/user.service";
 
 const defaultImage = "../../../assets/images/account.png";
