@@ -43,14 +43,14 @@ export class DriverService {
 
   startShift(): Observable<DriversShift> {
     const shift = {
-      'start': moment().format('YYYY-MM-DDTHH:mm:ss'),
+      'start': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
     return this.http.post<DriversShift>(this.url + "/2/working-hour", shift);
   }
 
   endShift(): Observable<DriversShift> {
     const shift = {
-      'end': moment().format('YYYY-MM-DDTHH:mm:ss'),
+      'end': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
     return this.http.put<DriversShift>(this.url + "/working-hour/" + this.shiftId, shift);
   }
