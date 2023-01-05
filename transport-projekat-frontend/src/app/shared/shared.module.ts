@@ -1,14 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MapComponent} from "./map/map.component";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import { PanicComponent } from './panic/panic.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
+import {PanicComponent} from './panic/panic.component';
+import {ChangePasswordComponent} from './change-password/change-password.component';
 import {MatListModule} from "@angular/material/list";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
+import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 
 @NgModule({
   declarations: [
@@ -23,12 +24,14 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatListModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LeafletModule
   ],
-    exports: [
-        MapComponent,
-        PanicComponent,
-        ChangePasswordComponent
-    ]
+  exports: [
+    MapComponent,
+    PanicComponent,
+    ChangePasswordComponent
+  ],
 })
-export class SharedModule { }
+export class SharedModule {
+}

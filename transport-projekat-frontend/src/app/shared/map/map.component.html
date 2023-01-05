@@ -1,9 +1,8 @@
 <div id="map" class="standard-border-radius">
-  <!--<img src="assets/images/legend.PNG" alt="legend" id="legend" class="standard-border-radius"/>-->
   <div *ngIf="(mapService.rideInProgress$ | async) === false" class = "legend standard-border-radius flex-row center-vertical center-horizontal mat-h2">
-    <img src = "../../../assets/images/vehicle-red.png" class = "height-100">
+    <img src = "../../../assets/images/redcar.png" class = "height-100">
     &nbsp;Zauzeto &nbsp;&nbsp;
-    <img src = "../../../assets/images/vehicle-green.png" class = "height-100">
+    <img src = "../../../assets/images/greencar.png" class = "height-100">
     &nbsp;Slobodno
   </div>
   <app-panic></app-panic>

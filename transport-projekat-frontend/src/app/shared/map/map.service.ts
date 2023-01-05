@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {RouteEstimates} from "../model/RouteEstimates";
 import {RouteEstimatesRequestBody} from "../model/RouteEstimatesRequestBody";
 import {Location} from "../model/Location";
+import {Ride} from "../model/Ride";
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +83,9 @@ export class MapService {
 
   public setIsDriver(status : boolean) {
     this.isDriver.next(status);
+  }
+
+  getAllActiveRides(): Observable<Ride[]> {
+    return this.http.get<Ride[]>(environment.apiURL + 'ride');
   }
 }

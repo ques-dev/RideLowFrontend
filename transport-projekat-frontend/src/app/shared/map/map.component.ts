@@ -1,11 +1,16 @@
-import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
-import {LatLngTuple} from 'leaflet';
+import {LatLng, latLng, LatLngTuple, marker} from 'leaflet';
 import 'leaflet-routing-machine';
 import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
 import {HttpClient} from '@angular/common/http';
 import {MapService} from "./map.service";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import {Vehicle} from "../model/Vehicle";
+import {Ride} from "../model/Ride";
+
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
 @Component({
@@ -14,16 +19,19 @@ const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World
   styleUrls: ['./map.component.css','../../app.component.css']
 })
 
-export class MapComponent implements AfterViewInit, OnDestroy {
+export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(private http: HttpClient,
               public mapService: MapService) {}
+
+  private stompClient!: Stomp.Client;
+  vehicles: { [key: number]: L.Marker } = {};
+
+  private driverRideInProgress = false;
   private map!: L.Map;
   private routeLayer! : L.LayerGroup;
-  private takenCars: LatLngTuple[] = [[45.240174, 19.837885], [45.236360, 19.836721], [45.237863, 19.829511], [45.243302, 19.825220]];
-  private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828], [45.246484, 19.840132]];
+  private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828]];
   private carMarker!: L.Marker;
-  private takenCarMarkers: L.Marker[] = [];
   private freeCarMarkers: L.Marker[] = [];
   private route!: L.Routing.Control;
   private departurePlain = Location.getEmptyLocation();
@@ -37,65 +45,94 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
-    shadowUrl: 'assets/images/place-marker.png',
     iconRetinaUrl : 'assets/images/place-marker.png',
 
-    iconSize:     [40, 40], // size of the icon
-    shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
-    shadowAnchor: [0, 0],  // the same for the shadow
-    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [40, 40],
+    iconAnchor:   [20, 40],
   });
 
   private vehicleFreeIcon = L.icon({
-    iconUrl: 'assets/images/vehicle-green.png',
-    shadowUrl: 'assets/images/vehicle-green.png',
-    iconRetinaUrl : 'assets/images/vehicle-green.png',
+    iconUrl: 'assets/images/greencar.png',
+    iconRetinaUrl : 'assets/images/greencar.png',
 
-    iconSize:     [25, 25], // size of the icon
-    shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [15, 20], // point of the icon which will correspond to marker's location
-    shadowAnchor: [0, 0],  // the same for the shadow
-    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+    iconSize: [35, 45],
+    iconAnchor: [18, 45],
   });
 
   private vehicleReservedIcon = L.icon({
-    iconUrl:'assets/images/vehicle-red.png',
-    shadowUrl: 'assets/images/vehicle-red.png',
-    iconRetinaUrl : 'assets/images/vehicle-red.png',
+    iconUrl:'assets/images/redcar.png',
+    iconRetinaUrl : 'assets/images/redcar.png',
 
-    iconSize:     [25, 25], // size of the icon
-    shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
-    shadowAnchor: [0, 0],  // the same for the shadow
-    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+    iconSize: [35, 45],
+    iconAnchor: [18, 45],
   });
 
   private driverIcon = L.icon({
     iconUrl: 'assets/images/car.png',
-    shadowUrl: 'assets/images/car.png',
     iconRetinaUrl : 'assets/images/car.png',
 
-    iconSize:     [35, 35], // size of the icon
-    shadowSize:   [0,0], // size of the shadow
-    iconAnchor:   [35, 35], // point of the icon which will correspond to marker's location
-    shadowAnchor: [0, 0],  // the same for the shadow
-    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [35, 35],
+    iconAnchor:   [35, 35],
   })
 
-  private initMap(): void {
-    this.map = L.map('map', {
-      center: [ 45.245932, 19.850961 ],
-      zoom: 15,
-      zoomControl : false,
-      attributionControl : false
+  ngOnInit(): void {
+    this.initializeWebSocketConnection();
+    this.mapService.getAllActiveRides().subscribe((ret: Ride[]) => {
+      for (const ride of ret) {
+        const markerLayer = marker([ride.vehicle.longitude, ride.vehicle.latitude], {
+          icon: this.vehicleReservedIcon,
+        });
+        markerLayer.addTo(this.map);
+        this.vehicles[ride.vehicle.id] = markerLayer;
+      }
     });
+  }
 
+  initializeWebSocketConnection() {
+    const ws = new SockJS('http://localhost:8080/socket');
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = f => f;
+    this.stompClient.connect({}, () => {
+      this.openGlobalSocket();
+    });
+  }
+
+  openGlobalSocket() {
+    this.stompClient.subscribe('/map-updates/update-vehicle-position', (message: { body: string }) => {
+      if (!this.driverRideInProgress) {
+        const vehicle: Vehicle = JSON.parse(message.body);
+        const existingVehicle = this.vehicles[vehicle.id];
+        existingVehicle.setLatLng([vehicle.longitude, vehicle.latitude]);
+      }
+    });
+    this.stompClient.subscribe('/map-updates/new-ride', (message: { body: string }) => {
+      if (!this.driverRideInProgress) {
+        const ride: Ride = JSON.parse(message.body);
+        const markerLayer = marker([ride.vehicle.longitude, ride.vehicle.latitude], {
+          icon: this.vehicleReservedIcon,
+        });
+        markerLayer.addTo(this.map);
+        this.vehicles[ride.vehicle.id] = markerLayer;
+      }
+    });
+    this.stompClient.subscribe('/map-updates/ended-ride', (message: { body: string }) => {
+      const ride: Ride = JSON.parse(message.body);
+      this.vehicles[ride.vehicle.id].remove();
+      delete this.vehicles[ride.vehicle.id];
+    });
+  }
+
+  private initMap(): void {
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       minZoom: 3,
     });
-
+    this.map = L.map('map', {
+      zoom: 14,
+      center: latLng(45.253434, 19.831323),
+      zoomControl: false,
+      attributionControl: false
+    });
     tiles.addTo(this.map);
     this.routeLayer = new L.LayerGroup();
     this.routeLayer.addTo(this.map);
@@ -168,14 +205,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
               return L.marker(waypoint.latLng, {
                 icon: L.icon({
                   iconUrl: 'assets/images/car.png',
-                  shadowUrl: 'assets/images/car.png',
                   iconRetinaUrl: 'assets/images/car.png',
 
                   iconSize: [35, 35], // size of the icon
-                  shadowSize: [0, 0], // size of the shadow
                   iconAnchor: [35, 35], // point of the icon which will correspond to marker's location
-                  shadowAnchor: [0, 0],  // the same for the shadow
-                  popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
                 }),
               });
             }
@@ -185,17 +218,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       }).addTo(this.map);
     }
   }
-
-  private initTakenCars(): void {
-    for (const car of this.takenCars) {
-      this.takenCarMarkers.push(
-        L.marker(car, {
-        draggable: false,
-        icon: this.vehicleReservedIcon
-      }).addTo(this.map));
-    }
-  }
-
   private initFreeCars(): void {
     for (const car of this.freeCars) {
       this.freeCarMarkers.push(
@@ -206,22 +228,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private initCars(): void {
-    this.initTakenCars();
-    this.initFreeCars();
-  }
-
   private clearCars(): void {
-    for (const car of this.takenCarMarkers) {
-      car.remove();
-    }
     for (const car of this.freeCarMarkers) {
       car.remove();
     }
   }
 
   private initReverseGeocoding(): void {
-
     this.map.on('click', (ev) => {
       if(this.enableClicking) {
       const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
@@ -245,8 +258,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.makeMarker(location).addTo(this.routeLayer);
     this.map.setView([location.latitude,location.longitude],16);
   }
+
   private initDriverCar(): void {
-    this.carMarker = L.marker(this.map.getCenter(), {
+    this.carMarker = L.marker(new LatLng(45.245972209988224, 19.850956499576572), {
       draggable: false,
       icon: this.driverIcon
     }).addTo(this.map);
@@ -255,16 +269,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     L.Marker.prototype.options.icon = this.locationIcon;
     this.initMap();
-    this.initCars();
+    this.initFreeCars();
     if (this.displayCar) {
       this.initDriverCar();
     }
 
     this.mapService.rideInProgress$.subscribe(rideInProgress => {
+      this.driverRideInProgress = rideInProgress;
       if (rideInProgress) {
         this.clearCars();
+        for (const key of Object.keys(this.vehicles)) {
+          const vehicle = this.vehicles[Number(key)];
+          vehicle.remove();
+        }
+        this.vehicles = {};
       } else {
-        this.initCars();
+        this.initFreeCars();
       }
     });
     this.mapService.departure$.subscribe(departure => {
