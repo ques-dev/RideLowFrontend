@@ -190,7 +190,7 @@
 
 .center-vertical {
   margin-top: auto;
-  margin-bottom:auto;
+  margin-bottom:auto !important;
 }
 
 .center-horizontal {
