@@ -45,19 +45,19 @@ export class ChangePasswordComponent {
 
   sendRequest() : void {
     const request : ChangePassword = {
-      old_password: this.changePasswordForm.value.oldPassword,
-      new_password: this.changePasswordForm.value.newPassword
+      oldPassword: this.changePasswordForm.value.oldPassword,
+      newPassword: this.changePasswordForm.value.newPassword
     }
-    this.userService.changePassword(2, request).subscribe({
+    this.userService.changePassword(3, request).subscribe({
       next: () => {
         this.notificationService.createNotification('Uspešno ste promenili lozinku.', 5000);
         this.closeDriverChangingPassword();
       },
       error: (error) => {
-        if (error.error.includes("matching")) {
+        if (error.error.message.includes("matching")) {
           this.notificationService.createNotification('Stara lozinka nije tačna.', 5000);
-        } else if (error.error.includes("valid")) {
-          if (error.error.includes("old")) {
+        } else if (error.error.message.includes("valid")) {
+          if (error.error.message.includes("old")) {
             this.notificationService.createNotification('Stara lozinka nije tačna.', 5000);
           } else {
             this.notificationService.createNotification('Nova lozinka nije dovoljno sigurna. ' +
@@ -65,7 +65,7 @@ export class ChangePasswordComponent {
               'Ne sme imati nevalidne znakove.', 5000);
           }
         } else {
-          this.notificationService.createNotification('Neuspešna promena lozinke. Greške: ' + error.error, 5000);
+          this.notificationService.createNotification('Neuspešna promena lozinke. Greške: ' + error.error.message, 5000);
         }
       }
     });

@@ -34,7 +34,7 @@ export class DriverService {
   }
 
   getDriver(): Observable<UserRetrieved> {
-    return this.http.get<UserRetrieved>(this.url + "/2");
+    return this.http.get<UserRetrieved>(this.url + "/3");
   }
 
   sendUpdateDriverRequest(newDriver : DriverUpdateRequest) : Observable<Response> {
@@ -45,7 +45,7 @@ export class DriverService {
     const shift = {
       'start': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
-    return this.http.post<DriversShift>(this.url + "/2/working-hour", shift);
+    return this.http.post<DriversShift>(this.url + "/3/working-hour", shift);
   }
 
   endShift(): Observable<DriversShift> {

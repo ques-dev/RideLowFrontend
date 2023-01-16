@@ -24,7 +24,7 @@ export class DriverSideNavigationComponent {
           this.driverService.shiftId = -1;
         },
         error: (error) => {
-          console.log("Error on shift end: " + error.error)
+          console.log("Error on shift end: " + error.error.message)
         }
       });
     }
@@ -38,12 +38,12 @@ export class DriverSideNavigationComponent {
           this.driverService.shiftId = value.id;
         },
         error: (error) => {
-          if (!error.error.includes("ongoing")) {
-            if (error.error.includes("limit")) {
+          if (!error.error.message.includes("ongoing")) {
+            if (error.error.message.includes("limit")) {
               this.notificationService.createNotification("Već ste radili 8 sati danas, pa ne možete pokrenuti novu smenu.", 7500);
               this.driverService.cantStartShift = true;
             } else {
-              console.log("Error on shift start: " + error.error)
+              console.log("Error on shift start: " + error.error.message)
             }
           }
         },
@@ -54,7 +54,7 @@ export class DriverSideNavigationComponent {
           this.driverService.shiftId = -1;
         },
         error: (error) => {
-          console.log("Error on shift end: " + error.error)
+          console.log("Error on shift end: " + error.error.message)
         }
       });
     }

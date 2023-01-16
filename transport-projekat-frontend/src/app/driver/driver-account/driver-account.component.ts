@@ -106,7 +106,7 @@ export class DriverAccountComponent implements OnInit {
 
   updateDriver() {
     const request : DriverUpdateRequest = {
-      driverId : 2,
+      driverId : 3,
       name: this.updateDriverForm.value.name,
       surname: this.updateDriverForm.value.surname,
       profilePicture: this.image === defaultImage ? null : this.userService.cutBase64ImageFormat(this.image),
@@ -121,22 +121,22 @@ export class DriverAccountComponent implements OnInit {
           this.disableForm();
         },
         error: (error) => {
-          if (error.error.includes("email")) {
+          if (error.error.message.includes("email")) {
             this.notificationService.createNotification('Email adresa je zauzeta ili nevalidna.', 5000);
-          } else if (error.error.includes("changes")) {
+          } else if (error.error.message.includes("changes")) {
             this.notificationService.createNotification('Niste izmenili nijedan podatak.', 5000);
-          } else if (error.error.toLowerCase().includes("file")) {
+          } else if (error.error.message.toLowerCase().includes("file")) {
             this.notificationService.createNotification('Morate odabrati validnu sliku manju od 5MB.', 5000);
-          } else if (error.error.includes("surname")) {
+          } else if (error.error.message.includes("surname")) {
             this.notificationService.createNotification('Prezime ne sme biti duže od 100 slova.', 5000);
-          } else if (error.error.includes("name")) {
+          } else if (error.error.message.includes("name")) {
             this.notificationService.createNotification('Ime ne sme biti duže od 100 slova.', 5000);
-          } else if (error.error.includes("phone")) {
+          } else if (error.error.message.includes("phone")) {
             this.notificationService.createNotification('Broj telefona mora biti validan.', 5000);
-          } else if (error.error.includes("address")) {
+          } else if (error.error.message.includes("address")) {
             this.notificationService.createNotification('Adresa ne sme biti duže od 100 slova.', 5000);
           } else {
-            this.notificationService.createNotification('Došlo je do sledeće greške: ' + error.error, 5000);
+            this.notificationService.createNotification('Došlo je do sledeće greške: ' + error.error.message, 5000);
           }
         }
       });
