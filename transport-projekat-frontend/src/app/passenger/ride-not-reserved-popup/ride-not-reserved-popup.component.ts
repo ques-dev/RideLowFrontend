@@ -9,7 +9,7 @@ export class RideNotReservedPopupComponent {
 
   @Input() popupOpened = true;
   @Output() popupClosed = new EventEmitter<boolean>();
-
+  @Input() errorMessage = '';
   close(){
     this.popupClosed.emit(true);
   }

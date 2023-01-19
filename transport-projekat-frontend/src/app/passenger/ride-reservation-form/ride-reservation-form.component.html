@@ -13,9 +13,9 @@
             Tip vozila:&nbsp;&nbsp;
 
             <mat-select class = "width-40 select-bar black-text font-weight-medium" formControlName="vehicleType" required>
-              <mat-option value="STANDARDNO">Standardno</mat-option>
-              <mat-option value="LUKSUZNO">Luksuzno</mat-option>
-              <mat-option value="KOMBI">Kombi</mat-option>
+              <mat-option value="STANDARD">Standardno</mat-option>
+              <mat-option value="LUXURY">Luksuzno</mat-option>
+              <mat-option value="VAN">Kombi</mat-option>
             </mat-select>
             <br>
           </div>
@@ -80,10 +80,10 @@
           <hr>
           <div class="flex-row width-100 height-20 justify-items-start padding-left-2vw">
               <mat-chip-grid #chipGrid aria-label="Mail-ovi:" class="overflow-y-scroll height-20-vh width-100">
-                <mat-chip *ngFor="let email of passengersEmails"
-                              (removed)="removePassenger(email)"
+                <mat-chip *ngFor="let passenger of passengers"
+                              (removed)="removePassenger(passenger.email)"
                               class="mat-h2 font-weight-medium">
-                  {{email}}
+                  {{passenger.email}}
                   <button matChipRemove [attr.aria-label]="'Izbaci'">
                     <mat-icon>cancel</mat-icon>
                   </button>
@@ -118,7 +118,7 @@
         <br>
         <div class="width-100  flex-row distance-between-max">
           <div class="mat-h2 font-weight-medium padding-left-2vw">
-            Cena(po sobi):
+            Cena(po osobi):
           </div>
           <div class="mat-h1 font-weight-heavy padding-right-2vw">
             {{pricePerPerson | number:'1.2-2'}} din
@@ -160,4 +160,4 @@
   </div>
 </div>
 <app-ride-reserved-popup [popupOpened]="openSuccessPopup" (popupClosed)="closePopup()"></app-ride-reserved-popup>
-<app-ride-not-reserved-popup [popupOpened]="openFailPopup" (popupClosed)="closePopup()"></app-ride-not-reserved-popup>
+<app-ride-not-reserved-popup [errorMessage]="rideReservationFailureMessage" [popupOpened]="openFailPopup" (popupClosed)="closePopup()"></app-ride-not-reserved-popup>

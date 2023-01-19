@@ -3,6 +3,16 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
 import {NgxMaterialTimepickerTheme} from "ngx-material-timepicker";
+import {NotificationService} from "../../shared/notification-service/notification.service";
+import {PassengerService} from "../passenger.service";
+import {UserIdEmail} from "../../shared/model/UserIdEmail";
+import {catchError, of} from "rxjs";
+import {MapService} from "../../shared/map/map.service";
+import {Location} from "../../shared/model/Location";
+import {RideReservation} from "../../shared/model/RideReservation";
+import * as moment from "moment";
+import {Route} from "../../shared/model/Route";
+import {RideCreated} from "../../shared/model/RideCreated";
 
 @Component({
   selector: 'app-ride-reservation-form',
@@ -17,10 +27,14 @@ import {NgxMaterialTimepickerTheme} from "ngx-material-timepicker";
 export class RideReservationFormComponent {
   fieldsRequiredErrorText = 'Unesite obavezna polja!';
   emailFormatErrorText = "Email loše formatiran!";
-  passengersEmails: string[] = [];
+  //TODO:Izvuci iz tokena trenutnog korisnika i upisi ga u userIdEmail
+  passengers : UserIdEmail[] = [new UserIdEmail(1,"imenko@mail.com")];
   isReservation = false;
+  rideReservationFailureMessage = '';
+  destination: Location = Location.getEmptyLocation();
+  departure: Location = Location.getEmptyLocation();
   rideBasicInfoForm : FormGroup = new FormGroup({
-    vehicleType: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
+    vehicleType: new FormControl( '',{nonNullable:true, validators: [Validators.required, Validators.maxLength(50)]}),
     petTransport: new FormControl(false,{nonNullable:true, validators: [Validators.required]}),
     babyTransport: new FormControl(false,{nonNullable:true, validators: [Validators.required]}),
     scheduleTime: new FormControl(null),
@@ -46,34 +60,112 @@ export class RideReservationFormComponent {
     }
   };
   totalPrice = 0.00;
-  pricePerPerson = this.totalPrice / this.passengersEmails.length;
+  pricePerPerson = 0.00;
   @Input() orderOpened = false;
   @Output() orderClosed = new EventEmitter<boolean>();
   openSuccessPopup = false;
   openFailPopup = false;
+  constructor(private notificationService : NotificationService,
+              private passengerService : PassengerService,
+              private mapService : MapService) {
+    mapService.estimates$.subscribe(estimate => {
+      this.totalPrice = estimate.estimatedCost;
+      this.pricePerPerson = this.totalPrice;
+    });
+    mapService.departure$.subscribe(departure => this.departure = departure);
+    mapService.destination$.subscribe(destination => this.destination = destination);
+  }
+
   public close() {
     this.orderClosed.emit(true);
-    //this.openSuccessPopup = true;
-    this.openFailPopup = true;
   }
 
   public removePassenger(email : string) {
-    const index = this.passengersEmails.indexOf(email);
-    if (index >= 0) {
-      this.passengersEmails.splice(index, 1);
+    let index = -1;
+    for(const passenger of this.passengers) {
+      if (passenger.email == email) {
+        index = this.passengers.indexOf(passenger);
+        break;
+      }
+    }
+    if (index >= 1) {
+      this.passengers.splice(index, 1);
     }
   }
   addPassenger(): void {
+    if(!this.passengersEmailsForm.valid || this.passengersEmailsForm.controls["email"].value == "") return;
     const email = this.passengersEmailsForm.controls["email"].value;
-    this.passengersEmails.push(email);
+    if(this.checkIfPassengerIsAdded(email)) return;
+    this.passengerService.getPassengerIdByMail(email).pipe(
+      catchError(error => {
+        if(error.status == 0) {
+          console.error("Server communication failed");
+        }
+        else {
+          this.notificationService.createNotification("Korisnik sa unetim email-om ne postoji!",3000);
+        }
+        return of(UserIdEmail.getEmptyUserIdEmail());
+      })
+    ).subscribe(value => {
+      if(value.id != UserIdEmail.getEmptyUserIdEmail().id) {
+        this.passengers.push(value);
+        this.pricePerPerson = this.totalPrice / this.passengers.length;
+      }
+    });
   }
 
   reserve() {
+    if(!this.rideBasicInfoForm.valid) return;
+    let scheduleTime = null;
+    const now = moment();
+    if(this.isReservation) {
+      scheduleTime = this.rideBasicInfoForm.controls["scheduleTime"].value;
+      const date = moment(scheduleTime,"HH:mm");
+      if(date.isBefore(now)) date.add(1,'day');
+      if(moment.duration(date.diff(now)).asMinutes() > 5*60) {
+        this.notificationService.createNotification("Vožnju možete rezervisati najviše 5 sati unapred!",3000);
+      }
+      else {
+        scheduleTime = date.format("yyyy-MM-DDTHH:mm:ss");
+      }
+    }
+    const route : Route = {
+      departure : this.departure,
+      destination : this.destination
+    }
+    const reservation : RideReservation = {
+      locations : [route],
+      passengers : this.passengers,
+      vehicleType : this.rideBasicInfoForm.controls["vehicleType"].value,
+      babyTransport : this.rideBasicInfoForm.controls["babyTransport"].value,
+      petTransport : this.rideBasicInfoForm.controls["petTransport"].value,
+      scheduleTime: scheduleTime
+    }
+    this.passengerService.reserveRide(reservation).pipe(
+      catchError(error => {
+        if(error.status == 0) {
+          console.error("Server communication failed");
+        }
+        else if (error.status == 400) {
+          this.rideReservationFailureMessage = "Ne možete poručiti novu vožnju ukoliko imate prethodno poručene!"
+        }
+        else {
+          this.rideReservationFailureMessage = "Sistem ne može da nađe vozača. Porudžbina se odbija."
+        }
+        this.openFailPopup = true;
+        return of(RideCreated.getEmptyRideCreated());
+      })
+    ).subscribe(value => {
+      if((<RideCreated>value).id != RideCreated.getEmptyRideCreated().id) {
+        this.openSuccessPopup = true;
+        this.clearReservationForm();
+      }
+    });
     this.close();
   }
 
   closePopup(){
-   //this.openSuccessPopup = false;
+    this.openSuccessPopup = false;
     this.openFailPopup = false;
   }
 
@@ -83,5 +175,20 @@ export class RideReservationFormComponent {
       return;
     }
     this.isReservation = true;
+  }
+
+  checkIfPassengerIsAdded(email : string) : boolean {
+    for(const passenger of this.passengers) {
+      if(passenger.email == email) return true;
+    }
+    return false;
+  }
+
+  clearReservationForm() {
+    this.rideBasicInfoForm.controls["vehicleType"].setValue('');
+    this.rideBasicInfoForm.controls["scheduleTime"].setValue('');
+    this.passengersEmailsForm.controls["email"].setValue('');
+    this.passengers.splice(1,this.passengers.length - 1);
+    this.mapService.setClearMap();
   }
 }

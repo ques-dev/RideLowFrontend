@@ -242,9 +242,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
       this.http.get(locationUrl).subscribe((response: any) => {
         const clicked = new Location(response.address.LongLabel, latlng.lng, latlng.lat);
         this.makeMarker(clicked).addTo(this.routeLayer);
-        if (this.departurePlain.address == '') this.departurePlain = clicked;
+        if (this.departurePlain.address == '')
+        {
+          this.departurePlain = clicked;
+          this.mapService.setDeparture(this.departurePlain);
+        }
         else {
           this.destinationPlain = clicked;
+          this.mapService.setDestination(this.destinationPlain);
           this.routeLayer.clearLayers();
           this.drawRoute(this.departurePlain, this.destinationPlain);
           this.mapService.setRideEstimates().then();
