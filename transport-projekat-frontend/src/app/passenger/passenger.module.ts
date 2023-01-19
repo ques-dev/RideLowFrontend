@@ -26,6 +26,7 @@ import {RideReservedPopupComponent} from "./ride-reserved-popup/ride-reserved-po
 import { RideNotReservedPopupComponent } from './ride-not-reserved-popup/ride-not-reserved-popup.component';
 import { RideRatingComponent } from './ride-rating/ride-rating.component';
 import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.component';
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 
 @NgModule({
   declarations: [
@@ -39,27 +40,28 @@ import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.compon
     RideRatingComponent,
     RatingStarBarComponent
   ],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatAutocompleteModule,
-        MatButtonModule,
-        MatInputModule,
-        MatCardModule,
-        MatSidenavModule,
-        MatListModule,
-        RouterLink,
-        RouterLinkActive,
-        RouterOutlet,
-        SharedModule,
-        MatSelectModule,
-        MatStepperModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatChipsModule,
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatInputModule,
+    MatCardModule,
+    MatSidenavModule,
+    MatListModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+    SharedModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatChipsModule,
+    NgxMaterialTimepickerModule,
+  ],
   exports: [
     PassengerAccountComponent,
     PassengerHomeComponent,

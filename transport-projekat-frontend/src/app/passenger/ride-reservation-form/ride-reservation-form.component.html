@@ -1,8 +1,8 @@
 <div class = "modal-overlay-layer flex-column standard-border-radius" *ngIf="orderOpened">
   <div class = "width-50 height-70 light-grey standard-border-radius">
     <mat-stepper #stepper class = "light-grey standard-border-radius">
-      <mat-step [errorMessage]="errorText">
-        <form>
+      <mat-step [errorMessage]="fieldsRequiredErrorText" [stepControl]="rideBasicInfoForm">
+        <form [formGroup]="rideBasicInfoForm">
           <ng-template matStepLabel>Unesi osnovne podatke</ng-template>
           <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
             <mat-icon matListItemIcon class = "icon">settings</mat-icon>
@@ -12,7 +12,7 @@
           <div class = "flex-row black-text justify-items-start padding-left-2vw width-100 mat-h2 font-weight-medium">
             Tip vozila:&nbsp;&nbsp;
 
-            <mat-select class = "width-40 select-bar black-text font-weight-medium">
+            <mat-select class = "width-40 select-bar black-text font-weight-medium" formControlName="vehicleType" required>
               <mat-option value="STANDARDNO">Standardno</mat-option>
               <mat-option value="LUKSUZNO">Luksuzno</mat-option>
               <mat-option value="KOMBI">Kombi</mat-option>
@@ -21,8 +21,8 @@
           </div>
           <br>
           <div class ="width-100 flex-row padding-left-2vw justify-items-start">
-            <mat-checkbox class="black-text fourth-times-bigger margin-right-20">Prevoz dece</mat-checkbox>
-            <mat-checkbox class="black-text fourth-times-bigger">Prevoz ljubimaca</mat-checkbox>
+            <mat-checkbox class="black-text fourth-times-bigger margin-right-20" formControlName="babyTransport">Prevoz dece</mat-checkbox>
+            <mat-checkbox class="black-text fourth-times-bigger" formControlName="petTransport">Prevoz ljubimaca</mat-checkbox>
           </div>
           <br>
           <br>
@@ -32,18 +32,16 @@
           </div>
           <br>
           <div class ="width-100 flex-row padding-left-2vw justify-items-start">
-            <mat-checkbox class="black-text fourth-times-bigger margin-right-20">Za najskorije </mat-checkbox>
-            <mat-form-field appearance="fill">
-              <mat-label>Za kasnije</mat-label>
-              <input matInput [matDatepicker]="datepicker">
-              <mat-datepicker-toggle matIconSuffix [for]="datepicker" class="black-text"></mat-datepicker-toggle>
-              <mat-datepicker #datepicker>
-                <mat-datepicker-actions>
-                  <button mat-button class = "standard-border-radius" matDatepickerCancel>Cancel</button>
-                  <button mat-button class="sky-blue standard-border-radius" matDatepickerApply>Apply</button>
-                </mat-datepicker-actions>
-              </mat-datepicker>
-            </mat-form-field>
+            <mat-checkbox class="black-text fourth-times-bigger margin-right-20"
+                          (change)="toggleDatepicker($event)">Za najskorije</mat-checkbox>
+              <mat-form-field appearance="fill">
+                  <mat-label>Za kasnije</mat-label>
+                  <input matInput [ngxTimepicker]="picker" formControlName="scheduleTime"
+                         [format]="24" [disableClick]="true" readonly>
+                  <ngx-material-timepicker-toggle [for]="picker" matIconSuffix class="margin-right-2" [disabled]="!isReservation">
+                  </ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #picker [theme]="timepickerTheme" [appendToInput]="true"></ngx-material-timepicker>
+              </mat-form-field>
           </div>
           <br>
           <br>
@@ -55,8 +53,8 @@
           </div>
         </form>
       </mat-step>
-      <mat-step  [errorMessage]="errorText">
-        <form>
+      <mat-step  [errorMessage]="emailFormatErrorText" [stepControl]="passengersEmailsForm">
+        <form [formGroup]="passengersEmailsForm">
           <ng-template matStepLabel>Dodaj putnike</ng-template>
           <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
             <mat-icon matListItemIcon class = "icon">mail</mat-icon>
@@ -66,9 +64,9 @@
           <div class ="width-100 flex-row padding-left-2vw justify-items-start">
             <mat-form-field appearance="fill" class = "width-50 margin-right-5">
               <mat-label>Email</mat-label>
-              <input matInput name = "email" [matChipInputFor]="chipGrid">
+              <input matInput name = "email" [matChipInputFor]="chipGrid" formControlName="email">
             </mat-form-field>
-            <button mat-mini-fab class="bright-orange white-text box-shadow-none" type = "button" (click)="add('mail3@mail.com')">
+            <button mat-mini-fab class="bright-orange white-text box-shadow-none" type = "button" (click)="addPassenger()">
               <mat-icon>done</mat-icon>
             </button>
           </div>
@@ -83,7 +81,7 @@
           <div class="flex-row width-100 height-20 justify-items-start padding-left-2vw">
               <mat-chip-grid #chipGrid aria-label="Mail-ovi:" class="overflow-y-scroll height-20-vh width-100">
                 <mat-chip *ngFor="let email of passengersEmails"
-                              (removed)="remove(email)"
+                              (removed)="removePassenger(email)"
                               class="mat-h2 font-weight-medium">
                   {{email}}
                   <button matChipRemove [attr.aria-label]="'Izbaci'">

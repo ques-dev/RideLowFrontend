@@ -150,6 +150,14 @@
   padding: 0 !important;
 }
 
+::ng-deep .mat-step-icon-state-error .mat-icon {
+  color: #FD1C1C;
+}
+
+::ng-deep .mat-mdc-form-field-icon-suffix {
+  margin-right: 2%;
+}
+
 
 .bright-orange{
   background: #FF5722 !important;
@@ -162,6 +170,7 @@
 .sky-blue {
   background: #00ADB5;
 }
+
 
 .light-grey {
   background: #EEEEEE;
@@ -406,7 +415,7 @@
   position: absolute;
   padding-top: 1vh;
   padding-left: 1vw;
-  z-index: 999;
+  z-index: 990;
 }
 
 .padding-bottom-2vh {
@@ -544,13 +553,17 @@
 }
 
 .modal-overlay-layer {
-  z-index: 1000;
+  z-index: 992;
   height: 100%;
   width: 100%;
   background: rgba(0,0,0,0.6);
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.leaflet-top {
+  z-index: 991 !important;
 }
 
 .width-30 {
