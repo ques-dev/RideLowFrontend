@@ -8,5 +8,5 @@ export interface RideReservation {
   vehicleType: string,
   babyTransport: boolean,
   petTransport: boolean,
-  scheduleTime: Date
+  scheduledTime: Date
 }

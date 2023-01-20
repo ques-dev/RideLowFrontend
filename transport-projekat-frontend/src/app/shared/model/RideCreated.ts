@@ -16,7 +16,7 @@ export class RideCreated{
   locations: Route[];
   passengers: UserIdEmail[];
   petTransport: boolean;
-  scheduleTime: string;
+  scheduledTime: string;
   vehicleType: string;
 
   constructor(id: number,
@@ -45,7 +45,7 @@ export class RideCreated{
     this.locations = locations;
     this.passengers = passengers;
     this.petTransport = petTransport;
-    this.scheduleTime = scheduleTime;
+    this.scheduledTime = scheduleTime;
     this.vehicleType = vehicleType;
   }
 

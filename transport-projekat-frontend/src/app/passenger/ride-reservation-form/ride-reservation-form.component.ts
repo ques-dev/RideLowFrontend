@@ -129,6 +129,7 @@ export class RideReservationFormComponent {
         scheduleTime = date.format("yyyy-MM-DDTHH:mm:ss");
       }
     }
+    console.log(scheduleTime);
     const route : Route = {
       departure : this.departure,
       destination : this.destination
@@ -139,8 +140,9 @@ export class RideReservationFormComponent {
       vehicleType : this.rideBasicInfoForm.controls["vehicleType"].value,
       babyTransport : this.rideBasicInfoForm.controls["babyTransport"].value,
       petTransport : this.rideBasicInfoForm.controls["petTransport"].value,
-      scheduleTime: scheduleTime
+      scheduledTime: scheduleTime
     }
+    console.log(reservation);
     this.passengerService.reserveRide(reservation).pipe(
       catchError(error => {
         if(error.status == 0) {

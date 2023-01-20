@@ -8,6 +8,7 @@ import {NotificationService} from "../../shared/notification-service/notificatio
 import * as moment from "moment";
 import {UserIdEmail} from "../../shared/model/UserIdEmail";
 import {Ride} from "../../shared/model/Ride";
+import {RideReservation} from "../../shared/model/RideReservation";
 
 @Component({
   selector: 'app-passenger-home',
@@ -57,14 +58,14 @@ export class PassengerHomeComponent implements OnInit{
     this.stompClient.debug = f => f;
     this.stompClient.connect({}, () => {
       this.stompClient.subscribe('/ride-ordered/get-ride', (message: { body: string }) => {
-        const ride : RideCreated = JSON.parse(message.body);
-        for(const passenger of ride.passengers) {
-          if(passenger.id == this.currentUserId){
+        const ride: RideCreated = JSON.parse(message.body);
+        for (const passenger of ride.passengers) {
+          if (passenger.id == this.currentUserId) {
             this.rides.push(ride);
-            if(ride.passengers.indexOf(passenger) == ride.passengers.length - 1) break; //he is the creator of the ride
-            const scheduleTime = moment(ride.scheduleTime);
-            const notification : string = "Dodati ste kao putnik vožnje u " + scheduleTime.format("HH:mm") + ".";
-            this.notificationService.createNotification(notification,3000);
+            if (ride.passengers.indexOf(passenger) == ride.passengers.length - 1) break; //he is the creator of the ride
+            const scheduleTime = moment(ride.scheduledTime);
+            const notification: string = "Dodati ste kao putnik vožnje u " + scheduleTime.format("HH:mm") + ".";
+            this.notificationService.createNotification(notification, 3000);
             const departureAddress = ride.locations[0].departure.address.split(",")[0];
             const destinationAddress = ride.locations[0].destination.address.split(",")[0];
             this.rideRoute = departureAddress + " - " + destinationAddress;
@@ -76,8 +77,26 @@ export class PassengerHomeComponent implements OnInit{
           }
         }
       });
+
+      this.stompClient.subscribe('/ride-ordered/reservation-notification', (message: { body: string }) => {
+        const reservedRide: RideReservation = JSON.parse(message.body);
+        for(const passenger of reservedRide.passengers) {
+          if(passenger.id != this.currentUserId) continue;
+          const notification = "Imate rezervisanu vožnju u " + moment(reservedRide.scheduledTime).format("HH:mm") + ".";
+          this.notificationService.createNotification(notification, 3000);
+        }
+      });
+
+      this.stompClient.subscribe('/ride-ordered/not-found', (message: { body: string }) => {
+        const reservedRide: RideReservation = JSON.parse(message.body);
+        for(const passenger of reservedRide.passengers) {
+          if (passenger.id != this.currentUserId) continue;
+          if(reservedRide.scheduledTime == null) break;
+          const notification = "Vaša vožnja rezervisana u " + moment(reservedRide.scheduledTime).format("HH:mm") + " se odbija. Sistem nije pronašao vozača.";
+          this.notificationService.createNotification(notification, 3000);
+        }
+      });
     });
   }
-
 }
 

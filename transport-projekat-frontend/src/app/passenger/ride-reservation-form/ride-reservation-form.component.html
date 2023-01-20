@@ -33,7 +33,7 @@
           <br>
           <div class ="width-100 flex-row padding-left-2vw justify-items-start">
             <mat-checkbox class="black-text fourth-times-bigger margin-right-20"
-                          (change)="toggleDatepicker($event)">Za najskorije</mat-checkbox>
+                          (change)="toggleDatepicker($event)" checked>Za najskorije</mat-checkbox>
               <mat-form-field appearance="fill">
                   <mat-label>Za kasnije</mat-label>
                   <input matInput [ngxTimepicker]="picker" formControlName="scheduleTime"
