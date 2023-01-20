@@ -8,6 +8,14 @@
       <app-map [displayCar]="false"> </app-map>
    <app-ride-reservation-form [orderOpened]="orderClicked"
                               (orderClosed)="closeRideOrderForm()"></app-ride-reservation-form>
+    <app-ride-details [passengerAdded]="openDetails"
+                      [route]="rideRoute"
+                      [scheduleTime]="rideScheduleTime"
+                      [totalPrice]="rideTotalCost"
+                      [pricePerPerson]="ridePricePerPerson"
+                      (detailsClose)="closeRideDetailsForm()">
+
+    </app-ride-details>
   </div>
 </body>
 <router-outlet></router-outlet>

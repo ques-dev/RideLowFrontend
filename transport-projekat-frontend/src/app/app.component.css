@@ -609,3 +609,7 @@
 .file-input {
   display: none;
 }
+
+.text-align-right {
+  text-align: right;
+}

@@ -27,6 +27,7 @@ import { RideNotReservedPopupComponent } from './ride-not-reserved-popup/ride-no
 import { RideRatingComponent } from './ride-rating/ride-rating.component';
 import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.component';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import { RideDetailsComponent } from './ride-details/ride-details.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
     RideReservedPopupComponent,
     RideNotReservedPopupComponent,
     RideRatingComponent,
-    RatingStarBarComponent
+    RatingStarBarComponent,
+    RideDetailsComponent
   ],
   imports: [
     CommonModule,
