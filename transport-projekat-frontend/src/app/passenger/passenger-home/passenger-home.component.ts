@@ -1,13 +1,10 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MapService} from "../../shared/map/map.service";
-import {Subject} from "rxjs";
 import * as SockJS from "sockjs-client";
 import * as Stomp from "stompjs";
 import {RideCreated} from "../../shared/model/RideCreated";
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import * as moment from "moment";
-import {UserIdEmail} from "../../shared/model/UserIdEmail";
-import {Ride} from "../../shared/model/Ride";
 import {RideReservation} from "../../shared/model/RideReservation";
 
 @Component({

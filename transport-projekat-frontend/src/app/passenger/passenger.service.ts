@@ -7,6 +7,8 @@ import {UserRetrieved} from "../shared/model/UserRetrieved";
 import {UserIdEmail} from "../shared/model/UserIdEmail";
 import {RideReservation} from "../shared/model/RideReservation";
 import {RideCreated} from "../shared/model/RideCreated";
+import {FavoriteRideCreation} from "../shared/model/FavoriteRideCreation";
+import {FavoriteRideCreated} from "../shared/model/FavoriteRideCreated";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class PassengerService {
   url = environment.apiURL + "passenger/1";
   postUrl = environment.apiURL + "passenger";
   createRideUrl = environment.apiURL + "ride";
+  createFavoriteRideUrl = this.createRideUrl + "/favorites"
 
   constructor(private http: HttpClient) { }
 
@@ -48,5 +51,12 @@ export class PassengerService {
       responseType: 'text',
     };
     return this.http.post<RideCreated>(this.createRideUrl,ride,options);
+  }
+
+  addFavorite(favorite : FavoriteRideCreation) : Observable<HttpEvent<FavoriteRideCreated>> {
+    const options : any = {
+      responseType: 'text',
+    };
+    return this.http.post<FavoriteRideCreated>(this.createFavoriteRideUrl,favorite,options);
   }
 }

@@ -159,5 +159,7 @@
     </mat-stepper>
   </div>
 </div>
-<app-ride-reserved-popup [popupOpened]="openSuccessPopup" (popupClosed)="closePopup()"></app-ride-reserved-popup>
+<app-ride-reserved-popup [popupOpened]="openSuccessPopup"
+                         [favoriteRideOrder]="reservedRide"
+                         (popupClosed)="closePopup()"></app-ride-reserved-popup>
 <app-ride-not-reserved-popup [errorMessage]="rideReservationFailureMessage" [popupOpened]="openFailPopup" (popupClosed)="closePopup()"></app-ride-not-reserved-popup>

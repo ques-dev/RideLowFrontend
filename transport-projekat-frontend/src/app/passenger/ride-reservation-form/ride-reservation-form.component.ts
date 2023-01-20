@@ -13,6 +13,7 @@ import {RideReservation} from "../../shared/model/RideReservation";
 import * as moment from "moment";
 import {Route} from "../../shared/model/Route";
 import {RideCreated} from "../../shared/model/RideCreated";
+import {Ride} from "../../shared/model/Ride";
 
 @Component({
   selector: 'app-ride-reservation-form',
@@ -31,6 +32,7 @@ export class RideReservationFormComponent {
   passengers : UserIdEmail[] = [new UserIdEmail(1,"imenko@mail.com")];
   isReservation = false;
   rideReservationFailureMessage = '';
+  reservedRide! : RideReservation;
   destination: Location = Location.getEmptyLocation();
   departure: Location = Location.getEmptyLocation();
   rideBasicInfoForm : FormGroup = new FormGroup({
@@ -129,7 +131,6 @@ export class RideReservationFormComponent {
         scheduleTime = date.format("yyyy-MM-DDTHH:mm:ss");
       }
     }
-    console.log(scheduleTime);
     const route : Route = {
       departure : this.departure,
       destination : this.destination
@@ -142,7 +143,6 @@ export class RideReservationFormComponent {
       petTransport : this.rideBasicInfoForm.controls["petTransport"].value,
       scheduledTime: scheduleTime
     }
-    console.log(reservation);
     this.passengerService.reserveRide(reservation).pipe(
       catchError(error => {
         if(error.status == 0) {
@@ -159,7 +159,10 @@ export class RideReservationFormComponent {
       })
     ).subscribe(value => {
       if((<RideCreated>value).id != RideCreated.getEmptyRideCreated().id) {
+        const reservationCreated = JSON.parse(value.toString());
         this.openSuccessPopup = true;
+        reservation.passengers = reservationCreated.passengers;
+        this.reservedRide = reservation;
         this.clearReservationForm();
       }
     });
