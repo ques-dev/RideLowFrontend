@@ -395,6 +395,10 @@
   display: none;
 }
 
+.visibility-hidden {
+  visibility: hidden;
+}
+
 .show {
   display: flex;
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DriverService} from "../../driver/driver.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationService} from "../notification-service/notification.service";
@@ -17,12 +17,15 @@ export class ChangePasswordComponent {
     newPassword: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
     repeatNewPassword: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
   });
+  @Input() userId = -1;
+  @Output() formClosed = new EventEmitter<boolean>();
   constructor(private driverService : DriverService,
               private notificationService : NotificationService,
               private userService : UserService) { }
 
   closeDriverChangingPassword() : void {
     this.driverService.setChangingPassword(false);
+    this.formClosed.emit(true);
   }
 
   changePassword() : void {
@@ -48,7 +51,7 @@ export class ChangePasswordComponent {
       oldPassword: this.changePasswordForm.value.oldPassword,
       newPassword: this.changePasswordForm.value.newPassword
     }
-    this.userService.changePassword(3, request).subscribe({
+    this.userService.changePassword(this.userId, request).subscribe({
       next: () => {
         this.notificationService.createNotification('Uspešno ste promenili lozinku.', 5000);
         this.closeDriverChangingPassword();

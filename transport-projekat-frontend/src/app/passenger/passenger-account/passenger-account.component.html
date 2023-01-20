@@ -1,13 +1,21 @@
 <div class="main-page">
   <app-passenger-side-navigation></app-passenger-side-navigation>
   <div class = "main-content padding-top-2vh">
+    <app-change-password *ngIf="passwordChange" (formClosed)="closeChangePasswordWindow()" [userId]="2"></app-change-password>
     <div class="bright-orange label-container width-50">
       <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
         Podaci o korisniku
     </div>
 
     <div class="profile-picture-container">
-      <img src="../../../assets/images/account.png" class = "profile-picture" alt="profile picture">
+      <img [src]="image" class = "profile-picture" alt="profile picture">
+    </div>
+    <div id="file-upload" class="flex-row mat-h3 padding-bottom-2vh"
+         [ngClass]="{'show':updateMode,'visibility-hidden':!updateMode }">
+      <input type="file" class="file-input"
+             (change)="onFileSelected($event)" #fileUpload>
+      <mat-icon>edit</mat-icon>
+      <p (click)="fileUpload.click()" class="font-weight-light">Izmeni profilnu sliku</p>
     </div>
 
       <form [formGroup] ="updatePassengerForm" (ngSubmit)="toggleUpdateMode()"  class = "form-container center-horizontal">
@@ -40,7 +48,7 @@
           <mat-icon class = "icon">mode_edit</mat-icon>
           {{updateButtonText}}
         </button>
-        <button mat-button class = "bright-orange button-rounded mat-h1" type="button">
+        <button mat-button class = "bright-orange button-rounded mat-h1" type="button" (click)="openChangePassword()">
           <mat-icon class = "icon">password</mat-icon>
           Promeni lozinku
         </button>

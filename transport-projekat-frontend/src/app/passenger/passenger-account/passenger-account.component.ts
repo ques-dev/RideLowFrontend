@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {PassengerService} from "../passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {User} from "../../shared/model/User";
 import {NotificationService} from "../../shared/notification-service/notification.service";
+import {UserUpdateInfo} from "../../shared/model/UserUpdateInfo";
+import {UserService} from "../../shared/user.service";
 
 @Component({
   selector: 'app-passenger-account',
@@ -12,36 +13,60 @@ import {NotificationService} from "../../shared/notification-service/notificatio
 export class PassengerAccountComponent implements OnInit {
 
   updatePassengerForm : FormGroup = new FormGroup({
-    name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
-    surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
-    telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
-    address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    password: new FormControl('placeholder_pass'),
+    name: new FormControl( '',{nonNullable:true, validators: [Validators.required,Validators.maxLength(100)]}),
+    surname: new FormControl('',{nonNullable:true, validators: [Validators.required,Validators.maxLength(100)]}),
+    telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required,
+      Validators.pattern('^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$')]}),
+    address: new FormControl('', {nonNullable:true, validators: [Validators.required,Validators.maxLength(100)]}),
+    email: new FormControl('', {nonNullable:true, validators: [Validators.required,Validators.email]}),
   });
 
   updateMode  = false;
-  updateButtonText = "Izmeni podatke"
+  updateButtonText = "Izmeni podatke";
+  image = "../../../assets/images/account.png";
+  defaultImage = "../../../assets/images/account.png";
+  passwordChange = false;
 
   constructor(private passengerService : PassengerService,
-              private notificationService : NotificationService) { }
+              private notificationService : NotificationService,
+              private userService : UserService) { }
   ngOnInit() {
     this.updatePassengerForm.disable();
     this.showPassenger();
   }
 
   updatePassenger(){
-    const passenger : User = {
+    const passenger : UserUpdateInfo = {
       name : this.updatePassengerForm.value.name,
       surname : this.updatePassengerForm.value.surname,
       telephoneNumber : this.updatePassengerForm.value.telephoneNumber,
-      profilePicture : '',
+      profilePicture: this.image === this.defaultImage ? null : this.userService.cutBase64ImageFormat(this.image),
       address : this.updatePassengerForm.value.address,
       email : this.updatePassengerForm.value.email,
-      password : this.updatePassengerForm.value.password
     }
-    this.passengerService.updatePassenger(passenger).subscribe();
+    this.passengerService.updatePassenger(passenger).subscribe({
+      next: () => {
+        this.showSuccessMessage();
+        this.disableForm();
+      },
+      error: (error) => {
+        if (error.error.includes("email")) {
+          this.notificationService.createNotification('Email adresa je zauzeta!', 3000);
+        }
+        else if(error.error.includes("telephone")) {
+          this.notificationService.createNotification('Format broja telefona je nevalidan!', 3000);
+        }
+      }
+    });
     this.disableForm();
+  }
+
+  openChangePassword() : void {
+    this.passwordChange = true;
+  }
+
+  closeChangePasswordWindow() {
+    this.passwordChange = false;
   }
 
   showPassenger() {
@@ -55,7 +80,13 @@ export class PassengerAccountComponent implements OnInit {
           address: passenger.address,
           email: passenger.email,
         }
-      )});
+      )
+        if (passenger.profilePicture != null) {
+          this.image = 'data:image/png;base64,' + passenger.profilePicture;
+        } else {
+          this.image = String(this.defaultImage);
+        }
+      });
   }
 
   toggleUpdateMode()
@@ -64,7 +95,6 @@ export class PassengerAccountComponent implements OnInit {
       if(this.updatePassengerForm.valid) {
         this.updatePassenger();
         this.disableForm();
-        this.showSuccessMessage()
       }
     }
     else this.enableForm();
@@ -83,6 +113,28 @@ export class PassengerAccountComponent implements OnInit {
 
   showSuccessMessage() {
       this.notificationService.createNotification("Podaci uspešno izmenjeni!",2000);
+  }
+
+  onFileSelected(event: Event) {
+    const maxFileSize = 5 * 1024 * 1024;
+    if (event.target != null) {
+      const inputElement: HTMLInputElement = event.target as HTMLInputElement;
+      if (inputElement.files != null) {
+        const file: File = inputElement.files[0];
+        if (file) {
+          if (file.type.startsWith('image/') && file.size < maxFileSize) {
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+              this.image = fileReader.result as string;
+              console.log(this.image);
+            };
+            fileReader.readAsDataURL(file);
+          } else {
+            this.notificationService.createNotification('Morate odabrati validnu sliku manju od 5MB.', 5000);
+          }
+        }
+      }
+    }
   }
 
 }
