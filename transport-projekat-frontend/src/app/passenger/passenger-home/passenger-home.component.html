@@ -16,6 +16,14 @@
                       (detailsClose)="closeRideDetailsForm()">
 
     </app-ride-details>
+    <app-ride-rating [windowVisible]="openVehicleRatingForm"
+                     [isDriver]="false"
+                     [rideId]="finishedRideId"
+                     (windowClosed)="closeRatings()"></app-ride-rating>
+    <app-ride-rating [windowVisible]="openDriverRatingForm"
+                     [isDriver]="true"
+                     [rideId]="finishedRideId"
+                     (windowClosed)="openVehicleRating()"></app-ride-rating>
   </div>
 </body>
 <router-outlet></router-outlet>

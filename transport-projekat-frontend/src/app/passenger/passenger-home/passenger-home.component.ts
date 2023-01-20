@@ -18,10 +18,12 @@ export class PassengerHomeComponent implements OnInit{
     this.initializeWebSocketConnection();
   }
   orderClicked = false;
-  ratingWindowVisible = false;
   stompClient!: Stomp.Client;
   //TODO:dobavi iz JWT-a
   currentUserId = 1;
+  finishedRideId = -1;
+  openDriverRatingForm = false;
+  openVehicleRatingForm = false;
   rides : RideCreated[] = [];
   openDetails = false;
   rideRoute = '';
@@ -32,22 +34,28 @@ export class PassengerHomeComponent implements OnInit{
   ngOnInit() {
     this.mapService.setIsDriver(false);
   }
-  public openRideOrderForm(){
-    this.ratingWindowVisible = true;
+  public openRideOrderForm() {
     this.orderClicked = true;
   }
 
-  public closeRideOrderForm(){
+  public closeRideOrderForm() {
     this.orderClicked = false;
   }
 
-  public closeRatingForm(){
-    this.ratingWindowVisible = false;
+  public openVehicleRating() {
+    this.openDriverRatingForm = false;
+    this.openVehicleRatingForm = true;
+  }
+
+  public closeRatings() {
+    this.openDriverRatingForm = false;
+    this.openVehicleRatingForm = false;
   }
 
   public closeRideDetailsForm() {
     this.openDetails = false;
   }
+
 
   initializeWebSocketConnection() {
     const ws = new SockJS('http://localhost:8080/socket');
@@ -59,6 +67,7 @@ export class PassengerHomeComponent implements OnInit{
         for (const passenger of ride.passengers) {
           if (passenger.id == this.currentUserId) {
             this.rides.push(ride);
+            this.finishedRideId = ride.id;
             if (ride.passengers.indexOf(passenger) == ride.passengers.length - 1) break; //he is the creator of the ride
             const scheduleTime = moment(ride.scheduledTime);
             const notification: string = "Dodati ste kao putnik vožnje u " + scheduleTime.format("HH:mm") + ".";

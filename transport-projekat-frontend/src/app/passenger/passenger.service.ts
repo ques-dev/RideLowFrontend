@@ -10,6 +10,8 @@ import {UserUpdateInfo} from "../shared/model/UserUpdateInfo";
 import {Observable} from "rxjs";
 import {FavoriteRideCreation} from "../shared/model/FavoriteRideCreation";
 import {FavoriteRideCreated} from "../shared/model/FavoriteRideCreated";
+import {Review} from "../shared/model/Review";
+import {ReviewReturned} from "../shared/model/ReviewReturned";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class PassengerService {
   url = environment.apiURL + "passenger/2";
   postUrl = environment.apiURL + "passenger";
   createRideUrl = environment.apiURL + "ride";
-  createFavoriteRideUrl = this.createRideUrl + "/favorites"
+  createFavoriteRideUrl = this.createRideUrl + "/favorites";
+  reviewUrl = environment.apiURL + "review/"
 
   constructor(private http: HttpClient) { }
 
@@ -59,5 +62,21 @@ export class PassengerService {
       responseType: 'text',
     };
     return this.http.post<FavoriteRideCreated>(this.createFavoriteRideUrl,favorite,options);
+  }
+
+  reviewDriver(review : Review, rideId: number) : Observable<HttpEvent<ReviewReturned>> {
+    const options : any = {
+      responseType: 'text',
+    };
+    const url = this.reviewUrl  + rideId.toString() + "/driver";
+    return this.http.post<ReviewReturned>(url,review,options);
+  }
+
+  reviewVehicle(review : Review, rideId: number) : Observable<HttpEvent<ReviewReturned>> {
+    const options : any = {
+      responseType: 'text',
+    };
+    const url = this.reviewUrl + rideId.toString() + "/vehicle";
+    return this.http.post<ReviewReturned>(url,review,options);
   }
 }

@@ -7,7 +7,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class RatingStarBarComponent implements OnInit{
   ratingArr = new Array<number>();
-  starCount = 5;
+  starCount = 10;
   @Input() rating = 0;
   @Output() ratingUpdated = new EventEmitter<number>();
   ngOnInit() {
