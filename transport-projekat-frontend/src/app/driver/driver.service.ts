@@ -6,6 +6,7 @@ import {UserRetrieved} from "../shared/model/UserRetrieved";
 import {DriverUpdateRequest} from "../shared/model/DriverUpdateRequest";
 import {DriversShift} from "./DriversShift";
 import * as moment from "moment";
+import {RideCreated} from "../shared/model/RideCreated";
 
 type Response = {
   message: string
@@ -23,6 +24,8 @@ export class DriverService {
   url = environment.apiURL + "driver";
   shiftId = -1;
   cantStartShift = false;
+  currentRide: RideCreated | null = null;
+  receivedRide = false;
 
   constructor(private http: HttpClient) { }
 
