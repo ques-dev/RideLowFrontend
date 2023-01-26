@@ -73,6 +73,10 @@ export class DriverService {
     return this.http.put<RideCreated>(this.rideUrl + "/" + this.currentRide?.id + "/start", {});
   }
 
+  endRide(): Observable<RideCreated> {
+    return this.http.put<RideCreated>(this.rideUrl + "/" + this.currentRide?.id + "/end", {});
+  }
+
   getVehicle(): Observable<Vehicle> {
     return this.http.get<Vehicle>(this.url + "/4/vehicle");
   }

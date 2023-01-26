@@ -82,9 +82,14 @@ export class DriverRideComponent implements OnInit {
   }
 
   public finish(): void {
-    this.mapService.setRideInProgress(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 50);
+    this.driverService.endRide().subscribe({
+      next: (value) => {
+        this.mapService.setRideInProgress(false);
+        this.mapService.setRideReceived(false);
+      },
+      error: (error) => {
+        console.log(error.error.message);
+      }
+    });
   }
 }
