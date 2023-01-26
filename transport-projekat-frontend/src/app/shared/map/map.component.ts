@@ -280,10 +280,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   private initDriverCar(): void {
-    this.carMarker = L.marker(new LatLng(45.245972209988224, 19.850956499576572), {
-      draggable: false,
-      icon: this.driverIcon
-    }).addTo(this.map);
+    this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
+      this.carMarker = L.marker(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude), {
+        draggable: false,
+        icon: this.driverIcon
+      }).addTo(this.map);
+    });
   }
 
   ngAfterViewInit(): void {

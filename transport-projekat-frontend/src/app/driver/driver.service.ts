@@ -63,4 +63,8 @@ export class DriverService {
   denyRide(reason: string): Observable<{'reason': string}> {
     return this.http.put<{'reason': string}>(this.rideUrl + "/" + this.currentRide?.id + "/cancel", {'reason': reason});
   }
+
+  getVehicle(): Observable<Vehicle> {
+    return this.http.get<Vehicle>(this.url + "/4/vehicle");
+  }
 }
