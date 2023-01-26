@@ -26,7 +26,6 @@ export class DriverDenyRideComponent {
     if (this.denyRideForm.valid) {
       this.driverService.denyRide(this.denyRideForm.value.reason).subscribe({
         next: (value) => {
-          console.log(value);
           this.mapService.setRideDenied(false);
           this.mapService.setRideInProgress(false);
           this.mapService.setRideReceived(false);

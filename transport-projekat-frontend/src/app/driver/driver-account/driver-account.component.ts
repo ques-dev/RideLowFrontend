@@ -93,7 +93,6 @@ export class DriverAccountComponent implements OnInit {
             const fileReader = new FileReader();
             fileReader.onload = () => {
               this.image = fileReader.result as string;
-              console.log(this.image);
             };
             fileReader.readAsDataURL(file);
           } else {

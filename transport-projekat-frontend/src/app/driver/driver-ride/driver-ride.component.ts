@@ -57,10 +57,24 @@ export class DriverRideComponent implements OnInit {
   }
 
   public accept() : void {
-    this.mapService.setRideInProgress(true);
-    this.chosenDeparture.emit(new Location("Ulica Gogoljeva 16-28, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.833455085754398, 45.24670303487374));
-    this.chosenDestination.emit(new Location("Ulica Sime Matavulja, 21102, Novi Sad, Južno-Bački Okrug, Vojvodina", 19.826073646545414, 45.234887824257456));
-    this.bothLocationsSelected.emit(true);
+    this.driverService.acceptRide().subscribe({
+      next: (value) => {
+        this.driverService.startRide().subscribe({
+          next: (value) => {
+            this.mapService.setRideInProgress(true);
+            this.chosenDeparture.emit(this.driverService.currentRide?.locations[0].departure);
+            this.chosenDestination.emit(this.driverService.currentRide?.locations[0].destination);
+            this.bothLocationsSelected.emit(true);
+          },
+          error: (error) => {
+            console.log(error.error.message);
+          }
+        })
+      },
+      error: (error) => {
+        console.log(error.error.message);
+      }
+    });
   }
 
   public deny() : void {

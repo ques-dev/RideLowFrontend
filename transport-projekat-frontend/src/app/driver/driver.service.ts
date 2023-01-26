@@ -8,6 +8,7 @@ import {DriversShift} from "./DriversShift";
 import * as moment from "moment";
 import {RideCreated} from "../shared/model/RideCreated";
 import {Vehicle} from "../shared/model/Vehicle";
+import {Ride} from "../shared/model/Ride";
 
 type Response = {
   message: string
@@ -62,6 +63,14 @@ export class DriverService {
 
   denyRide(reason: string): Observable<{'reason': string}> {
     return this.http.put<{'reason': string}>(this.rideUrl + "/" + this.currentRide?.id + "/cancel", {'reason': reason});
+  }
+
+  acceptRide(): Observable<RideCreated> {
+    return this.http.put<RideCreated>(this.rideUrl + "/" + this.currentRide?.id + "/accept", {});
+  }
+
+  startRide(): Observable<RideCreated> {
+    return this.http.put<RideCreated>(this.rideUrl + "/" + this.currentRide?.id + "/start", {});
   }
 
   getVehicle(): Observable<Vehicle> {
