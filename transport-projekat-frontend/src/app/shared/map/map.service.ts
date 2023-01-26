@@ -37,6 +37,8 @@ export class MapService {
 
   private isDriver : Subject<boolean>= new Subject<boolean>();
   isDriver$ = this.isDriver.asObservable();
+  private rideReceived : Subject<boolean> = new Subject<boolean>();
+  rideReceived$ = this.rideReceived.asObservable();
 
   public setRideInProgress(inProgress: boolean) {
     this.rideInProgress.next(inProgress);
@@ -44,6 +46,10 @@ export class MapService {
 
   public setRideDenied(denied: boolean) {
     this.rideDenied.next(denied);
+  }
+
+  public setRideReceived(received: boolean) {
+    this.rideReceived.next(received);
   }
 
   private getRouteEstimates() : Promise<RouteEstimates>{

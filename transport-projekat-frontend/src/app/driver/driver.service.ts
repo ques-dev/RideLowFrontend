@@ -7,6 +7,7 @@ import {DriverUpdateRequest} from "../shared/model/DriverUpdateRequest";
 import {DriversShift} from "./DriversShift";
 import * as moment from "moment";
 import {RideCreated} from "../shared/model/RideCreated";
+import {Vehicle} from "../shared/model/Vehicle";
 
 type Response = {
   message: string
@@ -22,6 +23,7 @@ type Response = {
 @Injectable()
 export class DriverService {
   url = environment.apiURL + "driver";
+  rideUrl = environment.apiURL + "ride";
   shiftId = -1;
   cantStartShift = false;
   currentRide: RideCreated | null = null;
@@ -37,7 +39,7 @@ export class DriverService {
   }
 
   getDriver(): Observable<UserRetrieved> {
-    return this.http.get<UserRetrieved>(this.url + "/3");
+    return this.http.get<UserRetrieved>(this.url + "/4");
   }
 
   sendUpdateDriverRequest(newDriver : DriverUpdateRequest) : Observable<Response> {
@@ -48,7 +50,7 @@ export class DriverService {
     const shift = {
       'start': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
-    return this.http.post<DriversShift>(this.url + "/3/working-hour", shift);
+    return this.http.post<DriversShift>(this.url + "/4/working-hour", shift);
   }
 
   endShift(): Observable<DriversShift> {
@@ -56,5 +58,9 @@ export class DriverService {
       'end': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
     return this.http.put<DriversShift>(this.url + "/working-hour/" + this.shiftId, shift);
+  }
+
+  denyRide(reason: string): Observable<{'reason': string}> {
+    return this.http.put<{'reason': string}>(this.rideUrl + "/" + this.currentRide?.id + "/cancel", {'reason': reason});
   }
 }

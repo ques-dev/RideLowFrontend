@@ -1,5 +1,6 @@
+import {Location} from "./Location";
+
 export interface Vehicle {
   id: number;
-  latitude: number;
-  longitude: number;
+  currentLocation: Location;
 }

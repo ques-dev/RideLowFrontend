@@ -53,7 +53,7 @@ export class DriverHomeComponent implements OnInit{
   }
 
   public receiveRide() : void {
-    this.rideReceived = true;
+    this.mapService.setRideReceived(true);
     this.notificationService.createNotification("Primili ste vožnju!", 3000);
     this.displayCar = false;
   }

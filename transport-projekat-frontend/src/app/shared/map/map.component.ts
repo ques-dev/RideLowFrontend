@@ -8,8 +8,10 @@ import {HttpClient} from '@angular/common/http';
 import {MapService} from "./map.service";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import {Vehicle} from "../model/Vehicle";
+import {VehicleWithOnlyLocation} from "../model/VehicleWithOnlyLocation";
 import {Ride} from "../model/Ride";
+import {DriverService} from "../../driver/driver.service";
+import {Vehicle} from "../model/Vehicle";
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
@@ -22,7 +24,8 @@ const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World
 export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(private http: HttpClient,
-              public mapService: MapService) {}
+              public mapService: MapService,
+              private driverService: DriverService) {}
 
   private stompClient!: Stomp.Client;
   vehicles: { [key: number]: L.Marker } = {};
@@ -100,7 +103,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   openGlobalSocket() {
     this.stompClient.subscribe('/map-updates/update-vehicle-position', (message: { body: string }) => {
       if (!this.driverRideInProgress) {
-        const vehicle: Vehicle = JSON.parse(message.body);
+        const vehicle: VehicleWithOnlyLocation = JSON.parse(message.body);
         const existingVehicle = this.vehicles[vehicle.id];
         existingVehicle.setLatLng([vehicle.longitude, vehicle.latitude]);
       }
@@ -144,6 +147,18 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   }).bindPopup(location.address).openPopup();
   }
 
+  private removeRoutes() : void {
+    if(this.route != null) {
+      this.route.remove();
+    }
+    this.departurePlain = Location.getEmptyLocation();
+    this.destinationPlain = Location.getEmptyLocation();
+    this.departure.next(Location.getEmptyLocation());
+    this.mapService.setDeparture(Location.getEmptyLocation());
+    this.mapService.setDestination(Location.getEmptyLocation());
+    this.destination.next(Location.getEmptyLocation());
+    this.initDriverCar();
+  }
   private drawRoute(departure : Location, destination : Location, driver = this.isDriver) : void {
     if (this.route != null) {
       this.route.remove();
@@ -292,6 +307,11 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.initFreeCars();
       }
     });
+    this.mapService.rideReceived$.subscribe(rideReceived => {
+      if (!rideReceived) {
+        this.removeRoutes();
+      }
+    })
     this.mapService.departure$.subscribe(departure => {
       this.departurePlain = departure;
       if(departure.address != '') this.drawMarker(departure)

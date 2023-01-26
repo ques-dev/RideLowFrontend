@@ -1,6 +1,6 @@
-import { Vehicle } from './Vehicle';
+import { VehicleWithOnlyLocation } from './VehicleWithOnlyLocation';
 
 export interface Ride {
   id: number;
-  vehicle: Vehicle;
+  vehicle: VehicleWithOnlyLocation;
 }
