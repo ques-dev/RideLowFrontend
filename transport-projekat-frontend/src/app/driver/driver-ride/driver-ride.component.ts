@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Location} from "../../shared/model/Location";
 import {MapService} from "../../shared/map/map.service";
 import {DriverService} from "../driver.service";
+import {NotificationService} from "../../shared/notification-service/notification.service";
 
 @Component({
   selector: 'app-driver-ride',
@@ -11,7 +12,8 @@ import {DriverService} from "../driver.service";
 })
 export class DriverRideComponent implements OnInit {
   constructor(public mapService : MapService,
-              private driverService : DriverService) {
+              private driverService : DriverService,
+              private notificationService : NotificationService) {
   }
 
   searchForm : FormGroup = new FormGroup({
@@ -57,6 +59,10 @@ export class DriverRideComponent implements OnInit {
   }
 
   public accept() : void {
+    if (!this.driverService.rideToDepartureDone) {
+      this.notificationService.createNotification('Morate prvo doći do početne tačke da bi započeli vožnju.', 2000);
+      return;
+    }
     this.driverService.acceptRide().subscribe({
       next: (value) => {
         this.driverService.startRide().subscribe({
@@ -65,6 +71,9 @@ export class DriverRideComponent implements OnInit {
             this.chosenDeparture.emit(this.driverService.currentRide?.locations[0].departure);
             this.chosenDestination.emit(this.driverService.currentRide?.locations[0].destination);
             this.bothLocationsSelected.emit(true);
+            this.mapService.simulateMovementToDestination = true;
+            this.mapService.setSimulateToDestination(true);
+            this.driverService.rideToDepartureDone = false;
           },
           error: (error) => {
             console.log(error.error.message);
@@ -82,10 +91,18 @@ export class DriverRideComponent implements OnInit {
   }
 
   public finish(): void {
+    if (!this.driverService.rideToDestinationDone) {
+      this.notificationService.createNotification('Morate prvo doći do destinacije da bi završili vožnju.', 2000);
+      return;
+    }
+
     this.driverService.endRide().subscribe({
       next: (value) => {
         this.mapService.setRideInProgress(false);
         this.mapService.setRideReceived(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 250);
       },
       error: (error) => {
         console.log(error.error.message);

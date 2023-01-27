@@ -31,9 +31,8 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   private stompClient!: Stomp.Client;
   vehicles: { [key: number]: L.Marker } = {};
 
-
-  private simulationDone = false;
   private simulation?: NodeJS.Timer;
+  private otherSimulation?: NodeJS.Timer;
 
   private driverRideInProgress = false;
   private map!: L.Map;
@@ -51,8 +50,6 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   @Input() departure: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() destination: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() passenger: Subject<boolean> = new Subject<boolean>();
-
-  private currentSimulationCoords: LatLng[] = [];
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -113,7 +110,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
       if (!this.driverRideInProgress) {
         const vehicle: VehicleWithOnlyLocation = JSON.parse(message.body);
         const existingVehicle = this.vehicles[vehicle.id];
-        existingVehicle.setLatLng([vehicle.longitude, vehicle.latitude]);
+        if (existingVehicle) {
+          existingVehicle.setLatLng([vehicle.longitude, vehicle.latitude]);
+        }
       }
     });
     this.stompClient.subscribe('/map-updates/new-ride', (message: { body: string }) => {
@@ -128,7 +127,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     });
     this.stompClient.subscribe('/map-updates/ended-ride', (message: { body: string }) => {
       const ride: Ride = JSON.parse(message.body);
-      this.vehicles[ride.vehicle.id].remove();
+      if (this.vehicles[ride.vehicle.id]) {
+        this.vehicles[ride.vehicle.id].remove();
+      }
       delete this.vehicles[ride.vehicle.id];
     });
   }
@@ -325,9 +326,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
       } else {
         this.initFreeCars();
         if (this.carMarker != null) {
-          this.driverService.changeVehicleLocation(this.carMarker.getLatLng()).subscribe((response: any) => {
-            console.log(response);
-          });
+          this.driverService.changeVehicleLocation(this.carMarker.getLatLng()).subscribe();
         }
         clearInterval(this.simulation);
       }
@@ -363,13 +362,19 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     });
 
     this.mapService.departureDestinationCoords$.subscribe((coords) => {
+      this.mapService.destinationCoords = coords;
       if (this.mapService.simulateMovementToDestination) {
-        this.simulateMovement(coords);
+        this.simulateMovementToDestination(coords);
       }
     });
     this.mapService.driverDepartureCoords$.subscribe((coords) => {
       if (this.mapService.simulateMovementToDeparture) {
-        this.simulateMovement(coords);
+        this.simulateMovementToDeparture(coords);
+      }
+    });
+    this.mapService.simulateToDestination$.subscribe((status) => {
+      if (status) {
+        this.simulateMovementToDeparture(this.mapService.destinationCoords);
       }
     });
   }
@@ -396,21 +401,34 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     this.clear();
   }
 
-  private simulateMovement(coords: LatLng[]) {
+  private simulateMovementToDeparture(coords: LatLng[]) {
     let i = 0;
     const interval_timer = setInterval(() => {
       this.carMarker.setLatLng(coords[i]);
       i++;
       if (i >= coords.length) {
-        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe((response: any) => {
-          console.log(response);
-        });
-        this.simulationDone = true;
+        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
+        this.driverService.rideToDepartureDone = true;
         this.toDepartureRoute.remove();
         clearInterval(interval_timer);
       }
     }, 200);
 
     this.simulation = interval_timer;
+  }
+
+  private simulateMovementToDestination(coords: LatLng[]) {
+    let i = 0;
+    const interval_timer = setInterval(() => {
+      this.carMarker.setLatLng(coords[i]);
+      i++;
+      if (i >= coords.length) {
+        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
+        this.driverService.rideToDestinationDone = true;
+        clearInterval(interval_timer);
+      }
+    }, 200);
+
+    this.otherSimulation = interval_timer;
   }
 }

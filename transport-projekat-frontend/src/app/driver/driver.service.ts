@@ -32,6 +32,8 @@ export class DriverService {
   cantStartShift = false;
   currentRide: RideCreated | null = null;
   receivedRide = false;
+  rideToDepartureDone = false;
+  rideToDestinationDone = false;
 
   constructor(private http: HttpClient) { }
 

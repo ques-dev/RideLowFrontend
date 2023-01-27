@@ -14,6 +14,7 @@ import {LatLng} from "leaflet";
 export class MapService {
 
   private estimatesUrl = environment.apiURL + "unregisteredUser";
+  destinationCoords: LatLng[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -21,6 +22,8 @@ export class MapService {
   departureDestinationCoords$ = this.departureDestinationCoords.asObservable();
   private driverDepartureCoords = new BehaviorSubject<LatLng[]>([]);
   driverDepartureCoords$ = this.driverDepartureCoords.asObservable();
+  private simulateToDestination = new BehaviorSubject<boolean>(false);
+  simulateToDestination$ = this.simulateToDestination.asObservable();
   public simulateMovementToDeparture = false;
   public simulateMovementToDestination = false;
   private rideInProgress = new BehaviorSubject<boolean>(false);
@@ -49,6 +52,10 @@ export class MapService {
 
   public setDepartureDestinationCoords(coords: LatLng[]) {
     this.departureDestinationCoords.next(coords);
+  }
+
+  public setSimulateToDestination(status: boolean) {
+    this.simulateToDestination.next(status);
   }
 
   public setDriverDepartureCoords(coords: LatLng[]) {
