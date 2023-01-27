@@ -164,6 +164,7 @@ export class RideReservationFormComponent {
         reservation.passengers = reservationCreated.passengers;
         this.reservedRide = reservation;
         this.clearReservationForm();
+        this.mapService.setTrackDriver(true);
       }
     });
     this.close();
@@ -194,6 +195,5 @@ export class RideReservationFormComponent {
     this.rideBasicInfoForm.controls["scheduleTime"].setValue('');
     this.passengersEmailsForm.controls["email"].setValue('');
     this.passengers.splice(1,this.passengers.length - 1);
-    this.mapService.setClearMap();
   }
 }

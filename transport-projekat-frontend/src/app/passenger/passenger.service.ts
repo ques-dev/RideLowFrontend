@@ -24,6 +24,7 @@ export class PassengerService {
   createRideUrl = environment.apiURL + "ride";
   createFavoriteRideUrl = this.createRideUrl + "/favorites";
   reviewUrl = environment.apiURL + "review/"
+  currentRideId?: number = 0;
 
   constructor(private http: HttpClient) { }
 
@@ -78,5 +79,10 @@ export class PassengerService {
     };
     const url = this.reviewUrl + rideId.toString() + "/vehicle";
     return this.http.post<ReviewReturned>(url,review,options);
+  }
+
+  getActiveRide() : Observable<RideCreated> {
+    const url = this.createRideUrl + "/passenger/1/active";
+    return this.http.get<RideCreated>(url);
   }
 }

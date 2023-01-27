@@ -14,7 +14,8 @@ import {RideReservation} from "../../shared/model/RideReservation";
 })
 export class PassengerHomeComponent implements OnInit{
 
-  constructor(private mapService: MapService, private notificationService : NotificationService) {
+  constructor(public mapService: MapService,
+              private notificationService : NotificationService) {
     this.initializeWebSocketConnection();
   }
   orderClicked = false;
@@ -55,7 +56,6 @@ export class PassengerHomeComponent implements OnInit{
   public closeRideDetailsForm() {
     this.openDetails = false;
   }
-
 
   initializeWebSocketConnection() {
     const ws = new SockJS('http://localhost:8080/socket');

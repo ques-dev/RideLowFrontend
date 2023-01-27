@@ -10,12 +10,14 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import {RideInconsistencyComponent} from "./ride-inconsistency/ride-inconsistency.component";
 
 @NgModule({
   declarations: [
     MapComponent,
     PanicComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    RideInconsistencyComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import {LeafletModule} from "@asymmetrik/ngx-leaflet";
   exports: [
     MapComponent,
     PanicComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    RideInconsistencyComponent
   ],
 })
 export class SharedModule {

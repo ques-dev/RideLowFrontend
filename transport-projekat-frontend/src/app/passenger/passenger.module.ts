@@ -28,6 +28,7 @@ import { RideRatingComponent } from './ride-rating/ride-rating.component';
 import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.component';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import { RideDetailsComponent } from './ride-details/ride-details.component';
+import { RideInconsistencyComponent } from '../shared/ride-inconsistency/ride-inconsistency.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { RideDetailsComponent } from './ride-details/ride-details.component';
     RideNotReservedPopupComponent,
     RideRatingComponent,
     RatingStarBarComponent,
-    RideDetailsComponent
+    RideDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -64,13 +65,13 @@ import { RideDetailsComponent } from './ride-details/ride-details.component';
     MatChipsModule,
     NgxMaterialTimepickerModule,
   ],
-  exports: [
-    PassengerAccountComponent,
-    PassengerHomeComponent,
-    PassengerSideNavigationComponent,
-    RideEstimatesComponent,
-    RideReservationFormComponent
-  ],
+    exports: [
+        PassengerAccountComponent,
+        PassengerHomeComponent,
+        PassengerSideNavigationComponent,
+        RideEstimatesComponent,
+        RideReservationFormComponent
+    ],
   providers: [
     PassengerService
   ]

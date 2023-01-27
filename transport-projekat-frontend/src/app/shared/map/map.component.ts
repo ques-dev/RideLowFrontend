@@ -12,6 +12,8 @@ import {VehicleWithOnlyLocation} from "../model/VehicleWithOnlyLocation";
 import {Ride} from "../model/Ride";
 import {DriverService} from "../../driver/driver.service";
 import {Vehicle} from "../model/Vehicle";
+import {PassengerService} from "../../passenger/passenger.service";
+import {RideCreated} from "../model/RideCreated";
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
@@ -25,7 +27,8 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(private http: HttpClient,
               public mapService: MapService,
-              private driverService: DriverService) {
+              private driverService: DriverService,
+              private passengerService: PassengerService) {
   }
 
   private stompClient!: Stomp.Client;
@@ -50,6 +53,8 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   @Input() departure: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() destination: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
   @Input() passenger: Subject<boolean> = new Subject<boolean>();
+
+  private isTrackingDriver = false;
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
@@ -377,6 +382,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.simulateMovementToDeparture(this.mapService.destinationCoords);
       }
     });
+
+    this.mapService.trackDriver$.subscribe((status) => {
+      if (status) {
+        this.trackDriver();
+      }
+    });
   }
 
   private clear() {
@@ -404,7 +415,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   private simulateMovementToDeparture(coords: LatLng[]) {
     let i = 0;
     const interval_timer = setInterval(() => {
-      this.carMarker.setLatLng(coords[i]);
+      if (this.carMarker) {
+        this.carMarker.setLatLng(coords[i]);
+      }
+      if (i % 3 == 0) {
+        this.driverService.changeVehicleLocation(coords[i]).subscribe();
+      }
       i++;
       if (i >= coords.length) {
         this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
@@ -420,7 +436,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   private simulateMovementToDestination(coords: LatLng[]) {
     let i = 0;
     const interval_timer = setInterval(() => {
-      this.carMarker.setLatLng(coords[i]);
+      if (this.carMarker) {
+        this.carMarker.setLatLng(coords[i]);
+      }
+      if (i % 3 == 0) {
+        this.driverService.changeVehicleLocation(coords[i]).subscribe();
+      }
       i++;
       if (i >= coords.length) {
         this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
@@ -430,5 +451,45 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     }, 200);
 
     this.otherSimulation = interval_timer;
+  }
+
+  private lastThreeLocations: LatLng[] = [];
+
+  private trackDriver() {
+    this.isTrackingDriver = true;
+    this.initDriverCar();
+    const trackDriverTimer = setInterval(() => {
+      if (!this.isTrackingDriver) {
+        clearInterval(trackDriverTimer);
+        return;
+      }
+      this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
+        this.carMarker.setLatLng(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude));
+        this.lastThreeLocations.push(this.carMarker.getLatLng());
+        if (this.lastThreeLocations.length > 3) {
+          this.lastThreeLocations.shift();
+        }
+        if (this.lastThreeLocations.length == 3) {
+          if (this.lastThreeLocations[0].equals(this.lastThreeLocations[1]) && this.lastThreeLocations[1].equals(this.lastThreeLocations[2])) {
+            this.passengerService.getActiveRide().subscribe(
+              (ride: RideCreated) => {
+                this.passengerService.currentRideId = ride.id;
+                this.mapService.setRideInProgress(true);
+            },
+              (error: any) => {
+                if (this.mapService.passengerRideInProgress) {
+                  this.isTrackingDriver = false;
+                  this.carMarker.remove();
+                  this.mapService.setTrackDriver(false);
+                  this.mapService.setRideInProgress(false);
+                  this.mapService.setClearMap();
+                  clearInterval(trackDriverTimer);
+                  return;
+                }
+              });
+          }
+        }
+      });
+    }, 1000);
   }
 }

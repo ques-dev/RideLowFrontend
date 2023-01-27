@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DriverService} from "../../driver/driver.service";
 import {NotificationService} from "../../shared/notification-service/notification.service";
+import {MapService} from "../../shared/map/map.service";
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent {
 
   constructor(private router:Router,
               private driverService : DriverService,
-              private notificationService : NotificationService) { }
+              private notificationService : NotificationService,
+              private mapService : MapService) { }
 
   loginForm = new FormGroup({
     email: new FormControl( '',[Validators.required]),
@@ -22,6 +24,7 @@ export class LoginComponent {
 
   routeToHome() {
     if (this.loginForm.controls.email.value == "driver") {
+      this.mapService.userIsDriver = true;
       this.driverService.startShift().subscribe({
         next: (value) => {
           this.driverService.shiftId = value.id;

@@ -18,6 +18,11 @@ export class MapService {
 
   constructor(private http: HttpClient) {
   }
+
+  public userIsDriver = false;
+
+  private trackDriver = new BehaviorSubject<boolean>(false);
+  trackDriver$ = this.trackDriver.asObservable();
   private departureDestinationCoords = new BehaviorSubject<LatLng[]>([]);
   departureDestinationCoords$ = this.departureDestinationCoords.asObservable();
   private driverDepartureCoords = new BehaviorSubject<LatLng[]>([]);
@@ -50,6 +55,12 @@ export class MapService {
   private rideReceived : Subject<boolean> = new Subject<boolean>();
   rideReceived$ = this.rideReceived.asObservable();
 
+  public passengerRideInProgress = false;
+
+  public setTrackDriver(status: boolean) {
+    this.trackDriver.next(status);
+  }
+
   public setDepartureDestinationCoords(coords: LatLng[]) {
     this.departureDestinationCoords.next(coords);
   }
@@ -63,6 +74,7 @@ export class MapService {
   }
 
   public setRideInProgress(inProgress: boolean) {
+    this.passengerRideInProgress = inProgress;
     this.rideInProgress.next(inProgress);
   }
 
