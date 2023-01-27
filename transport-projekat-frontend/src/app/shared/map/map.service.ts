@@ -6,6 +6,7 @@ import {RouteEstimates} from "../model/RouteEstimates";
 import {RouteEstimatesRequestBody} from "../model/RouteEstimatesRequestBody";
 import {Location} from "../model/Location";
 import {Ride} from "../model/Ride";
+import {LatLng} from "leaflet";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,12 @@ export class MapService {
 
   constructor(private http: HttpClient) {
   }
+  private departureDestinationCoords = new BehaviorSubject<LatLng[]>([]);
+  departureDestinationCoords$ = this.departureDestinationCoords.asObservable();
+  private driverDepartureCoords = new BehaviorSubject<LatLng[]>([]);
+  driverDepartureCoords$ = this.driverDepartureCoords.asObservable();
+  public simulateMovementToDeparture = false;
+  public simulateMovementToDestination = false;
   private rideInProgress = new BehaviorSubject<boolean>(false);
   rideInProgress$ = this.rideInProgress.asObservable();
   private rideDenied = new BehaviorSubject<boolean>(false);
@@ -39,6 +46,14 @@ export class MapService {
   isDriver$ = this.isDriver.asObservable();
   private rideReceived : Subject<boolean> = new Subject<boolean>();
   rideReceived$ = this.rideReceived.asObservable();
+
+  public setDepartureDestinationCoords(coords: LatLng[]) {
+    this.departureDestinationCoords.next(coords);
+  }
+
+  public setDriverDepartureCoords(coords: LatLng[]) {
+    this.driverDepartureCoords.next(coords);
+  }
 
   public setRideInProgress(inProgress: boolean) {
     this.rideInProgress.next(inProgress);

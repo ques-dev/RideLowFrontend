@@ -56,6 +56,7 @@ export class DriverHomeComponent implements OnInit{
     this.mapService.setRideReceived(true);
     this.notificationService.createNotification("Primili ste vožnju!", 3000);
     this.displayCar = false;
+    this.mapService.simulateMovementToDeparture = true;
   }
 
   ngOnInit(): void {

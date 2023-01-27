@@ -18,53 +18,61 @@ const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css','../../app.component.css']
+  styleUrls: ['./map.component.css', '../../app.component.css']
 })
 
 export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(private http: HttpClient,
               public mapService: MapService,
-              private driverService: DriverService) {}
+              private driverService: DriverService) {
+  }
 
   private stompClient!: Stomp.Client;
   vehicles: { [key: number]: L.Marker } = {};
 
+
+  private simulationDone = false;
+  private simulation?: NodeJS.Timer;
+
   private driverRideInProgress = false;
   private map!: L.Map;
-  private routeLayer! : L.LayerGroup;
+  private routeLayer!: L.LayerGroup;
   private freeCars: LatLngTuple[] = [[45.237002, 19.829361], [45.240477, 19.847849], [45.244125, 19.842828]];
   private carMarker!: L.Marker;
   private freeCarMarkers: L.Marker[] = [];
   private route!: L.Routing.Control;
+  private toDepartureRoute!: L.Routing.Control;
   private departurePlain = Location.getEmptyLocation();
   private destinationPlain = Location.getEmptyLocation();
   private enableClicking = true;
   private isDriver = false;
   @Input() displayCar = false;
-  @Input()  departure : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
-  @Input()  destination : BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
-  @Input() passenger : Subject<boolean> = new Subject<boolean>();
+  @Input() departure: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
+  @Input() destination: BehaviorSubject<Location> = new BehaviorSubject<Location>(Location.getEmptyLocation());
+  @Input() passenger: Subject<boolean> = new Subject<boolean>();
+
+  private currentSimulationCoords: LatLng[] = [];
 
   private locationIcon = L.icon({
     iconUrl: 'assets/images/place-marker.png',
-    iconRetinaUrl : 'assets/images/place-marker.png',
+    iconRetinaUrl: 'assets/images/place-marker.png',
 
-    iconSize:     [40, 40],
-    iconAnchor:   [20, 40],
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
   });
 
   private vehicleFreeIcon = L.icon({
     iconUrl: 'assets/images/greencar.png',
-    iconRetinaUrl : 'assets/images/greencar.png',
+    iconRetinaUrl: 'assets/images/greencar.png',
 
     iconSize: [35, 45],
     iconAnchor: [18, 45],
   });
 
   private vehicleReservedIcon = L.icon({
-    iconUrl:'assets/images/redcar.png',
-    iconRetinaUrl : 'assets/images/redcar.png',
+    iconUrl: 'assets/images/redcar.png',
+    iconRetinaUrl: 'assets/images/redcar.png',
 
     iconSize: [35, 45],
     iconAnchor: [18, 45],
@@ -72,10 +80,10 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private driverIcon = L.icon({
     iconUrl: 'assets/images/car.png',
-    iconRetinaUrl : 'assets/images/car.png',
+    iconRetinaUrl: 'assets/images/car.png',
 
-    iconSize:     [35, 35],
-    iconAnchor:   [35, 35],
+    iconSize: [35, 35],
+    iconAnchor: [35, 35],
   })
 
   ngOnInit(): void {
@@ -141,15 +149,18 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     this.routeLayer.addTo(this.map);
   }
 
-  private makeMarker(location : Location) : L.Marker {
+  private makeMarker(location: Location): L.Marker {
     return L.marker([location.latitude, location.longitude], {
-    draggable: false,
-  }).bindPopup(location.address).openPopup();
+      draggable: false,
+    }).bindPopup(location.address).openPopup();
   }
 
-  private removeRoutes() : void {
-    if(this.route != null) {
+  private removeRoutes(): void {
+    if (this.route != null) {
       this.route.remove();
+    }
+    if (this.toDepartureRoute != null) {
+      this.toDepartureRoute.remove();
     }
     this.departurePlain = Location.getEmptyLocation();
     this.destinationPlain = Location.getEmptyLocation();
@@ -157,20 +168,57 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     this.mapService.setDeparture(Location.getEmptyLocation());
     this.mapService.setDestination(Location.getEmptyLocation());
     this.destination.next(Location.getEmptyLocation());
-    this.initDriverCar();
   }
-  private drawRoute(departure : Location, destination : Location, driver = this.isDriver) : void {
+
+  private drawRoute(departure: Location, destination: Location, driver = this.isDriver): void {
     if (this.route != null) {
       this.route.remove();
     }
-    if (!this.isDriver) {
-      this.route = L.Routing.control({
+    this.route = L.Routing.control({
+      router: L.Routing.osrmv1({
+        serviceUrl: `http://router.project-osrm.org/route/v1/`
+      }),
+      showAlternatives: false,
+      lineOptions: {
+        styles: [{color: '#CF0A0A', weight: 7}],
+        extendToWaypoints: true,
+        missingRouteTolerance: 100
+      },
+      fitSelectedRoutes: true,
+      show: true,
+      routeWhileDragging: true,
+      plan: L.Routing.plan([
+        this.makeMarker(departure).getLatLng(),
+        this.makeMarker(destination).getLatLng()
+      ], {
+        createMarker: function (i: number, waypoint: L.Routing.Waypoint) {
+          let text;
+          if (i == 0) text = departure.address;
+          else text = destination.address;
+          return L.marker(waypoint.latLng, {
+            draggable: false,
+          }).bindPopup(text).openPopup();
+        },
+        draggableWaypoints: false
+      }),
+      waypoints: [
+        this.makeMarker(departure).getLatLng(),
+        this.makeMarker(destination).getLatLng()
+      ]
+    }).addTo(this.map);
+
+    this.route.on('routesfound', (e: any) => {
+      this.mapService.setDepartureDestinationCoords(e.routes[0].coordinates);
+    });
+
+    if (this.isDriver) {
+      this.toDepartureRoute = L.Routing.control({
         router: L.Routing.osrmv1({
           serviceUrl: `http://router.project-osrm.org/route/v1/`
         }),
         showAlternatives: false,
         lineOptions: {
-          styles: [{color: '#CF0A0A', weight: 7}],
+          styles: [{color: '#0000FF', weight: 7}],
           extendToWaypoints: true,
           missingRouteTolerance: 100
         },
@@ -178,68 +226,37 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         show: true,
         routeWhileDragging: true,
         plan: L.Routing.plan([
-          this.makeMarker(departure).getLatLng(),
-          this.makeMarker(destination).getLatLng()
+          this.carMarker.getLatLng(),
+          this.makeMarker(departure).getLatLng()
         ], {
-          createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
+          createMarker: function (i: number, waypoint: L.Routing.Waypoint) {
             let text;
-            if(i == 0) text = departure.address;
+            if (i == 0) text = departure.address;
             else text = destination.address;
             return L.marker(waypoint.latLng, {
               draggable: false,
             }).bindPopup(text).openPopup();
           },
-          draggableWaypoints : false
+          draggableWaypoints: false
         }),
         waypoints: [
-          this.makeMarker(departure).getLatLng(),
-          this.makeMarker(destination).getLatLng()
+          this.carMarker.getLatLng(),
+          this.makeMarker(departure).getLatLng()
         ]
       }).addTo(this.map);
-    } else {
-      this.route = L.Routing.control({
-        router: L.Routing.osrmv1({
-          serviceUrl: `http://router.project-osrm.org/route/v1/`
-        }),
-        showAlternatives: false,
-        lineOptions: {
-          styles: [{color: '#CF0A0A', weight: 7}],
-          extendToWaypoints: true,
-          missingRouteTolerance: 100
-        },
-        fitSelectedRoutes: true,
-        show: true,
-        routeWhileDragging: true,
-        plan: L.Routing.plan([
-          this.makeMarker(departure).getLatLng(),
-          this.makeMarker(destination).getLatLng()
-        ], {
-          draggableWaypoints: false,
-          createMarker: function(i: number, waypoint: L.Routing.Waypoint) {
-            if (i == 0 && driver) {
-              return L.marker(waypoint.latLng, {
-                icon: L.icon({
-                  iconUrl: 'assets/images/car.png',
-                  iconRetinaUrl: 'assets/images/car.png',
-
-                  iconSize: [35, 35], // size of the icon
-                  iconAnchor: [35, 35], // point of the icon which will correspond to marker's location
-                }),
-              });
-            }
-            return L.marker(waypoint.latLng);
-          }
-        })
-      }).addTo(this.map);
+      this.toDepartureRoute.on('routesfound', (e: any) => {
+        this.mapService.setDriverDepartureCoords(e.routes[0].coordinates);
+      });
     }
   }
+
   private initFreeCars(): void {
     for (const car of this.freeCars) {
       this.freeCarMarkers.push(
-      L.marker(car, {
-        draggable: false,
-        icon: this.vehicleFreeIcon
-      }).addTo(this.map));
+        L.marker(car, {
+          draggable: false,
+          icon: this.vehicleFreeIcon
+        }).addTo(this.map));
     }
   }
 
@@ -251,36 +268,36 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private initReverseGeocoding(): void {
     this.map.on('click', (ev) => {
-      if(this.enableClicking) {
-      const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
-      const locationUrl = reverseGeocodeUrl + latlng.lng + "," + latlng.lat + "&f=pjson";
-      this.http.get(locationUrl).subscribe((response: any) => {
-        const clicked = new Location(response.address.LongLabel, latlng.lng, latlng.lat);
-        this.makeMarker(clicked).addTo(this.routeLayer);
-        if (this.departurePlain.address == '')
-        {
-          this.departurePlain = clicked;
-          this.mapService.setDeparture(this.departurePlain);
-        }
-        else {
-          this.destinationPlain = clicked;
-          this.mapService.setDestination(this.destinationPlain);
-          this.routeLayer.clearLayers();
-          this.drawRoute(this.departurePlain, this.destinationPlain);
-          this.mapService.setRideEstimates().then();
-        }
-      });
-    }});
-}
+      if (this.enableClicking) {
+        const latlng = this.map.mouseEventToLatLng(ev.originalEvent);
+        const locationUrl = reverseGeocodeUrl + latlng.lng + "," + latlng.lat + "&f=pjson";
+        this.http.get(locationUrl).subscribe((response: any) => {
+          const clicked = new Location(response.address.LongLabel, latlng.lng, latlng.lat);
+          this.makeMarker(clicked).addTo(this.routeLayer);
+          if (this.departurePlain.address == '') {
+            this.departurePlain = clicked;
+            this.mapService.setDeparture(this.departurePlain);
+          } else {
+            this.destinationPlain = clicked;
+            this.mapService.setDestination(this.destinationPlain);
+            this.routeLayer.clearLayers();
+            this.drawRoute(this.departurePlain, this.destinationPlain);
+            this.mapService.setRideEstimates().then();
+          }
+        });
+      }
+    });
+  }
 
-  drawMarker(location : Location) : void {
-    if(this.isDriver) return;
+  drawMarker(location: Location): void {
+    if (this.isDriver) return;
     this.makeMarker(location).addTo(this.routeLayer);
-    this.map.setView([location.latitude,location.longitude],16);
+    this.map.setView([location.latitude, location.longitude], 16);
   }
 
   private initDriverCar(): void {
     this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
+      this.driverService.vehicleId = vehicle.id;
       this.carMarker = L.marker(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude), {
         draggable: false,
         icon: this.driverIcon
@@ -307,6 +324,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.vehicles = {};
       } else {
         this.initFreeCars();
+        if (this.carMarker != null) {
+          this.driverService.changeVehicleLocation(this.carMarker.getLatLng()).subscribe((response: any) => {
+            console.log(response);
+          });
+        }
+        clearInterval(this.simulation);
       }
     });
     this.mapService.rideReceived$.subscribe(rideReceived => {
@@ -316,14 +339,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     })
     this.mapService.departure$.subscribe(departure => {
       this.departurePlain = departure;
-      if(departure.address != '') this.drawMarker(departure)
+      if (departure.address != '') this.drawMarker(departure)
     });
 
     this.mapService.isDriver$.subscribe(status => this.isDriver = status);
 
     this.mapService.destination$.subscribe(destination => {
       this.destinationPlain = destination;
-      if(destination.address != '') this.drawMarker(destination);
+      if (destination.address != '') this.drawMarker(destination);
     });
 
     this.mapService.clearMap$.subscribe(() => this.clear());
@@ -338,10 +361,21 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
       this.drawRouteBetweenSelectedLocations();
       this.mapService.setRideEstimates().then();
     });
+
+    this.mapService.departureDestinationCoords$.subscribe((coords) => {
+      if (this.mapService.simulateMovementToDestination) {
+        this.simulateMovement(coords);
+      }
+    });
+    this.mapService.driverDepartureCoords$.subscribe((coords) => {
+      if (this.mapService.simulateMovementToDeparture) {
+        this.simulateMovement(coords);
+      }
+    });
   }
 
   private clear() {
-    if(this.route != null) {
+    if (this.route != null) {
       this.route.remove();
     }
     this.isDriver = false;
@@ -354,15 +388,29 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
     this.destination.next(Location.getEmptyLocation());
   }
 
-  public drawRouteBetweenSelectedLocations()
-  {
-    if (this.carMarker != null) {
-      this.carMarker.remove();
-    }
+  public drawRouteBetweenSelectedLocations() {
     this.drawRoute(this.departurePlain, this.destinationPlain);
   }
 
   ngOnDestroy() {
     this.clear();
+  }
+
+  private simulateMovement(coords: LatLng[]) {
+    let i = 0;
+    const interval_timer = setInterval(() => {
+      this.carMarker.setLatLng(coords[i]);
+      i++;
+      if (i >= coords.length) {
+        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe((response: any) => {
+          console.log(response);
+        });
+        this.simulationDone = true;
+        this.toDepartureRoute.remove();
+        clearInterval(interval_timer);
+      }
+    }, 200);
+
+    this.simulation = interval_timer;
   }
 }

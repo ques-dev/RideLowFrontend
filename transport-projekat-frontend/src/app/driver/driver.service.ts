@@ -9,6 +9,7 @@ import * as moment from "moment";
 import {RideCreated} from "../shared/model/RideCreated";
 import {Vehicle} from "../shared/model/Vehicle";
 import {Ride} from "../shared/model/Ride";
+import {LatLng} from "leaflet";
 
 type Response = {
   message: string
@@ -25,7 +26,9 @@ type Response = {
 export class DriverService {
   url = environment.apiURL + "driver";
   rideUrl = environment.apiURL + "ride";
+  vehicleUrl = environment.apiURL + "vehicle";
   shiftId = -1;
+  vehicleId = -1;
   cantStartShift = false;
   currentRide: RideCreated | null = null;
   receivedRide = false;
@@ -75,6 +78,10 @@ export class DriverService {
 
   endRide(): Observable<RideCreated> {
     return this.http.put<RideCreated>(this.rideUrl + "/" + this.currentRide?.id + "/end", {});
+  }
+
+  changeVehicleLocation(latlng: LatLng) : Observable<Response> {
+    return this.http.put<Response>(this.vehicleUrl + "/" + this.vehicleId + "/location", {latitude: latlng.lat, longitude: latlng.lng});
   }
 
   getVehicle(): Observable<Vehicle> {
