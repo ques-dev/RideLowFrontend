@@ -383,8 +383,7 @@
   background-color: #EEEEEE;
   flex: 1;
   border-radius: 1.25vw;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
 }
 

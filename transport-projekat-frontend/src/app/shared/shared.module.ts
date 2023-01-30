@@ -11,9 +11,11 @@ import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import {RideInconsistencyComponent} from "./ride-inconsistency/ride-inconsistency.component";
+import {RideHistoryComponent} from "./ride-history/ride-history.component";
 
 @NgModule({
   declarations: [
+    RideHistoryComponent,
     MapComponent,
     PanicComponent,
     ChangePasswordComponent,

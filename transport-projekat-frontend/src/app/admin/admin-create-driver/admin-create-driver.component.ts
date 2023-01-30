@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import {AdminService} from "../admin.service";
 import {DriverUpdateRequest} from "../../shared/model/DriverUpdateRequest";
+import {VehicleCreateRequest} from "../../shared/model/VehicleCreateRequest"
 import {UserService} from "../../shared/user.service";
 
 const defaultImage = "../../../assets/images/account.png";
@@ -13,6 +14,9 @@ const defaultImage = "../../../assets/images/account.png";
   styleUrls: ['../../passenger/passenger-account/passenger-account.component.css', './admin-create-driver.component.css', '../../app.component.css']
 })
 export class AdminCreateDriverComponent implements OnInit {
+
+  baby = false;
+  pet = false;
   createDriverForm : FormGroup = new FormGroup({
     name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
     surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
@@ -24,7 +28,8 @@ export class AdminCreateDriverComponent implements OnInit {
     model: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     licence: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     seats: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    babySeat: new FormControl('')
+    babySeat: new FormControl(''),
+    vehicleType: new FormControl('', {nonNullable:true, validators: [Validators.required]})
   });
 
   image = "../../../assets/images/account.png";
@@ -101,5 +106,35 @@ export class AdminCreateDriverComponent implements OnInit {
           }
         }
       });
+
+    const request2 : VehicleCreateRequest = {
+      driverId : 10,
+      vehicleId: 10,
+      vehicleType: this.createDriverForm.value.vehicleType,
+      model: this.createDriverForm.value.model,
+      licenseNumber: this.createDriverForm.value.licence,
+      passengerSeats: this.createDriverForm.value.seats,
+      babyTransport: this.baby,
+      petTransport: this.pet
+    }
+    this.adminService.sendCreateVehicleRequest(request2)
+      .subscribe({
+        next: () => {
+          this.notificationService.createNotification('Uspešno kreirano vozilo.', 5000);
+        },
+        error: (error) => {
+          if (error.error.message.includes("email")) {
+            this.notificationService.createNotification('Email adresa je zauzeta ili nevalidna.', 5000);
+          }
+        }
+      });
+  }
+
+  togglePet() {
+    this.pet = !this.pet;
+  }
+
+  toggleBaby() {
+    this.baby = !this.baby;
   }
 }
