@@ -1,0 +1,54 @@
+<div class="main-page">
+  <app-admin-side-navigation></app-admin-side-navigation>
+  <div class="main-content padding-top-2vh">
+    <div class="bright-orange label-container width-50">
+      <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
+      Podaci o korisniku
+    </div>
+
+    <div class="profile-picture-container">
+      <img [src]="image" class = "profile-picture" alt="profile picture">
+    </div>
+
+    <div id="file-upload" class="flex-row mat-h3 padding-bottom-2vh">
+      <input type="file" class="file-input"
+             (change)="onFileSelected($event)" #fileUpload>
+      <mat-icon>edit</mat-icon>
+      <p (click)="fileUpload.click()" class="font-weight-light">Dodaj profilnu sliku</p>
+    </div>
+
+    <form [formGroup] ="updateDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">
+      <mat-form-field appearance="fill">
+        <mat-label>Ime</mat-label>
+        <input matInput name = "name" formControlName="name">
+      </mat-form-field><br>
+      <mat-form-field appearance="fill">
+        <mat-label>Prezime</mat-label>
+        <input matInput name = "surname" formControlName="surname">
+      </mat-form-field><br>
+      <mat-form-field appearance="fill">
+        <mat-label>Broj telefona</mat-label>
+        <input matInput name = "telephoneNumber" formControlName="telephoneNumber">
+      </mat-form-field><br>
+      <mat-form-field appearance="fill">
+        <mat-label>Adresa</mat-label>
+        <input matInput name = "address" formControlName="address">
+      </mat-form-field><br>
+      <mat-form-field appearance="fill">
+        <mat-label>E-mail</mat-label>
+        <input matInput name = "email" formControlName="email">
+      </mat-form-field><br>
+
+
+      <div class="buttons">
+        <button mat-button class = "bright-orange button-rounded mat-h1"
+                [ngClass]="{'bright-orange':true }"
+                type = "submit">
+          <mat-icon class = "icon">mode_edit</mat-icon>
+          {{"Kreiraj vozača"}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<router-outlet></router-outlet>

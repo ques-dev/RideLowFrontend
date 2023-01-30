@@ -6,8 +6,12 @@ import {PassengerHomeComponent} from "./passenger/passenger-home/passenger-home.
 import {UnregisteredUserMainComponent} from "./unregistered-user/unregistered-user-main/unregistered-user-main.component";
 import {DriverAccountComponent} from "./driver/driver-account/driver-account.component";
 import {DriverHomeComponent} from "./driver/driver-home/driver-home.component";
+import {AdminHomeComponent} from "./admin/admin-home/admin-home.component";
+import {AdminCreateDriverComponent} from "./admin/admin-create-driver/admin-create-driver.component";
 
 const routes: Routes = [
+  {path: "admin-home", component: AdminHomeComponent},
+  {path: "admin-create-driver", component: AdminCreateDriverComponent},
   {path: "passenger-account", component: PassengerAccountComponent },
   {path: "driver-account", component: DriverAccountComponent },
   {path: "entrance", component: LoginRegisterComponent },

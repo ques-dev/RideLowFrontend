@@ -10,6 +10,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {AppRoutingModule} from "./app-routing.module";
 import {HttpClientModule} from "@angular/common/http";
 import {MatNativeDateModule} from '@angular/material/core';
+import {AdminModule} from "./admin/admin.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     HttpClientModule,
     MatSnackBarModule,
     DriverModule,
+    AdminModule,
     PassengerModule,
     UnregisteredUserModule,
     SharedModule,
