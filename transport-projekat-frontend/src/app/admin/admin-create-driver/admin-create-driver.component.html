@@ -3,7 +3,12 @@
   <div class="main-content padding-top-2vh">
     <div class="bright-orange label-container width-50">
       <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
-      Podaci o korisniku
+      Kreiranje Vozača/Vozila
+    </div><br>
+
+    <div class="bright-orange label-container width-30">
+      <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
+      Lični podatci
     </div>
 
     <div class="profile-picture-container">
@@ -17,7 +22,7 @@
       <p (click)="fileUpload.click()" class="font-weight-light">Dodaj profilnu sliku</p>
     </div>
 
-    <form [formGroup] ="updateDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">
+    <form [formGroup] ="createDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">
       <mat-form-field appearance="fill">
         <mat-label>Ime</mat-label>
         <input matInput name = "name" formControlName="name">
@@ -38,7 +43,31 @@
         <mat-label>E-mail</mat-label>
         <input matInput name = "email" formControlName="email">
       </mat-form-field><br>
+    </form><br><br>
 
+      <div class="bright-orange label-container width-30">
+        <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
+        Podatci o vozilu
+      </div><br>
+
+    <form [formGroup] ="createDriverForm" (ngSubmit)="toggleUpdateMode()" class = "form-container center-horizontal">
+      <mat-form-field appearance="fill">
+        <mat-label>Model</mat-label>
+        <input matInput name = "model" formControlName="model">
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Broj registarske table</mat-label>
+        <input matInput name = "licence" formControlName="licence">
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Broj sedišta za putnike</mat-label>
+        <input matInput name = "seats" formControlName="seats">
+      </mat-form-field><br>
+
+      <mat-checkbox name="babySeat">Sedište za bebe</mat-checkbox>
+      <mat-checkbox name="petTransport">Transport ljubimaca</mat-checkbox>
 
       <div class="buttons">
         <button mat-button class = "bright-orange button-rounded mat-h1"

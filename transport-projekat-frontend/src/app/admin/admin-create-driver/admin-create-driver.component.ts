@@ -13,13 +13,18 @@ const defaultImage = "../../../assets/images/account.png";
   styleUrls: ['../../passenger/passenger-account/passenger-account.component.css', './admin-create-driver.component.css', '../../app.component.css']
 })
 export class AdminCreateDriverComponent implements OnInit {
-  updateDriverForm : FormGroup = new FormGroup({
+  createDriverForm : FormGroup = new FormGroup({
     name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
     surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
     telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
     address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
     password: new FormControl('placeholder_pass'),
+
+    model: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    licence: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    seats: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
+    babySeat: new FormControl('')
   });
 
   image = "../../../assets/images/account.png";
@@ -29,12 +34,12 @@ export class AdminCreateDriverComponent implements OnInit {
               private userService : UserService) { }
 
   ngOnInit() {
-    this.updateDriverForm.enable();
+    this.createDriverForm.enable();
   }
   toggleUpdateMode()
   {
-      if(this.updateDriverForm.valid) {
-        this.createDriver();
+      if(this.createDriverForm.valid) {
+        this.createDriverAndVehicle();
       } else {
         this.notificationService.createNotification("Morate popuniti sva polja!", 5000);
       }
@@ -61,15 +66,15 @@ export class AdminCreateDriverComponent implements OnInit {
     }
   }
 
-  createDriver() {
+  createDriverAndVehicle() {
     const request : DriverUpdateRequest = {
       driverId : 4,
-      name: this.updateDriverForm.value.name,
-      surname: this.updateDriverForm.value.surname,
+      name: this.createDriverForm.value.name,
+      surname: this.createDriverForm.value.surname,
       profilePicture: this.image === defaultImage ? null : this.userService.cutBase64ImageFormat(this.image),
-      telephoneNumber: this.updateDriverForm.value.telephoneNumber,
-      address: this.updateDriverForm.value.address,
-      email: this.updateDriverForm.value.email
+      telephoneNumber: this.createDriverForm.value.telephoneNumber,
+      address: this.createDriverForm.value.address,
+      email: this.createDriverForm.value.email
     }
     this.adminService.sendCreateDriverRequest(request)
       .subscribe({

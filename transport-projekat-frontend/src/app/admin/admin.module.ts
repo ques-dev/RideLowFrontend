@@ -17,6 +17,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
 import {AdminHomeComponent} from "./admin-home/admin-home.component";
 import {AdminCreateDriverComponent} from "./admin-create-driver/admin-create-driver.component";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import {AdminCreateDriverComponent} from "./admin-create-driver/admin-create-dri
     MatInputModule,
     SharedModule,
     MatAutocompleteModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule,
+    CdkVirtualScrollViewport
   ],
   exports: [
     AdminSideNavigationComponent
