@@ -8,10 +8,10 @@ import {DriverAccountComponent} from "./driver/driver-account/driver-account.com
 import {DriverHomeComponent} from "./driver/driver-home/driver-home.component";
 import {AdminHomeComponent} from "./admin/admin-home/admin-home.component";
 import {AdminCreateDriverComponent} from "./admin/admin-create-driver/admin-create-driver.component";
-import {RideHistoryComponent} from "./shared/ride-history/ride-history.component";
+import {AdminRideHistoryComponent} from "./admin/admin-ride-history/admin-ride-history.component";
 
 const routes: Routes = [
-  {path: "ride-history", component: RideHistoryComponent},
+  {path: "admin-ride-history", component: AdminRideHistoryComponent},
   {path: "admin-home", component: AdminHomeComponent},
   {path: "admin-create-driver", component: AdminCreateDriverComponent},
   {path: "passenger-account", component: PassengerAccountComponent },

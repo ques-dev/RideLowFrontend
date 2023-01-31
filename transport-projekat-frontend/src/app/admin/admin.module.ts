@@ -19,12 +19,14 @@ import {AdminHomeComponent} from "./admin-home/admin-home.component";
 import {AdminCreateDriverComponent} from "./admin-create-driver/admin-create-driver.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
+import {AdminRideHistoryComponent} from "./admin-ride-history/admin-ride-history.component";
 
 @NgModule({
   declarations: [
     AdminSideNavigationComponent,
     AdminHomeComponent,
-    AdminCreateDriverComponent
+    AdminCreateDriverComponent,
+    AdminRideHistoryComponent
   ],
   imports: [
     CommonModule,

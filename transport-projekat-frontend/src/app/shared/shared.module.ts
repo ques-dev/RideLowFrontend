@@ -35,7 +35,8 @@ import {RideHistoryComponent} from "./ride-history/ride-history.component";
     MapComponent,
     PanicComponent,
     ChangePasswordComponent,
-    RideInconsistencyComponent
+    RideInconsistencyComponent,
+    RideHistoryComponent
   ],
 })
 export class SharedModule {
