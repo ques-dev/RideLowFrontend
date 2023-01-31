@@ -23,6 +23,8 @@ export class DriverAccountComponent implements OnInit {
   });
 
   updateMode  = false;
+
+  userId = -1;
   updateButtonText = "Izmeni podatke";
   image = "../../../assets/images/account.png";
 
@@ -32,6 +34,7 @@ export class DriverAccountComponent implements OnInit {
   ngOnInit() {
     this.updateDriverForm.disable();
     this.showDriver();
+    this.userId = parseInt(<string>sessionStorage.getItem("user_id"));
   }
 
   openChangePassword() : void {
