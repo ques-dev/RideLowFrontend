@@ -12,6 +12,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import {RideInconsistencyComponent} from "./ride-inconsistency/ride-inconsistency.component";
 import {RideHistoryComponent} from "./ride-history/ride-history.component";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -21,16 +23,18 @@ import {RideHistoryComponent} from "./ride-history/ride-history.component";
     ChangePasswordComponent,
     RideInconsistencyComponent
   ],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    LeafletModule
-  ],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        LeafletModule,
+        MatTableModule,
+        MatPaginatorModule
+    ],
   exports: [
     MapComponent,
     PanicComponent,

@@ -8,7 +8,7 @@ const defaultImage = "../../../assets/images/account.png";
 @Component({
   selector: 'app-ride-history-driver',
   templateUrl: './admin-ride-history.component.html',
-  styleUrls: ['./admin-ride-history.component.css', '../../app.component.css']
+  styleUrls: ['../../passenger/passenger-account/passenger-account.component.css','./admin-ride-history.component.css', '../../app.component.css']
 })
 export class AdminRideHistoryComponent implements OnInit {
 
