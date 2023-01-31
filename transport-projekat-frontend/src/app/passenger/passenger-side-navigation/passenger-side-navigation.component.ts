@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
+import {UserService} from "../../shared/user.service";
 
 @Component({
   selector: 'app-passenger-side-navigation',
@@ -8,7 +9,18 @@ import {Router} from "@angular/router";
 })
 export class PassengerSideNavigationComponent {
 
-  constructor(private router : Router) {}
+  image  = '';
+  fullName = '';
+  constructor(private router : Router,private userService: UserService) {
+    const picture = localStorage.getItem('user_picture');
+    if(picture == null) this.image = '../../../assets/images/logo.png';
+    else this.image = 'data:image/png;base64,' + picture;
+    const fullName = localStorage.getItem('user_full_name');
+    if(fullName == null) this.fullName = 'Ime Prezime'
+    else this.fullName = fullName;
+  }
 
-  logout() {this.router.navigate(['entrance']).then();}
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['entrance']).then();}
 }

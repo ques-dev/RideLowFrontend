@@ -152,6 +152,7 @@ export class RideReservationFormComponent {
           this.rideReservationFailureMessage = "Ne možete poručiti novu vožnju ukoliko imate prethodno poručene!"
         }
         else {
+          console.log(error);
           this.rideReservationFailureMessage = "Sistem ne može da nađe vozača. Porudžbina se odbija."
         }
         this.openFailPopup = true;

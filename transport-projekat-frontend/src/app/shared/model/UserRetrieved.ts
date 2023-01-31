@@ -6,4 +6,5 @@ export interface UserRetrieved {
   telephoneNumber : string,
   email : string,
   address : string
+
 }

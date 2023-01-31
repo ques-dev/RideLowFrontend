@@ -9,6 +9,7 @@ import {DriverHomeComponent} from "./driver/driver-home/driver-home.component";
 import {AdminHomeComponent} from "./admin/admin-home/admin-home.component";
 import {AdminCreateDriverComponent} from "./admin/admin-create-driver/admin-create-driver.component";
 import {RideHistoryComponent} from "./shared/ride-history/ride-history.component";
+import {LoginService} from "./shared/login-guard/login.service";
 
 const routes: Routes = [
   {path: "ride-history", component: RideHistoryComponent},
@@ -16,7 +17,14 @@ const routes: Routes = [
   {path: "admin-create-driver", component: AdminCreateDriverComponent},
   {path: "passenger-account", component: PassengerAccountComponent },
   {path: "driver-account", component: DriverAccountComponent },
-  {path: "entrance", component: LoginRegisterComponent },
+  {
+    path: 'login',
+    component: LoginRegisterComponent,
+    canActivate: [LoginService],
+    loadChildren: () =>
+      import('././shared/shared.module').then((m) => m.SharedModule),
+  },
+  {path: 'entrance',component:LoginRegisterComponent},
   {path: "passenger-home", component: PassengerHomeComponent},
   {path: "driver-home", component: DriverHomeComponent},
   {path: "unregistered-main", component: UnregisteredUserMainComponent },

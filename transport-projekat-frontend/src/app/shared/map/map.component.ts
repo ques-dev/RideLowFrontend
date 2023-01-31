@@ -4,7 +4,7 @@ import {LatLng, latLng, LatLngTuple, marker} from 'leaflet';
 import 'leaflet-routing-machine';
 import {Location} from "../model/Location";
 import {BehaviorSubject, Subject} from "rxjs";
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MapService} from "./map.service";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -33,6 +33,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private stompClient!: Stomp.Client;
   vehicles: { [key: number]: L.Marker } = {};
+
 
   private simulation?: NodeJS.Timer;
   private otherSimulation?: NodeJS.Timer;

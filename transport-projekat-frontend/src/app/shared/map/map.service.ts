@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, catchError, lastValueFrom, Observable, Subject} from "rxjs";
-import {HttpClient, HttpEvent} from "@angular/common/http";
+import {HttpClient, HttpEvent, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {RouteEstimates} from "../model/RouteEstimates";
 import {RouteEstimatesRequestBody} from "../model/RouteEstimatesRequestBody";
@@ -14,6 +14,10 @@ import {LatLng} from "leaflet";
 export class MapService {
 
   private estimatesUrl = environment.apiURL + "unregisteredUser";
+  /*private header = new HttpHeaders({
+    'Content-Type': 'application/json',
+    skip: 'true',
+  });*/
   destinationCoords: LatLng[] = [];
 
   constructor(private http: HttpClient) {

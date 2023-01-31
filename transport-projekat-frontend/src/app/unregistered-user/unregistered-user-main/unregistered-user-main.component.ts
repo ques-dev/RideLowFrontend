@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class UnregisteredUserMainComponent {
 
+  constructor() {
+    localStorage.removeItem('user');
+  }
+
 }
