@@ -29,7 +29,7 @@ export class LoginService implements CanActivate {
     | UrlTree {
     if (this.userService.isLoggedIn()) {
       const role  = this.userService.getRole();
-      const userEmail = localStorage.getItem('user_email')
+      const userEmail = sessionStorage.getItem('user_email')
       if(userEmail == null) return false;
       this.userService.getUserIdByMail(userEmail).pipe(
         catchError(error => {
@@ -52,10 +52,13 @@ export class LoginService implements CanActivate {
         })
       ).subscribe(value => {
         if(value.id != -1) {
-          localStorage.setItem('user_id',String(value.id));
-          localStorage.setItem('user_full_name',value.name + " " + value.surname)
-          localStorage.setItem('user_picture',value.profilePicture)
-          if(role == 'ROLE_PASSENGER') this.router.navigate(['passenger-home']);
+          sessionStorage.setItem('user_id',String(value.id));
+          sessionStorage.setItem('user_full_name',value.name + " " + value.surname)
+          sessionStorage.setItem('user_picture',value.profilePicture)
+          if(role == 'ROLE_PASSENGER') {
+            sessionStorage.setItem('created_rides',JSON.stringify([]));
+            this.router.navigate(['passenger-home']);
+          }
           else if(role == 'ROLE_DRIVER') {
             this.mapService.userIsDriver = true;
             this.driverService.startShift().subscribe({

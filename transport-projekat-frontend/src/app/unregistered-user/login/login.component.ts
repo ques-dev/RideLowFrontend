@@ -33,8 +33,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.userService.login(loginVal).subscribe({
         next: (result) => {
-          localStorage.setItem('user_email',<string>this.loginForm.value.email);
-          localStorage.setItem('user', JSON.stringify(result));
+          sessionStorage.setItem('user_email',<string>this.loginForm.value.email);
+          sessionStorage.setItem('user', JSON.stringify(result));
           this.userService.setUser();
           this.router.navigate(['login']);
         },
@@ -46,5 +46,5 @@ export class LoginComponent {
       });
     }
   }
-  
+
 }

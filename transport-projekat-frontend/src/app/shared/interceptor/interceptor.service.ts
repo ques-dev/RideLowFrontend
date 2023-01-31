@@ -10,7 +10,7 @@ export class InterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const accessToken: any = localStorage.getItem('user');
+    const accessToken: any = sessionStorage.getItem('user');
     const decodedItem = JSON.parse(accessToken);
     if (req.headers.get('skip')) {
       return next.handle(req);

@@ -48,12 +48,12 @@ export class UserService {
   }
 
   public logout(): void {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
   }
 
   public getRole(): any {
     if (this.isLoggedIn()) {
-      const loginInfo = localStorage.getItem('user');
+      const loginInfo = sessionStorage.getItem('user');
       if(loginInfo == null) return null;
       const accessToken: Token = JSON.parse(loginInfo);
       const helper = new JwtHelperService();
@@ -64,7 +64,7 @@ export class UserService {
   }
 
   public isLoggedIn(): boolean {
-    if (localStorage.getItem('user') != null) {
+    if (sessionStorage.getItem('user') != null) {
       return true;
     }
     return false;

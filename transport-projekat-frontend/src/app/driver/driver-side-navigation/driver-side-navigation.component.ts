@@ -18,10 +18,10 @@ export class DriverSideNavigationComponent {
               public driverService : DriverService,
               private notificationService : NotificationService,
               private userService: UserService) {
-    const picture = localStorage.getItem('user_picture');
+    const picture = sessionStorage.getItem('user_picture');
     if(picture == null) this.image = '../../../assets/images/logo.png';
     else this.image = 'data:image/png;base64,' + picture;
-    const fullName = localStorage.getItem('user_full_name');
+    const fullName = sessionStorage.getItem('user_full_name');
     if(fullName == null) this.fullName = 'Ime Prezime'
     else this.fullName = fullName;
   }

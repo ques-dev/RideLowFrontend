@@ -28,8 +28,9 @@ import {Ride} from "../../shared/model/Ride";
 export class RideReservationFormComponent {
   fieldsRequiredErrorText = 'Unesite obavezna polja!';
   emailFormatErrorText = "Email loše formatiran!";
-  //TODO:Izvuci iz tokena trenutnog korisnika i upisi ga u userIdEmail
-  passengers : UserIdEmail[] = [new UserIdEmail(1,"imenko@mail.com")];
+  userId: string  = sessionStorage.getItem('user_id') as string;
+  userEmail: string = sessionStorage.getItem('user_email') as string;
+  passengers: UserIdEmail[] = [new UserIdEmail(parseInt(this.userId), this.userEmail)];
   isReservation = false;
   rideReservationFailureMessage = '';
   reservedRide! : RideReservation;
@@ -161,6 +162,9 @@ export class RideReservationFormComponent {
     ).subscribe(value => {
       if((<RideCreated>value).id != RideCreated.getEmptyRideCreated().id) {
         const reservationCreated = JSON.parse(value.toString());
+        const created_rides = JSON.parse(<string>sessionStorage.getItem('created_rides'));
+        created_rides.push(reservationCreated);
+        sessionStorage.setItem('created_rides',JSON.stringify(created_rides));
         this.openSuccessPopup = true;
         reservation.passengers = reservationCreated.passengers;
         this.reservedRide = reservation;

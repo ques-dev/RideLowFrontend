@@ -20,8 +20,7 @@ export class PassengerHomeComponent implements OnInit{
   }
   orderClicked = false;
   stompClient!: Stomp.Client;
-  //TODO:dobavi iz JWT-a
-  currentUserId = 1;
+  currentUserId = parseInt(sessionStorage.getItem('user_id') as string);
   finishedRideId = -1;
   openDriverRatingForm = false;
   openVehicleRatingForm = false;
@@ -64,24 +63,36 @@ export class PassengerHomeComponent implements OnInit{
     this.stompClient.connect({}, () => {
       this.stompClient.subscribe('/ride-ordered/get-ride', (message: { body: string }) => {
         const ride: RideCreated = JSON.parse(message.body);
+        setTimeout(() => {
         for (const passenger of ride.passengers) {
           if (passenger.id == this.currentUserId) {
             this.rides.push(ride);
             this.finishedRideId = ride.id;
-            if (ride.passengers.indexOf(passenger) == ride.passengers.length - 1) break; //he is the creator of the ride
-            const scheduleTime = moment(ride.scheduledTime);
-            const notification: string = "Dodati ste kao putnik vožnje u " + scheduleTime.format("HH:mm") + ".";
-            this.notificationService.createNotification(notification, 3000);
-            const departureAddress = ride.locations[0].departure.address.split(",")[0];
-            const destinationAddress = ride.locations[0].destination.address.split(",")[0];
-            this.rideRoute = departureAddress + " - " + destinationAddress;
-            this.rideScheduleTime = scheduleTime.format("HH:mm");
-            this.rideTotalCost = ride.totalCost.toString();
-            this.ridePricePerPerson = (ride.totalCost / ride.passengers.length).toString();
-            this.openDetails = true;
-            break;
+
+              const createdRides = JSON.parse(<string>sessionStorage.getItem('created_rides'));
+              let isSelfMade = false;
+              for (const reservedRide of createdRides) {
+                if (ride.id == reservedRide.id) {
+                  isSelfMade = true;
+                  break;
+                }
+              }
+              if (isSelfMade) break;
+
+              const scheduleTime = moment(ride.scheduledTime);
+              const notification: string = "Dodati ste kao putnik vožnje u " + scheduleTime.format("HH:mm") + ".";
+              this.notificationService.createNotification(notification, 3000);
+              const departureAddress = ride.locations[0].departure.address.split(",")[0];
+              const destinationAddress = ride.locations[0].destination.address.split(",")[0];
+              this.rideRoute = departureAddress + " - " + destinationAddress;
+              this.rideScheduleTime = scheduleTime.format("HH:mm");
+              this.rideTotalCost = ride.totalCost.toString();
+              this.ridePricePerPerson = (ride.totalCost / ride.passengers.length).toString();
+              this.openDetails = true;
+              break;
+            }
           }
-        }
+        },100);
       });
 
       this.stompClient.subscribe('/ride-ordered/reservation-notification', (message: { body: string }) => {
