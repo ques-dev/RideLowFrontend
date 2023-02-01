@@ -41,7 +41,7 @@ export class RegistrationComponent {
   check(){
     if(this.registerPassengerForm.valid) {
       this.registerPassenger();
-      this.router.navigate(['passenger-account']).then();
+      //this.router.navigate(['passenger-account']).then();
     }
   }
 

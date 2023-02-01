@@ -12,9 +12,8 @@ import {Router} from "@angular/router";
 export class RideHistoryDialogComponent{
   private today = new Date()
   constructor(
-    private router: Router,
     public dialogRef: MatDialogRef<RideHistoryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DateStartEnd,
+    @Inject(MAT_DIALOG_DATA) public data: DateStartEnd
   ) {
   }
 

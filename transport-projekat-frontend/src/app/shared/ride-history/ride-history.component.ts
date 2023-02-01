@@ -1,9 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import {UserService} from "../../shared/user.service";
 import {MatDialog} from "@angular/material/dialog";
 import {RideHistoryDialogComponent} from "../ride-history-dialog/ride-history-dialog.component";
 import {DateStartEnd} from "../model/DateStartEnd";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
+import {SimpleRide} from "../model/SimpleRide";
+import {RideHistoryService} from "./ride-gistory.service";
+import {RideCreated} from "../model/RideCreated";
 
 export interface RideShort{
   rute:string
@@ -18,29 +23,41 @@ export interface RideShort{
 })
 
 export class RideHistoryComponent implements OnInit{
-
   public chartsEnabled = 'none'
   public tableEnabled = ''
   public dates: DateStartEnd | undefined
   public selected: RideShort | undefined
   public columns: string[]  = ["rute", "startEnd", "price"]
-  public dataSource: RideShort[] = [
-    {rute:"fawf", startEnd:"faga", price:"fawfae"},
-    {rute:"fawdawff", startEnd:"fagaegaga", price:"faawfae"},
-    {rute:"fawawgff", startEnd:"fagagea", price:"fawfdae"},
-    {rute:"fawagwwaf", startEnd:"fagagea", price:"fawgfae"}]
+  public dataSource!: MatTableDataSource<SimpleRide>;
+  public rides!: SimpleRide[];
+  public ridesFull!: RideCreated[];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator
 
   constructor(private notificationService : NotificationService,
               private userService : UserService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private rideService: RideHistoryService) { }
 
   generateReport(): void{
     const dialogRef = this.dialog.open(RideHistoryDialogComponent, {data: this.dates})
   }
 
   ngOnInit(): void {
+    this.rideService.getPassengerRidesRequest(parseInt(<string>sessionStorage.getItem("user_id"))).subscribe(
+      (res) =>{
+        this.ridesFull = res.results
+        for(let i = 0; i < this.ridesFull.length; i++){
+          const temp = this.ridesFull[i]
+          this.rides.push(new SimpleRide(temp.locations[0].departure.address + "-" + temp.locations[0].destination.address,
+            temp.startTime.toString() + " / " + temp.endTime, temp.totalCost.toString()));
+          this.dataSource = new MatTableDataSource<SimpleRide>(this.rides);
+          this.dataSource.paginator = this.paginator;
+        }
+      }
+    )
     this.dates = new DateStartEnd(new Date(), new Date())
-    this.dataSource = [
+    this.dataSource.data = [
       {rute:"fawf", startEnd:"faga", price:"fawfae"},
       {rute:"fawdawff", startEnd:"fagaegaga", price:"faawfae"},
       {rute:"fawawgff", startEnd:"fagagea", price:"fawfdae"},
@@ -54,64 +71,22 @@ export class RideHistoryComponent implements OnInit{
     animationEnabled: true,
     zoomEnabled: true,
     title: {
-      text: "Market Capitalization of ACME Corp"
+      text: "Broj vožnji"
     },
     axisY: {
       labelFormatter: (e: any) => {
-        const suffixes = ["", "K", "M", "B", "T"];
 
-        let order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-        if(order > suffixes.length - 1)
-          order = suffixes.length - 1;
-
-        const suffix = suffixes[order];
-        return "$" + (e.value / Math.pow(1000, order)) + suffix;
+        const order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+        return (e.value / Math.pow(1000, order));
       }
     },
     data: [{
       type: "line",
-      xValueFormatString: "YYYY",
-      yValueFormatString: "$#,###.##",
+      xValueFormatString: "DD/MM/YYYY",
+      yValueFormatString: "###",
       dataPoints: [
-        { x: new Date(1980, 0, 1), y: 2500582120 },
-        { x: new Date(1981, 0, 1), y: 2318922620 },
-        { x: new Date(1982, 0, 1), y: 2682595570 },
-        { x: new Date(1983, 0, 1), y: 3319952630 },
-        { x: new Date(1984, 0, 1), y: 3220180980 },
-        { x: new Date(1985, 0, 1), y: 4627024630 },
-        { x: new Date(1986, 0, 1), y: 6317198860 },
-        { x: new Date(1987, 0, 1), y: 7653429640 },
-        { x: new Date(1988, 0, 1), y: 9314027340 },
-        { x: new Date(1989, 0, 1), y: 11377814830 },
-        { x: new Date(1990, 0, 1), y: 9379751620 },
-        { x: new Date(1991, 0, 1), y: 11185055410 },
-        { x: new Date(1992, 0, 1), y: 10705343270 },
-        { x: new Date(1993, 0, 1), y: 13764161445.9 },
-        { x: new Date(1994, 0, 1), y: 14470193647.6 },
-        { x: new Date(1995, 0, 1), y: 17087721440.6 },
-        { x: new Date(1996, 0, 1), y: 19594314507.7 },
-        { x: new Date(1997, 0, 1), y: 21708247148.4 },
-        { x: new Date(1998, 0, 1), y: 25445271790 },
-        { x: new Date(1999, 0, 1), y: 33492125981.9 },
-        { x: new Date(2000, 0, 1), y: 30963463195.2 },
-        { x: new Date(2001, 0, 1), y: 26815924144.7 },
-        { x: new Date(2002, 0, 1), y: 22770427533.4 },
-        { x: new Date(2003, 0, 1), y: 31253989239.5 },
-        { x: new Date(2004, 0, 1), y: 36677497452.5 },
-        { x: new Date(2005, 0, 1), y: 40439926591.3 },
-        { x: new Date(2006, 0, 1), y: 49993998569.1 },
-        { x: new Date(2007, 0, 1), y: 60305010382.7 },
-        { x: new Date(2008, 0, 1), y: 32271465666.7 },
-        { x: new Date(2009, 0, 1), y: 43959427666.5 },
-        { x: new Date(2010, 0, 1), y: 50941861580.9 },
-        { x: new Date(2011, 0, 1), y: 43956921719.4 },
-        { x: new Date(2012, 0, 1), y: 50655765599.9 },
-        { x: new Date(2013, 0, 1), y: 59629932862.7 },
-        { x: new Date(2014, 0, 1), y: 62837256171.1 },
-        { x: new Date(2015, 0, 1), y: 61894377981.9 },
-        { x: new Date(2016, 0, 1), y: 64998472607.9 },
-        { x: new Date(2017, 0, 1), y: 75233321687.8 },
-        { x: new Date(2018, 0, 1), y: 68650476424.8 }
+        { x: new Date(2023, 1, 1), y: 1 },
+        { x: new Date(2023, 2, 5), y: 20 }
       ]
     }]
   }
