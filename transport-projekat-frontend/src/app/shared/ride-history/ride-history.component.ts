@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import {UserService} from "../../shared/user.service";
-import {Ride} from "../model/Ride";
+import {MatDialog} from "@angular/material/dialog";
+import {RideHistoryDialogComponent} from "../ride-history-dialog/ride-history-dialog.component";
+import {DateStartEnd} from "../model/DateStartEnd";
 
 export interface RideShort{
   rute:string
@@ -17,6 +19,7 @@ export interface RideShort{
 
 export class RideHistoryComponent implements OnInit{
 
+  public dates: DateStartEnd | undefined
   public selected: RideShort | undefined
   public columns: string[]  = ["rute", "startEnd", "price"]
   public dataSource: RideShort[] = [
@@ -26,20 +29,19 @@ export class RideHistoryComponent implements OnInit{
     {rute:"fawagwwaf", startEnd:"fagagea", price:"fawgfae"}]
 
   constructor(private notificationService : NotificationService,
-              private userService : UserService) { }
+              private userService : UserService,
+              private dialog: MatDialog) { }
 
-  onClick(element:RideShort){
-    this.selected = element
+  generateReport(): void{
+    const dialogRef = this.dialog.open(RideHistoryDialogComponent, {data: this.dates})
   }
+
   ngOnInit(): void {
+    this.dates = new DateStartEnd(new Date(), new Date())
     this.dataSource = [
       {rute:"fawf", startEnd:"faga", price:"fawfae"},
       {rute:"fawdawff", startEnd:"fagaegaga", price:"faawfae"},
       {rute:"fawawgff", startEnd:"fagagea", price:"fawfdae"},
       {rute:"fawagwwaf", startEnd:"fagagea", price:"fawgfae"}]
-  }
-
-  doclick() {
-    alert(this.selected?.rute)
   }
 }

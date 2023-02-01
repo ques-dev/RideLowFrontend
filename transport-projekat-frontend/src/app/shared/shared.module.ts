@@ -8,33 +8,40 @@ import {ChangePasswordComponent} from './change-password/change-password.compone
 import {MatListModule} from "@angular/material/list";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import {RideInconsistencyComponent} from "./ride-inconsistency/ride-inconsistency.component";
 import {RideHistoryComponent} from "./ride-history/ride-history.component";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatDialogModule} from "@angular/material/dialog";
+import {RideHistoryDialogComponent} from "./ride-history-dialog/ride-history-dialog.component";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
     RideHistoryComponent,
+    RideHistoryDialogComponent,
     MapComponent,
     PanicComponent,
     ChangePasswordComponent,
-    RideInconsistencyComponent
+    RideInconsistencyComponent,
   ],
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatIconModule,
-        MatListModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        LeafletModule,
-        MatTableModule,
-        MatPaginatorModule
-    ],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    LeafletModule,
+    MatTableModule,
+    MatPaginatorModule,
+    FormsModule,
+    MatDialogModule,
+    MatDatepickerModule
+  ],
   exports: [
     MapComponent,
     PanicComponent,

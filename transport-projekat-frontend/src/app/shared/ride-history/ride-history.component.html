@@ -20,6 +20,17 @@
 
   <tr mat-header-row *matHeaderRowDef="columns"></tr>
   <tr mat-row
-      (click)="selected = row; doclick()"
+      (click)="selected = row;"
       *matRowDef="let row; columns: columns;"></tr>
-</table>
+</table><br><br>
+
+
+<div class="buttons padding-3">
+  <button mat-button class = "bright-orange button-rounded mat-h1"
+          [ngClass]="{'bright-orange':true }"
+          (click)="generateReport()"
+          type = "submit">
+    <mat-icon class = "icon">mode_edit</mat-icon>
+    {{"Generiši Izveštaj"}}
+  </button>
+</div>
