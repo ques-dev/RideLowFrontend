@@ -17,9 +17,12 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatDialogModule} from "@angular/material/dialog";
 import {RideHistoryDialogComponent} from "./ride-history-dialog/ride-history-dialog.component";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import * as CanvasJSAngularChart from '../../assets/canvasjs.angular.component';
+const CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
   declarations: [
+    CanvasJSChart,
     RideHistoryComponent,
     RideHistoryDialogComponent,
     MapComponent,

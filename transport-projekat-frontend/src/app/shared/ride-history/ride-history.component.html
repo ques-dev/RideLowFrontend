@@ -1,7 +1,12 @@
 <div class="bright-orange label-container width-50">
   Istorija vožnji
 </div><br>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 rides-table ">
+
+<div>
+  <canvasjs-chart [options]="numberOfRidesOptions" [ngStyle]="{'display': chartsEnabled}" class="chartc"></canvasjs-chart>
+</div>
+
+<table mat-table [ngStyle]="{'display':tableEnabled}" [dataSource]="dataSource" class="mat-elevation-z8 rides-table ">
 
   <ng-container matColumnDef="rute" >
     <th mat-header-cell *matHeaderCellDef class="cellText"> Putanja </th>

@@ -9,6 +9,7 @@ import {DriverHomeComponent} from "./driver/driver-home/driver-home.component";
 import {AdminHomeComponent} from "./admin/admin-home/admin-home.component";
 import {AdminCreateDriverComponent} from "./admin/admin-create-driver/admin-create-driver.component";
 import {AdminRideHistoryComponent} from "./admin/admin-ride-history/admin-ride-history.component";
+import {LoginService} from "./shared/login-guard/login.service";
 
 const routes: Routes = [
   {path: "admin-ride-history", component: AdminRideHistoryComponent},
