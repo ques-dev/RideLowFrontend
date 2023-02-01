@@ -16,7 +16,14 @@ const routes: Routes = [
   {path: "admin-create-driver", component: AdminCreateDriverComponent},
   {path: "passenger-account", component: PassengerAccountComponent },
   {path: "driver-account", component: DriverAccountComponent },
-  {path: "entrance", component: LoginRegisterComponent },
+  {
+    path: 'login',
+    component: LoginRegisterComponent,
+    canActivate: [LoginService],
+    loadChildren: () =>
+      import('././shared/shared.module').then((m) => m.SharedModule),
+  },
+  {path: 'entrance',component:LoginRegisterComponent},
   {path: "passenger-home", component: PassengerHomeComponent},
   {path: "driver-home", component: DriverHomeComponent},
   {path: "unregistered-main", component: UnregisteredUserMainComponent },

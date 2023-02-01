@@ -8,9 +8,10 @@ import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {AppRoutingModule} from "./app-routing.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatNativeDateModule} from '@angular/material/core';
 import {AdminModule} from "./admin/admin.module";
+import {InterceptorService} from "./shared/interceptor/interceptor.service";
 
 @NgModule({
   declarations: [
@@ -30,6 +31,13 @@ import {AdminModule} from "./admin/admin.module";
     MatNativeDateModule,
   ],
   exports: [
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent]
 })

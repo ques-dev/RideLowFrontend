@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {MapService} from "../../shared/map/map.service";
 import {DriverService} from "../driver.service";
 import {NotificationService} from "../../shared/notification-service/notification.service";
+import {UserService} from "../../shared/user.service";
 
 @Component({
   selector: 'app-driver-side-navigation',
@@ -10,10 +11,20 @@ import {NotificationService} from "../../shared/notification-service/notificatio
   styleUrls: ['../../passenger/passenger-side-navigation/passenger-side-navigation.component.css', './driver-side-navigation.component.css', '../../app.component.css']
 })
 export class DriverSideNavigationComponent {
+  image  = '';
+  fullName = '';
   constructor(private router : Router,
               private mapService : MapService,
               public driverService : DriverService,
-              private notificationService : NotificationService) { }
+              private notificationService : NotificationService,
+              private userService: UserService) {
+    const picture = sessionStorage.getItem('user_picture');
+    if(picture == null) this.image = '../../../assets/images/logo.png';
+    else this.image = 'data:image/png;base64,' + picture;
+    const fullName = sessionStorage.getItem('user_full_name');
+    if(fullName == null) this.fullName = 'Ime Prezime'
+    else this.fullName = fullName;
+  }
 
   logout() {
     this.mapService.setRideDenied(false);
@@ -28,6 +39,7 @@ export class DriverSideNavigationComponent {
         }
       });
     }
+    this.userService.logout();
     this.router.navigate(['entrance']);
   }
 

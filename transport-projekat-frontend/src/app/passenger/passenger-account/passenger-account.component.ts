@@ -26,6 +26,7 @@ export class PassengerAccountComponent implements OnInit {
   image = "../../../assets/images/account.png";
   defaultImage = "../../../assets/images/account.png";
   passwordChange = false;
+  userId = -1;
 
   constructor(private passengerService : PassengerService,
               private notificationService : NotificationService,
@@ -33,6 +34,7 @@ export class PassengerAccountComponent implements OnInit {
   ngOnInit() {
     this.updatePassengerForm.disable();
     this.showPassenger();
+    this.userId = parseInt(<string>sessionStorage.getItem("user_id"));
   }
 
   updatePassenger(){
