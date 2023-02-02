@@ -33,15 +33,15 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.userService.login(loginVal).subscribe({
         next: (result) => {
+          console.log(result)
           sessionStorage.setItem('user_email',<string>this.loginForm.value.email);
           sessionStorage.setItem('user', JSON.stringify(result));
           this.userService.setUser();
           this.router.navigate(['login']);
         },
         error: (error) => {
-          if (error instanceof HttpErrorResponse) {
+         {
             console.log(error);
-
           }
         },
       });

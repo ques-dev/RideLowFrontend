@@ -63,13 +63,11 @@ export class UserService {
         return role;
       }
       catch (err : any){
-        console.log(err);
         this.notificationService.createNotification("Email ili lozinka nije tačna!",3000);
+        sessionStorage.removeItem("user");
         return null;
       }
-
     }
-    return null;
   }
 
   public isLoggedIn(): boolean {

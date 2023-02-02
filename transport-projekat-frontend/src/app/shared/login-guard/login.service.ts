@@ -51,6 +51,7 @@ export class LoginService implements CanActivate {
           return of(obj);
         })
       ).subscribe(value => {
+        console.log("lolol");
         if(value.id != -1) {
           sessionStorage.setItem('user_id',String(value.id));
           sessionStorage.setItem('user_full_name',value.name + " " + value.surname)
@@ -84,6 +85,6 @@ export class LoginService implements CanActivate {
         return false;
       });
     }
-    return true;
+    return false;
   }
 }
