@@ -108,7 +108,7 @@ export class DriverAccountComponent implements OnInit {
 
   updateDriver() {
     const request : DriverUpdateRequest = {
-      driverId : 4,
+      driverId : parseInt(sessionStorage.getItem("user_id")!),
       name: this.updateDriverForm.value.name,
       surname: this.updateDriverForm.value.surname,
       profilePicture: this.image === defaultImage ? null : this.userService.cutBase64ImageFormat(this.image),

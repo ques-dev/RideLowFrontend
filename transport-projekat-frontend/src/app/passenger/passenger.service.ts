@@ -25,6 +25,7 @@ export class PassengerService {
   createFavoriteRideUrl = this.createRideUrl + "/favorites";
   reviewUrl = environment.apiURL + "review/"
   currentRideId?: number = 0;
+  currentRide?: RideCreated;
 
   constructor(private http: HttpClient) { }
 

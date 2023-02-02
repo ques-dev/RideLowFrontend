@@ -29,7 +29,7 @@ export class DriverRideComponent implements OnInit {
   ngOnInit() {
     if (this.driverService.receivedRide) {
       const ride = this.driverService.currentRide;
-      if (ride?.driver.id == 4) {
+      if (ride?.driver.id == parseInt(sessionStorage.getItem("user_id")!)) {
         this.searchForm.disable();
         this.searchForm.controls['departure'].setValue(ride?.locations[0].departure.address);
         this.searchForm.controls['destination'].setValue(ride?.locations[0].destination.address);

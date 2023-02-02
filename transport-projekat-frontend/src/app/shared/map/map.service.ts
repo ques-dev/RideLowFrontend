@@ -19,6 +19,7 @@ export class MapService {
     skip: 'true',
   });*/
   destinationCoords: LatLng[] = [];
+  startedSimulation = false;
 
   constructor(private http: HttpClient) {
   }
