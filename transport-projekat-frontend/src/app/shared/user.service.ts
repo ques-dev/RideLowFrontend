@@ -7,6 +7,7 @@ import {Token} from "./model/Token";
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {UserIdEmail} from "./model/UserIdEmail";
 import {UserRetrieved} from "./model/UserRetrieved";
+import {NotificationService} from "./notification-service/notification.service";
 
 
 type ChangePasswordResponse = {
@@ -29,7 +30,7 @@ export class UserService {
   user$ = new BehaviorSubject(null);
   userState$ = this.user$.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private notificationService: NotificationService) {
     this.user$.next(this.getRole());
   }
 
@@ -57,8 +58,16 @@ export class UserService {
       if(loginInfo == null) return null;
       const accessToken: Token = JSON.parse(loginInfo);
       const helper = new JwtHelperService();
-      const role = helper.decodeToken(accessToken.accessToken).role;
-      return role;
+      try {
+        const role = helper.decodeToken(accessToken.accessToken).role;
+        return role;
+      }
+      catch (err : any){
+        console.log(err);
+        this.notificationService.createNotification("Email ili lozinka nije tačna!",3000);
+        return null;
+      }
+
     }
     return null;
   }

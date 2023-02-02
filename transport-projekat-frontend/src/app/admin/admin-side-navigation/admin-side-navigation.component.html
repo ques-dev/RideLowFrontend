@@ -8,10 +8,10 @@
       </div>
 
       <mat-card class="sidenav-profile-header">
-        <img src="../../../assets/images/account.png" class = "profile-picture">
+        <img [src]="image" class = "profile-picture">
         <mat-card-content>
           <p class = "mat-h1">
-            Ime Prezime
+            {{fullName}}
           </p>
         </mat-card-content>
       </mat-card>

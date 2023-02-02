@@ -78,7 +78,7 @@ export class LoginService implements CanActivate {
             });
             this.router.navigate(['driver-home']);
           }
-          else this.router.navigate(['admin-home']);
+          else if(role != null) this.router.navigate(['admin-home']);
           return false;
         }
         return false;
