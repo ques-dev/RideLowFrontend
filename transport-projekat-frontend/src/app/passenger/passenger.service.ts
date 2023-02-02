@@ -83,7 +83,7 @@ export class PassengerService {
   }
 
   getActiveRide() : Observable<RideCreated> {
-    const url = this.createRideUrl + "/passenger/1/active";
+    const url = this.createRideUrl + "/passenger/" + sessionStorage.getItem("user_id") + "/active";
     return this.http.get<RideCreated>(url);
   }
 }

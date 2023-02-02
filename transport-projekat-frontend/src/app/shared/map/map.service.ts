@@ -7,6 +7,7 @@ import {RouteEstimatesRequestBody} from "../model/RouteEstimatesRequestBody";
 import {Location} from "../model/Location";
 import {Ride} from "../model/Ride";
 import {LatLng} from "leaflet";
+import {RideCreated} from "../model/RideCreated";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,8 @@ export class MapService {
 
   public userIsDriver = false;
 
+  private ride = new BehaviorSubject<RideCreated>(RideCreated.getEmptyRideCreated());
+  ride$ = this.ride.asObservable();
   private trackDriver = new BehaviorSubject<boolean>(false);
   trackDriver$ = this.trackDriver.asObservable();
   private departureDestinationCoords = new BehaviorSubject<LatLng[]>([]);
@@ -61,6 +64,10 @@ export class MapService {
   rideReceived$ = this.rideReceived.asObservable();
 
   public passengerRideInProgress = false;
+
+  public setRide(ride: RideCreated) {
+    this.ride.next(ride);
+  }
 
   public setTrackDriver(status: boolean) {
     this.trackDriver.next(status);

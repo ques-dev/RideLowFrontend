@@ -33,6 +33,11 @@ export class RideRatingComponent implements OnInit{
     this.rating = 0;
     this.windowClosed.emit(true);
     this.windowVisible = false;
+    if (!this.isDriver) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 250);
+    }
   }
 
   onRatingChanged(rating : number){

@@ -400,6 +400,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.trackDriver();
       }
     });
+
+    this.mapService.ride$.subscribe((ride) => {
+      if (ride != RideCreated.getEmptyRideCreated()) {
+        this.drawRoute(ride.locations[0].departure, ride.locations[0].destination);
+      }
+    });
   }
 
   private clear() {
@@ -510,9 +516,6 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
                       this.mapService.setRideInProgress(false);
                       this.mapService.setClearMap();
                       clearInterval(trackDriverTimer);
-                      setTimeout(() => {
-                        //window.location.reload();
-                      }, 250);
                       return;
                     }
                   });
