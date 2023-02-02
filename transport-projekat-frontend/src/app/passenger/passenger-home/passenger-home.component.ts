@@ -6,6 +6,7 @@ import {RideCreated} from "../../shared/model/RideCreated";
 import {NotificationService} from "../../shared/notification-service/notification.service";
 import * as moment from "moment";
 import {RideReservation} from "../../shared/model/RideReservation";
+import {Ride} from "../../shared/model/Ride";
 
 @Component({
   selector: 'app-passenger-home',
@@ -93,6 +94,13 @@ export class PassengerHomeComponent implements OnInit{
             }
           }
         },100);
+      });
+
+      this.stompClient.subscribe('/ride-ended/notification', (message: { body: string }) => {
+        const passengers: number[] = JSON.parse(message.body);
+        if (passengers.includes(parseInt(<string>sessionStorage.getItem('user_id')))) {
+          this.openDriverRatingForm = true;
+        }
       });
 
       this.stompClient.subscribe('/ride-ordered/reservation-notification', (message: { body: string }) => {

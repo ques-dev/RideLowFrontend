@@ -511,7 +511,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
                       this.mapService.setClearMap();
                       clearInterval(trackDriverTimer);
                       setTimeout(() => {
-                        window.location.reload();
+                        //window.location.reload();
                       }, 250);
                       return;
                     }
