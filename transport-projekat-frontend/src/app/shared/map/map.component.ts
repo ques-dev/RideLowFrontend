@@ -14,6 +14,7 @@ import {DriverService} from "../../driver/driver.service";
 import {Vehicle} from "../model/Vehicle";
 import {PassengerService} from "../../passenger/passenger.service";
 import {RideCreated} from "../model/RideCreated";
+import {UserService} from "../user.service";
 
 const reverseGeocodeUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=";
 
@@ -28,7 +29,8 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   constructor(private http: HttpClient,
               public mapService: MapService,
               private driverService: DriverService,
-              private passengerService: PassengerService) {
+              private passengerService: PassengerService,
+              private userService: UserService) {
   }
 
   private stompClient!: Stomp.Client;
@@ -303,13 +305,20 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   private initDriverCar(): void {
-    this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
-      this.driverService.vehicleId = vehicle.id;
-      this.carMarker = L.marker(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude), {
+    if (this.userService.getRole() == 'ROLE_DRIVER') {
+      this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
+        this.driverService.vehicleId = vehicle.id;
+        this.carMarker = L.marker(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude), {
+          draggable: false,
+          icon: this.driverIcon
+        }).addTo(this.map);
+      });
+    } else {
+      this.carMarker = L.marker(new LatLng(0, 0), {
         draggable: false,
         icon: this.driverIcon
       }).addTo(this.map);
-    });
+    }
   }
 
   ngAfterViewInit(): void {
@@ -335,6 +344,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
           this.driverService.changeVehicleLocation(this.carMarker.getLatLng()).subscribe();
         }
         clearInterval(this.simulation);
+        return;
       }
     });
     this.mapService.rideReceived$.subscribe(rideReceived => {
@@ -379,8 +389,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     });
     this.mapService.simulateToDestination$.subscribe((status) => {
-      if (status) {
-        this.simulateMovementToDeparture(this.mapService.destinationCoords);
+      if (status && !this.mapService.startedSimulation) {
+        this.mapService.startedSimulation = true;
+        this.simulateMovementToDestination(this.mapService.destinationCoords);
       }
     });
 
@@ -416,6 +427,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   private simulateMovementToDeparture(coords: LatLng[]) {
     let i = 0;
     const interval_timer = setInterval(() => {
+      if (i >= coords.length) {
+        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
+        this.driverService.rideToDepartureDone = true;
+        clearInterval(interval_timer);
+        return;
+      }
       if (this.carMarker) {
         this.carMarker.setLatLng(coords[i]);
       }
@@ -423,12 +440,6 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.driverService.changeVehicleLocation(coords[i]).subscribe();
       }
       i++;
-      if (i >= coords.length) {
-        this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
-        this.driverService.rideToDepartureDone = true;
-        this.toDepartureRoute.remove();
-        clearInterval(interval_timer);
-      }
     }, 200);
 
     this.simulation = interval_timer;
@@ -448,6 +459,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         this.driverService.changeVehicleLocation(coords[i - 1]).subscribe();
         this.driverService.rideToDestinationDone = true;
         clearInterval(interval_timer);
+        return;
       }
     }, 200);
 
@@ -455,6 +467,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   private lastThreeLocations: LatLng[] = [];
+  private previousLocations: LatLng[] = [];
 
   private trackDriver() {
     this.isTrackingDriver = true;
@@ -464,33 +477,50 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
         clearInterval(trackDriverTimer);
         return;
       }
-      this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
-        this.carMarker.setLatLng(new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude));
-        this.lastThreeLocations.push(this.carMarker.getLatLng());
-        if (this.lastThreeLocations.length > 3) {
-          this.lastThreeLocations.shift();
-        }
-        if (this.lastThreeLocations.length == 3) {
-          if (this.lastThreeLocations[0].equals(this.lastThreeLocations[1]) && this.lastThreeLocations[1].equals(this.lastThreeLocations[2])) {
-            this.passengerService.getActiveRide().subscribe(
-              (ride: RideCreated) => {
-                this.passengerService.currentRideId = ride.id;
-                this.mapService.setRideInProgress(true);
-            },
-              (error: any) => {
-                if (this.mapService.passengerRideInProgress) {
-                  this.isTrackingDriver = false;
-                  this.carMarker.remove();
-                  this.mapService.setTrackDriver(false);
-                  this.mapService.setRideInProgress(false);
-                  this.mapService.setClearMap();
-                  clearInterval(trackDriverTimer);
-                  return;
-                }
-              });
+      if (!this.mapService.passengerRideInProgress) {
+        this.passengerService.getActiveRide().subscribe(
+          (ride: RideCreated) => {
+            this.passengerService.currentRideId = ride.id;
+            this.passengerService.currentRide = ride;
+            this.mapService.setRideInProgress(true);
+          },
+          (error: any) => {
+            const a = 0;
+          });
+      } else {
+        this.driverService.getVehicle().subscribe((vehicle: Vehicle) => {
+          const newLocation = new LatLng(vehicle.currentLocation.latitude, vehicle.currentLocation.longitude);
+            this.carMarker.setLatLng(newLocation);
+            this.previousLocations.push(this.carMarker.getLatLng());
+            this.lastThreeLocations.push(this.carMarker.getLatLng());
+            if (this.lastThreeLocations.length > 3) {
+              this.lastThreeLocations.shift();
+            }
+            if (this.lastThreeLocations.length == 3) {
+              if (this.lastThreeLocations[0].equals(this.lastThreeLocations[1]) && this.lastThreeLocations[1].equals(this.lastThreeLocations[2])) {
+                this.passengerService.getActiveRide().subscribe(
+                  (ride: RideCreated) => {
+                    const b = 0;
+                  },
+                  (error: any) => {
+                    if (this.mapService.passengerRideInProgress) {
+                      this.isTrackingDriver = false;
+                      this.carMarker.remove();
+                      this.mapService.setTrackDriver(false);
+                      this.mapService.setRideInProgress(false);
+                      this.mapService.setClearMap();
+                      clearInterval(trackDriverTimer);
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 250);
+                      return;
+                    }
+                  });
+              }
+            }
           }
-        }
-      });
+        );
+      }
     }, 1000);
   }
 }

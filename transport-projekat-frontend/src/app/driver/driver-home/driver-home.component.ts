@@ -28,7 +28,7 @@ export class DriverHomeComponent implements OnInit{
     this.stompClient.connect({}, () => {
       this.stompClient.subscribe('/ride-ordered/get-ride', (message: {body : string}) => {
         const ride: RideCreated = JSON.parse(message.body);
-        if (ride.driver.id == 4) {
+        if (ride.driver.id == parseInt(sessionStorage.getItem("user_id")!)) {
           this.driverService.currentRide = ride;
           this.driverService.receivedRide = true;
           this.receiveRide();

@@ -10,6 +10,8 @@ import {RideCreated} from "../shared/model/RideCreated";
 import {Vehicle} from "../shared/model/Vehicle";
 import {Ride} from "../shared/model/Ride";
 import {LatLng} from "leaflet";
+import {UserService} from "../shared/user.service";
+import {PassengerService} from "../passenger/passenger.service";
 
 type Response = {
   message: string
@@ -35,7 +37,9 @@ export class DriverService {
   rideToDepartureDone = false;
   rideToDestinationDone = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private userService: UserService,
+              private passengerService: PassengerService) { }
 
   private changingPassword = new BehaviorSubject<boolean>(false);
   changingPassword$ = this.changingPassword.asObservable();
@@ -45,7 +49,7 @@ export class DriverService {
   }
 
   getDriver(): Observable<UserRetrieved> {
-    return this.http.get<UserRetrieved>(this.url + "/4");
+    return this.http.get<UserRetrieved>(this.url + "/" + sessionStorage.getItem('user_id'));
   }
 
   sendUpdateDriverRequest(newDriver : DriverUpdateRequest) : Observable<Response> {
@@ -56,7 +60,7 @@ export class DriverService {
     const shift = {
       'start': moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
-    return this.http.post<DriversShift>(this.url + "/4/working-hour", shift);
+    return this.http.post<DriversShift>(this.url + "/" + sessionStorage.getItem("user_id") +"/working-hour", shift);
   }
 
   endShift(): Observable<DriversShift> {
@@ -87,6 +91,9 @@ export class DriverService {
   }
 
   getVehicle(): Observable<Vehicle> {
-    return this.http.get<Vehicle>(this.url + "/4/vehicle");
+    if (this.userService.getRole() == 'ROLE_DRIVER') {
+      return this.http.get<Vehicle>(this.url + "/" + sessionStorage.getItem('user_id') + "/vehicle");
+    }
+    return this.http.get<Vehicle>(this.url + "/" + this.passengerService.currentRide?.driver.id +"/vehicle");
   }
 }
