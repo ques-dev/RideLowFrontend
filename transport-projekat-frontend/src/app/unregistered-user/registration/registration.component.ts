@@ -3,45 +3,59 @@ import {PassengerService} from "../../passenger/passenger.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {User} from "../../shared/model/User";
+import {UserService} from "../../shared/user.service";
 
 @Component({
   selector: 'app-registration',
   templateUrl: 'registration.component.html',
-  styleUrls: ['registration.component.css','../../app.component.css']
+  styleUrls: ['registration.component.css', '../../app.component.css']
 })
 export class RegistrationComponent {
 
-  constructor(private passengerService : PassengerService, private router:Router) { }
+  constructor(private passengerService: PassengerService,
+              private router: Router,
+              private userService: UserService) {
+  }
 
   registerPassengerForm: FormGroup = new FormGroup({
-    name: new FormControl( '',{nonNullable:true, validators: [Validators.required]}),
-    surname: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
-    telephoneNumber: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
-    address: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    email: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    password: new FormControl('', {nonNullable:true, validators: [Validators.required]}),
-    passwordRepeat : new FormControl('',{nonNullable:true, validators: [Validators.required]}),
+    name: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    surname: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    telephoneNumber: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    address: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    email: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    password: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    passwordRepeat: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
   });
 
   firstPartVisible = true;
 
   registerPassenger() {
-      const passenger : User = {
-        name : this.registerPassengerForm.value.name,
-        surname : this.registerPassengerForm.value.surname,
-        telephoneNumber : this.registerPassengerForm.value.telephoneNumber,
-        profilePicture : '',
-        address : this.registerPassengerForm.value.address,
-        email : this.registerPassengerForm.value.email,
-        password : this.registerPassengerForm.value.password
+    const passenger: User = {
+      name: this.registerPassengerForm.value.name,
+      surname: this.registerPassengerForm.value.surname,
+      telephoneNumber: this.registerPassengerForm.value.telephoneNumber,
+      profilePicture: null,
+      address: this.registerPassengerForm.value.address,
+      email: this.registerPassengerForm.value.email,
+      password: this.registerPassengerForm.value.password
+    }
+    const loginVal = {
+      email: this.registerPassengerForm.value.email,
+      password: this.registerPassengerForm.value.password,
+    };
+    this.passengerService.registerPassenger(passenger).subscribe(
+      (result) => {
+        console.log(result);
+      },
+      (error) => {
+        console.log(error);
       }
-      this.passengerService.registerPassenger(passenger).subscribe();
+    );
   }
 
-  check(){
-    if(this.registerPassengerForm.valid) {
+  check() {
+    if (this.registerPassengerForm.valid) {
       this.registerPassenger();
-      //this.router.navigate(['passenger-account']).then();
     }
   }
 
