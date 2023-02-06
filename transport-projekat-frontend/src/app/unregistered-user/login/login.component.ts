@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {DriverService} from "../../driver/driver.service";
-import {NotificationService} from "../../shared/notification-service/notification.service";
-import {MapService} from "../../shared/map/map.service";
 import {UserService} from "../../shared/user.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {LoginCredentials} from "../../shared/model/LoginCredentials";
 
 @Component({
   selector: 'app-login',
@@ -15,10 +12,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class LoginComponent {
 
   constructor(private router:Router,
-              private driverService : DriverService,
-              private userService : UserService,
-              private notificationService : NotificationService,
-              private mapService : MapService) { }
+              public userService : UserService) { }
 
   loginForm = new FormGroup({
     email: new FormControl( '',[Validators.required, Validators.email]),
@@ -26,14 +20,14 @@ export class LoginComponent {
   });
 
   login(): void {
-    const loginVal = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
+    const loginVal : LoginCredentials = {
+      email: <string>this.loginForm.value.email,
+      password: <string>this.loginForm.value.password,
     };
     if (this.loginForm.valid) {
+
       this.userService.login(loginVal).subscribe({
         next: (result) => {
-          console.log(result)
           sessionStorage.setItem('user_email',<string>this.loginForm.value.email);
           sessionStorage.setItem('user', JSON.stringify(result));
           this.userService.setUser();

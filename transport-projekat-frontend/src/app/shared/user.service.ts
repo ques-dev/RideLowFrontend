@@ -8,6 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import {UserIdEmail} from "./model/UserIdEmail";
 import {UserRetrieved} from "./model/UserRetrieved";
 import {NotificationService} from "./notification-service/notification.service";
+import {LoginCredentials} from "./model/LoginCredentials";
 
 
 type ChangePasswordResponse = {
@@ -22,6 +23,7 @@ type ChangePasswordResponse = {
 })
 export class UserService {
 
+  idk = false;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
     skip: 'true',
@@ -42,7 +44,7 @@ export class UserService {
     return base64Image.split(',')[1];
   }
 
-  public login(auth: any): Observable<Token> {
+  public login(auth: LoginCredentials): Observable<Token> {
     return this.http.post<Token>(environment.apiURL + 'user/login', auth, {
       headers: this.headers,
     });
