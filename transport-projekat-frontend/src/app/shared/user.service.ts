@@ -65,7 +65,7 @@ export class UserService {
         return role;
       }
       catch (err : any){
-        this.notificationService.createNotification("Email ili lozinka nije tačna!",3000);
+        this.notificationService.createNotification("Email ili lozinka nije tačna!",300000);
         sessionStorage.removeItem("user");
         return null;
       }

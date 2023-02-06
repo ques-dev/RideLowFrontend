@@ -115,6 +115,15 @@ export class PassengerHomeComponent implements OnInit{
         }
       });
 
+      this.stompClient.subscribe('/ride-rejected/notification', (message: { body: string }) => {
+        const rideCreated: RideCreated = JSON.parse(message.body);
+        for (const passenger of rideCreated.passengers) {
+          if (passenger.id != this.currentUserId) continue;
+          const notification = "Poručena vožnja u " + moment(rideCreated.scheduledTime).format("HH:mm") + " je odbijena.";
+          this.notificationService.createNotification(notification, 3000);
+        }
+        });
+
       this.stompClient.subscribe('/ride-ordered/reservation-notification', (message: { body: string }) => {
         const reservedRide: RideReservation = JSON.parse(message.body);
         for(const passenger of reservedRide.passengers) {

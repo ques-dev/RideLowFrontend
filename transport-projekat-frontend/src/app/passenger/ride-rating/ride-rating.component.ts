@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PassengerService} from "../passenger.service";
 import {Review} from "../../shared/model/Review";
 import {NotificationService} from "../../shared/notification-service/notification.service";
+import {UserIdEmail} from "../../shared/model/UserIdEmail";
 
 @Component({
   selector: 'app-ride-rating',
@@ -46,9 +47,11 @@ export class RideRatingComponent implements OnInit{
 
   review() {
     if(!this.reviewForm.valid || this.rating == 0) return;
+    const reviewer = new UserIdEmail(parseInt(<string>sessionStorage.getItem("user_id")),<string>sessionStorage.getItem("user_email"));
     const review : Review = {
       rating : this.rating,
-      comment : this.reviewForm.controls["comment"].value
+      comment : this.reviewForm.controls["comment"].value,
+      reviewer : reviewer
     };
     if(this.isDriver) this.passengerService.reviewDriver(review,this.rideId).subscribe();
     else this.passengerService.reviewVehicle(review,this.rideId).subscribe();
