@@ -46,6 +46,20 @@ export class RegistrationComponent {
     this.passengerService.registerPassenger(passenger).subscribe(
       (result) => {
         console.log(result);
+        this.userService.login(loginVal).subscribe({
+          next: (result) => {
+            console.log(result)
+            sessionStorage.setItem('user_email',<string>loginVal.email);
+            sessionStorage.setItem('user', JSON.stringify(result));
+            this.userService.setUser();
+            this.router.navigate(['login']);
+          },
+          error: (error) => {
+            {
+              console.log(error);
+            }
+          },
+        });
       },
       (error) => {
         console.log(error);
