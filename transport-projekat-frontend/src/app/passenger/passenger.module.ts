@@ -15,7 +15,6 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {SharedModule} from "../shared/shared.module";
-import {PassengerService} from "./passenger.service";
 import { RideReservationFormComponent } from './ride-reservation-form/ride-reservation-form.component';
 import {MatSelectModule} from "@angular/material/select";
 import {MatStepperModule} from "@angular/material/stepper";
@@ -28,7 +27,6 @@ import { RideRatingComponent } from './ride-rating/ride-rating.component';
 import { RatingStarBarComponent } from './rating-star-bar/rating-star-bar.component';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import { RideDetailsComponent } from './ride-details/ride-details.component';
-import { RideInconsistencyComponent } from '../shared/ride-inconsistency/ride-inconsistency.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +71,6 @@ import { RideInconsistencyComponent } from '../shared/ride-inconsistency/ride-in
         RideReservationFormComponent
     ],
   providers: [
-    PassengerService
   ]
 })
 export class PassengerModule { }

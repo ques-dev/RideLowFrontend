@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {PassengerService} from "../../passenger/passenger.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {User} from "../../shared/model/User";
 import {UserService} from "../../shared/user.service";
@@ -22,7 +22,7 @@ export class RegistrationComponent {
     surname: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
     telephoneNumber: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
     address: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
-    email: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    email: new FormControl('', {nonNullable: true, validators: [Validators.required, Validators.email]}),
     password: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
     passwordRepeat: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
   });
@@ -68,7 +68,8 @@ export class RegistrationComponent {
   }
 
   check() {
-    if (this.registerPassengerForm.valid) {
+    if (this.registerPassengerForm.valid &&
+      this.registerPassengerForm.value.password === this.registerPassengerForm.value.passwordRepeat) {
       this.registerPassenger();
     }
   }

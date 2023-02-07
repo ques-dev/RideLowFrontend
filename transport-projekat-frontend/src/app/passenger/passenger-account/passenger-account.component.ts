@@ -26,7 +26,6 @@ export class PassengerAccountComponent implements OnInit {
   image = "../../../assets/images/account.png";
   defaultImage = "../../../assets/images/account.png";
   passwordChange = false;
-  userId = -1;
 
   constructor(private passengerService : PassengerService,
               private notificationService : NotificationService,
@@ -34,7 +33,6 @@ export class PassengerAccountComponent implements OnInit {
   ngOnInit() {
     this.updatePassengerForm.disable();
     this.showPassenger();
-    this.userId = parseInt(<string>sessionStorage.getItem("user_id"));
   }
 
   updatePassenger(){
@@ -46,7 +44,7 @@ export class PassengerAccountComponent implements OnInit {
       address : this.updatePassengerForm.value.address,
       email : this.updatePassengerForm.value.email,
     }
-    this.passengerService.updatePassenger(passenger).subscribe({
+    this.passengerService.updatePassenger(parseInt(<string>sessionStorage.getItem("user_id")), passenger).subscribe({
       next: () => {
         this.showSuccessMessage();
         this.disableForm();
@@ -72,7 +70,7 @@ export class PassengerAccountComponent implements OnInit {
   }
 
   showPassenger() {
-    this.passengerService.getPassenger()
+    this.passengerService.getPassenger(parseInt(<string>sessionStorage.getItem("user_id")))
       .subscribe(passenger => {
       this.updatePassengerForm.patchValue(
         {

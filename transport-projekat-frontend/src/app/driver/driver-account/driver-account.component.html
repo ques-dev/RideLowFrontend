@@ -1,7 +1,7 @@
 <div class="main-page">
   <app-driver-side-navigation></app-driver-side-navigation>
   <div class="main-content padding-top-2vh">
-    <app-change-password *ngIf="driverService.changingPassword$ | async" [userId]="userId"></app-change-password>
+    <app-change-password *ngIf="driverService.changingPassword$ | async"></app-change-password>
     <div class="bright-orange label-container width-50">
       <mat-icon matListItemIcon class = "person-icon">person_outline</mat-icon>
       Podaci o korisniku

@@ -17,7 +17,6 @@ export class ChangePasswordComponent {
     newPassword: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
     repeatNewPassword: new FormControl('',{nonNullable:true, validators: [Validators.required]}),
   });
-  @Input() userId = -1;
   @Output() formClosed = new EventEmitter<boolean>();
   constructor(private driverService : DriverService,
               private notificationService : NotificationService,
@@ -51,7 +50,7 @@ export class ChangePasswordComponent {
       oldPassword: this.changePasswordForm.value.oldPassword,
       newPassword: this.changePasswordForm.value.newPassword
     }
-    this.userService.changePassword(this.userId, request).subscribe({
+    this.userService.changePassword(parseInt(<string>sessionStorage.getItem("user_id")), request).subscribe({
       next: () => {
         this.notificationService.createNotification('Uspešno ste promenili lozinku.', 5000);
         this.closeDriverChangingPassword();
