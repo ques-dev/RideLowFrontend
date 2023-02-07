@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpEvent} from "@angular/common/http";
+import {HttpClient, HttpEvent, HttpResponse} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {User} from "../shared/model/User";
 import {UserRetrieved} from "../shared/model/UserRetrieved";
@@ -7,7 +7,7 @@ import {UserIdEmail} from "../shared/model/UserIdEmail";
 import {RideReservation} from "../shared/model/RideReservation";
 import {RideCreated} from "../shared/model/RideCreated";
 import {UserUpdateInfo} from "../shared/model/UserUpdateInfo";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {FavoriteRideCreation} from "../shared/model/FavoriteRideCreation";
 import {FavoriteRideCreated} from "../shared/model/FavoriteRideCreated";
 import {Review} from "../shared/model/Review";
@@ -16,10 +16,8 @@ import {ReviewReturned} from "../shared/model/ReviewReturned";
 @Injectable({
   providedIn: 'root'
 })
-
-@Injectable()
 export class PassengerService {
-  url = environment.apiURL + "passenger/2";
+  url = environment.apiURL + "passenger";
   postUrl = environment.apiURL + "passenger";
   createRideUrl = environment.apiURL + "ride";
   createFavoriteRideUrl = this.createRideUrl + "/favorites";
@@ -29,8 +27,8 @@ export class PassengerService {
 
   constructor(private http: HttpClient) { }
 
-  getPassenger(): Observable<UserRetrieved> {
-    return this.http.get<UserRetrieved>(this.url);
+  getPassenger(id: number): Observable<UserRetrieved> {
+    return this.http.get<UserRetrieved>(this.url + "/" + id);
   }
 
   getPassengerIdByMail(email : string) : Observable<UserIdEmail> {
@@ -38,18 +36,15 @@ export class PassengerService {
     return this.http.get<UserIdEmail>(fullUrl);
   }
 
-  updatePassenger(newData : UserUpdateInfo) : Observable<HttpEvent<UserRetrieved>> {
+  updatePassenger(id:number, newData : UserUpdateInfo) : Observable<HttpEvent<UserRetrieved>> {
     const options: any = {
       responseType: 'text',
     };
-    return this.http.put<UserRetrieved>(this.url,newData,options);
+    return this.http.put<UserRetrieved>(this.url + "/" + id, newData, options);
   }
 
-  registerPassenger(newData : User) : Observable<HttpEvent<UserRetrieved>> {
-    const options : any = {
-      responseType: 'text',
-    };
-    return this.http.post<UserRetrieved>(this.postUrl,newData,options);
+  registerPassenger(newData : User) : Observable<UserRetrieved> {
+    return this.http.post<UserRetrieved>(this.postUrl, newData);
   }
 
   reserveRide(ride : RideReservation) : Observable<HttpEvent<RideCreated>> {

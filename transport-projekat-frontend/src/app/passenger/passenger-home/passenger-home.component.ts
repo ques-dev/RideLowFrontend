@@ -21,7 +21,6 @@ export class PassengerHomeComponent implements OnInit{
   }
   orderClicked = false;
   stompClient!: Stomp.Client;
-  currentUserId = parseInt(sessionStorage.getItem('user_id') as string);
   finishedRideId = -1;
   openDriverRatingForm = false;
   openVehicleRatingForm = false;
@@ -66,7 +65,7 @@ export class PassengerHomeComponent implements OnInit{
         const ride: RideCreated = JSON.parse(message.body);
         setTimeout(() => {
         for (const passenger of ride.passengers) {
-          if (passenger.id == this.currentUserId) {
+          if (passenger.id == parseInt(sessionStorage.getItem('user_id') as string)) {
             this.rides.push(ride);
             this.finishedRideId = ride.id;
 
@@ -106,7 +105,7 @@ export class PassengerHomeComponent implements OnInit{
       this.stompClient.subscribe('/ride-started/notification', (message: { body: string }) => {
         const rideCreated: RideCreated = JSON.parse(message.body);
         for (const passenger of rideCreated.passengers) {
-          if (passenger.id != this.currentUserId) continue;
+          if (passenger.id != parseInt(sessionStorage.getItem('user_id') as string)) continue;
           this.mapService.setTrackDriver(true);
           this.mapService.setRide(rideCreated);
           const notification = "Vožnja je počela.";
@@ -118,7 +117,7 @@ export class PassengerHomeComponent implements OnInit{
       this.stompClient.subscribe('/ride-rejected/notification', (message: { body: string }) => {
         const rideCreated: RideCreated = JSON.parse(message.body);
         for (const passenger of rideCreated.passengers) {
-          if (passenger.id != this.currentUserId) continue;
+          if (passenger.id != parseInt(sessionStorage.getItem('user_id') as string)) continue;
           const notification = "Poručena vožnja u " + moment(rideCreated.scheduledTime).format("HH:mm") + " je odbijena.";
           this.notificationService.createNotification(notification, 3000);
         }
@@ -127,7 +126,7 @@ export class PassengerHomeComponent implements OnInit{
       this.stompClient.subscribe('/ride-ordered/reservation-notification', (message: { body: string }) => {
         const reservedRide: RideReservation = JSON.parse(message.body);
         for(const passenger of reservedRide.passengers) {
-          if(passenger.id != this.currentUserId) continue;
+          if(passenger.id != parseInt(sessionStorage.getItem('user_id') as string)) continue;
           const notification = "Imate rezervisanu vožnju u " + moment(reservedRide.scheduledTime).format("HH:mm") + ".";
           this.notificationService.createNotification(notification, 3000);
         }
@@ -136,7 +135,7 @@ export class PassengerHomeComponent implements OnInit{
       this.stompClient.subscribe('/ride-ordered/not-found', (message: { body: string }) => {
         const reservedRide: RideReservation = JSON.parse(message.body);
         for(const passenger of reservedRide.passengers) {
-          if (passenger.id != this.currentUserId) continue;
+          if (passenger.id != parseInt(sessionStorage.getItem('user_id') as string)) continue;
           if(reservedRide.scheduledTime == null) break;
           const notification = "Vaša vožnja rezervisana u " + moment(reservedRide.scheduledTime).format("HH:mm") + " se odbija. Sistem nije pronašao vozača.";
           this.notificationService.createNotification(notification, 3000);
