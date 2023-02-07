@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, TestBed, tick, waitForAsync} from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import {UserService} from "../../shared/user.service";
@@ -11,14 +11,15 @@ import {LoginCredentials} from "../../shared/model/LoginCredentials";
 import {Token} from "../../shared/model/Token";
 import {BehaviorSubject} from "rxjs";
 import {UserMockService} from "../../../tests/user-mock.service";
+import {Router} from "@angular/router";
 
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let loginForm : HTMLElement;
-  const userService  = new UserMockService();
-
+  let userService : UserService;
+  let submitButton : any;
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
@@ -38,75 +39,67 @@ describe('LoginComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
+    userService = TestBed.inject(UserService);
     component = fixture.componentInstance;
+    submitButton = fixture.debugElement.query(By.css("#submit")).nativeElement;
+    spyOn(component,"login").and.callThrough();
     loginForm = fixture.debugElement.nativeElement.querySelectorAll("form")[0];
     fixture.detectChanges();
   });
 
-  it('should create login component', () => {
+  it('Should create login component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should instantiate login form', () => {
+  it('Should instantiate login form', () => {
     expect(loginForm).toBeDefined();
   });
 
-  it("should not call login if fields are empty", async () => {
-    spyOn(component,"login");
-    const submitButton = fixture.debugElement.query(By.css("#submit")).nativeElement;
-    submitButton.click();
-    fixture.whenStable().then(() => {
-      expect(component.login).toHaveBeenCalled();
-    });
+  it("Should not call login in user service if fields are empty", async () => {
     component.loginForm.controls["email"].setValue('');
     component.loginForm.controls["password"].setValue('');
-
-    expect(component.loginForm.valid).toBeFalsy();
-  });
-
-  it("should not call login if email field format is not correct", async () => {
-    spyOn(component,"login");
-    const submitButton = fixture.debugElement.query(By.css("#submit")).nativeElement;
     submitButton.click();
     fixture.whenStable().then(() => {
       expect(component.login).toHaveBeenCalled();
+      spyOn(userService,'login').and.callThrough();
+      expect(userService.login).not.toHaveBeenCalled();
     });
+
+  });
+
+  it("Should not call login in user service if email field format is not correct", async () => {
     component.loginForm.controls["email"].setValue('mail.com');
     component.loginForm.controls["password"].setValue('Test1Test');
-    //spyOn(userService, "login");
-    //expect(userService.login).toHaveBeenCalledTimes(0);
-  });
-
-  it("should call login if email field format is not correct", async () => {
-    spyOn(component,"login").and.callThrough();
-    const submitButton = fixture.debugElement.query(By.css("#submit")).nativeElement;
     submitButton.click();
     fixture.whenStable().then(() => {
       expect(component.login).toHaveBeenCalled();
-      component.loginForm.controls["email"].setValue('mail@mail.com');
-      component.loginForm.controls["password"].setValue('Test1Test');
-      const loginCredentials: LoginCredentials = {
-        email: <string>component.loginForm.controls["email"].value,
-        password: <string>component.loginForm.controls["password"].value,
-      }
-      const token :Token = {
-        accessToken : "abc",
-        refreshToken : "abc"
-      }
-      const returnVal = new BehaviorSubject(token).asObservable();
-      expect(component.loginForm.valid).toBeTruthy();
-      //spyOn(sessionStorage, 'setItem');
-      //expect(sessionStorage.setItem).toHaveBeenCalled();
-      //spyOn(component.userService,'login').withArgs(loginCredentials).and.returnValue(returnVal);
-      //expect(component.userService.login).toHaveBeenCalled();
-      spyOn(userService, 'login').withArgs(loginCredentials).and.callThrough();
+      spyOn(userService,'login').and.callThrough();
+      expect(userService.login).not.toHaveBeenCalled();
+    });
+
+  });
+
+  it("Should redirect to login path if both fields are valid", (done) => {
+    const router = TestBed.inject(Router);
+    const routerSpy = spyOn(router,'navigate').and.stub();
+    component.loginForm.controls["email"].setValue('mail@mail.com');
+    component.loginForm.controls["password"].setValue('Test1Test');
+    const credentials : LoginCredentials = {
+      email : <string>component.loginForm.controls["email"].value,
+      password : <string>component.loginForm.controls["password"].value,
+    }
+    const token :Token = {
+      accessToken : "abc",
+      refreshToken : "abc"
+    }
+    const returnVal = new BehaviorSubject(token).asObservable();
+    spyOn(userService,'login').withArgs(credentials).and.returnValue(returnVal);
+    submitButton.click();
+    fixture.whenStable().then(() => {
+      expect(component.login).toHaveBeenCalled();
       expect(userService.login).toHaveBeenCalled();
-      expect(userService.idk).toBeTruthy();
-      //spyOn(Object.getPrototypeOf(sessionStorage), 'setItem').and.returnValue(true);
-      //expect(Object.getPrototypeOf(sessionStorage).setItem).toHaveBeenCalled();
-      //const obj = spyOn(userService, "login").withArgs(loginCredentials);
-      //expect(userService.login).toHaveBeenCalled();
-      //expect(router.navigate).toHaveBeenCalled();
+      expect(routerSpy.calls.first().args[0]).toContain('login');
+      done();
     });
   });
 });

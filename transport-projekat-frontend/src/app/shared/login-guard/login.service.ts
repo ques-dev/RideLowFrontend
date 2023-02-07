@@ -19,10 +19,7 @@ export class LoginService implements CanActivate {
               private userService : UserService,
               private notificationService : NotificationService,
               private mapService : MapService) {}
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
+  canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
@@ -51,7 +48,6 @@ export class LoginService implements CanActivate {
           return of(obj);
         })
       ).subscribe(value => {
-        console.log("lolol");
         if(value.id != -1) {
           sessionStorage.setItem('user_id',String(value.id));
           sessionStorage.setItem('user_full_name',value.name + " " + value.surname)
@@ -65,6 +61,7 @@ export class LoginService implements CanActivate {
             this.driverService.startShift().subscribe({
               next: (value) => {
                 this.driverService.shiftId = value.id;
+                this.router.navigate(['driver-home']);
               },
               error: (error) => {
                 if (!error.error.message.includes("ongoing")) {
@@ -77,7 +74,6 @@ export class LoginService implements CanActivate {
                 }
               },
             });
-            this.router.navigate(['driver-home']);
           }
           else if(role != null) this.router.navigate(['admin-home']);
           return false;

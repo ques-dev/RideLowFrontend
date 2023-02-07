@@ -12,8 +12,7 @@ import {LoginCredentials} from "../../shared/model/LoginCredentials";
 export class LoginComponent {
 
   constructor(private router:Router,
-              public userService : UserService) { }
-
+              private userService : UserService) { }
   loginForm = new FormGroup({
     email: new FormControl( '',[Validators.required, Validators.email]),
     password: new FormControl('',[Validators.required]),
@@ -25,12 +24,11 @@ export class LoginComponent {
       password: <string>this.loginForm.value.password,
     };
     if (this.loginForm.valid) {
-
       this.userService.login(loginVal).subscribe({
         next: (result) => {
+
           sessionStorage.setItem('user_email',<string>this.loginForm.value.email);
           sessionStorage.setItem('user', JSON.stringify(result));
-          this.userService.setUser();
           this.router.navigate(['login']);
         },
         error: (error) => {
