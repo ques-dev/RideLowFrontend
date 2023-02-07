@@ -41,7 +41,7 @@
       <div id="sidenav-footer">
         <mat-slide-toggle [disabled]="driverService.cantStartShift" [checked]="driverService.shiftId !== -1" (click)="changeState()">{{driverService.shiftId !== -1 ? "Online" : "Offline"}}</mat-slide-toggle>
 
-        <button mat-button class = "bright-orange button-rounded mat-h1 logout-button stick-to-bottom center-horizontal"
+        <button id="logout" mat-button class = "bright-orange button-rounded mat-h1 logout-button stick-to-bottom center-horizontal"
                 (click)="logout()">
           <mat-icon class = "icon">logout</mat-icon>
           Odjava

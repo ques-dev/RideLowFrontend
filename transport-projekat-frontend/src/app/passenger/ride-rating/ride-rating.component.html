@@ -1,4 +1,4 @@
-<div class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="windowVisible">
+<div id="rating" class = "modal-overlay-layer standard-border-radius flex-column standard-border-radius" *ngIf="windowVisible">
   <div class = "width-52 height-70 light-grey standard-border-radius padding-bottom-2vh padding-top-3vh">
     <div class = "label-container-small sky-blue stick-to-left flex-row white-text width-40">
       <mat-icon matListItemIcon class = "icon">star_border</mat-icon>
@@ -16,7 +16,8 @@
       <form [formGroup]="reviewForm">
         <mat-form-field appearance="fill" class="width-100">
           <mat-label>Komentar:</mat-label>
-          <textarea matInput
+          <textarea id="comment"
+            matInput
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="13"
                     cdkAutosizeMaxRows="13"
@@ -26,10 +27,10 @@
       <br>
       <br>
       <div class="flex-row width-100">
-        <button type="button" mat-button class = "bright-orange button-rounded mat-h2 margin-right-5" (click)="close()">
+        <button id="reviewLater" type="button" mat-button class = "bright-orange button-rounded mat-h2 margin-right-5" (click)="close()">
           Oceni kasnije
         </button>
-        <button type="submit" mat-button class = "bright-orange button-rounded mat-h2" (click)="review()">
+        <button id="review" type="submit" mat-button class = "bright-orange button-rounded mat-h2" (click)="review()">
           <mat-icon class = "icon">star_outline</mat-icon>
           Oceni
         </button>

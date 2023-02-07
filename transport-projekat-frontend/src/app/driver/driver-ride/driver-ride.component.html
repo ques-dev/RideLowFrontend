@@ -21,19 +21,19 @@
     <br>
 
     <div class = "flex-row space-evenly width-100">
-      <button *ngIf="(mapService.rideInProgress$ | async) === false" mat-button class = "red button-rounded mat-h2" type="button"
+      <button id="deny" *ngIf="(mapService.rideInProgress$ | async) === false" mat-button class = "red button-rounded mat-h2" type="button"
       (click)="deny()">
         <mat-icon class = "icon">do_not_disturb</mat-icon>
         Odbij
       </button>
 
-      <button *ngIf="(mapService.rideInProgress$ | async) === false" mat-button class = "green button-rounded mat-h2" type="button"
+      <button id="accept" *ngIf="(mapService.rideInProgress$ | async) === false" mat-button class = "green button-rounded mat-h2" type="button"
       (click)="accept()">
         <mat-icon class = "icon">not_started</mat-icon>
         Započni
       </button>
 
-      <button *ngIf="(mapService.rideInProgress$ | async) === true" mat-button class = "green button-rounded mat-h2" type="button"
+      <button id="finish" *ngIf="(mapService.rideInProgress$ | async) === true" mat-button class = "green button-rounded mat-h2" type="button"
       (click)="finish()">
         <mat-icon class = "icon">check</mat-icon>
         Završi vožnju
