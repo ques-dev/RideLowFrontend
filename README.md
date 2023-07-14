@@ -33,4 +33,3 @@ ng serve
 ## Related repositories
 1. [Backend](https://github.com/VukRadmilovic/uber-like-backend)
 2. [Mobile application](https://github.com/VukRadmilovic/uber-like-mobile-app)
-3. [Selenium test](https://github.com/VukRadmilovic/uber-like-selenium)
